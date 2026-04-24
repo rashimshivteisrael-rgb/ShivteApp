@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Madrij</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .logout {
+            text-decoration: none;
+            color: white;
+            background: #ef4444;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        .hero {
+            background: rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 20px;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .special {
+            border: 1px solid rgba(34,197,94,0.45);
+            background: rgba(34,197,94,0.12);
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="topbar">
+        <h1>Hola, {{ usuario.nombre }}</h1>
+        <a class="logout" href="/logout/">Cerrar sesión</a>
+    </div>
+
+    <div class="grid">
+        <a class="card" href="/kbutzot/">
+            <h3>🏠 Kbutzot</h3>
+            <p>Información general de grupos y organización.</p>
+        </a>
+
+        <a class="card" href="/horarios/">
+            <h3>📅 Horarios</h3>
+            <p>Consulta los horarios del camp.</p>
+        </a>
+
+        <a class="card" href="/actividades/">
+           <h3>🏃 Actividades</h3>
+           <p>Consulta todas las actividades del camp y su información.</p>
+        </a>
+
+      <a class="card" href="/fotos/">
+          <h3>📸 Fotos</h3>
+         <p>Ver y subir fotos del camp.</p>
+      </a>
+
+        <a class="card" href="/transporte-madrij/">
+           <h3>🚌 Transporte</h3>
+           <p>Consulta el transporte general y tus funciones si eres encargado.</p>
+       </a>
+
+    </div>
+</div>
+</body>
+</html>

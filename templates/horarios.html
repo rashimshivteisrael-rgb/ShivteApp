@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Horarios</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1000px; margin:auto; padding:30px 20px; }
+.topbar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+.btn { background:#334155; color:white; text-decoration:none; padding:10px 14px; border-radius:10px; font-weight:bold; }
+.list { display:grid; gap:12px; }
+.item { background:rgba(255,255,255,0.08); padding:16px; border-radius:16px; }
+.item strong { font-size:18px; }
+.muted { color:#cbd5e1; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="topbar">
+        <h1>📅 Horarios</h1>
+
+        {% if request.session.usuario_tipo == 'madrij' %}
+            <a class="btn" href="/menu-madrij/">← Menú</a>
+        {% elif request.session.usuario_tipo == 'admin' %}
+            <a class="btn" href="/panel-admin/">← Panel Admin</a>
+        {% else %}
+            <a class="btn" href="/">← Inicio</a>
+        {% endif %}
+    </div>
+
+    <div class="list">
+        {% for dia, lista in horarios_por_dia.items %}
+    
+           <h2 style="margin-top:20px;">📍 {{ dia }}</h2>
+
+           {% for h in lista %}
+              <div class="item">
+                   <strong>{{ h.hora }}</strong>
+                   <div class="muted">
+                       {{ h.actividad }}
+                       {% if h.lugar %} · {{ h.lugar }}{% endif %}
+                  </div>
+              </div>
+           {% endfor %}
+
+       {% empty %}
+         <div class="item">No hay horarios todavía.</div>
+       {% endfor %}
+    </div>
+</div>
+</body>
+</html>

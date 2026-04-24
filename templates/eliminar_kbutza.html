@@ -1,0 +1,17 @@
+<div style="max-width:500px;margin:auto;padding:40px;font-family:sans-serif;">
+    <h1>⚠️ Eliminar Kbutza</h1>
+    <p>¿Seguro que quieres eliminar <b>{{ kbutza.nombre }}</b>?</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button style="background:red;color:white;padding:10px 20px;border:none;border-radius:10px;">
+            Sí, eliminar
+        </button>
+    </form>
+
+    <br>
+
+    <a href="/panel-admin/kbutzot/{{ kbutza.id }}/">
+        Cancelar
+    </a>
+</div>

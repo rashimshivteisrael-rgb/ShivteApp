@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Madrij</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.10);
+            color: white;
+        }
+
+        option {
+            color: black;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/panel-admin/madrijim/{{ madrij.id }}/">← Volver</a>
+
+        <div class="card">
+            <h1>Editar Madrij</h1>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label>Nombre</label>
+                <input type="text" name="nombre" value="{{ madrij.nombre }}" required>
+
+                <label>Usuario</label>
+                <input type="text" name="username" value="{{ madrij.username }}" required>
+
+                <label>Contraseña</label>
+                <input type="text" name="password" value="{{ madrij.password }}" required>
+
+                <label>Kbutza</label>
+                <select name="kbutza">
+                    <option value="">Selecciona una kbutza</option>
+                    {% for k in kbutzas %}
+                        <option value="{{ k.id }}"
+                            {% if asignacion and asignacion.kbutza.id == k.id %}selected{% endif %}>
+                            {{ k.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button class="btn" type="submit">Guardar cambios</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

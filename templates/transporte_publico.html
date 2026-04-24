@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transporte Camp</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px 60px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.back {
+    text-decoration: none;
+    color: white;
+    background: #334155;
+    padding: 10px 14px;
+    border-radius: 10px;
+}
+
+.grid {
+    display: grid;
+    gap: 18px;
+}
+
+.card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.type {
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.estado-badge {
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.estado-pendiente { background: #475569; }
+.estado-saliendo { background: #ca8a04; }
+.estado-en_camino { background: #2563eb; }
+.estado-llegando { background: #7c3aed; }
+.estado-llego { background: #16a34a; }
+
+.encargado-box {
+    background: rgba(34,197,94,0.12);
+    border: 1px solid rgba(34,197,94,0.35);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+
+.encargado-label {
+    color: #86efac;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 4px;
+}
+
+.encargado-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.times {
+    color: #cbd5e1;
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.section {
+    margin-top: 14px;
+}
+
+.section h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.badge {
+    display: inline-block;
+    background: #334155;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.btn-maps {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 16px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.empty {
+    color: #94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🚌 Transporte en tiempo real</h1>
+        <a class="back" href="/">← Inicio</a>
+    </div>
+
+    <div class="grid">
+        {% for item in data %}
+            <div class="card">
+
+                <div class="top">
+                    <div>
+                        <div class="title">{{ item.camion.nombre }}</div>
+                        <div class="type">{{ item.camion.tipo }}</div>
+                    </div>
+
+                    <div class="estado-badge estado-{{ item.camion.estado }}">
+                        {{ item.camion.estado }}
+                    </div>
+                </div>
+
+                <div class="encargado-box">
+                    <div class="encargado-label">Encargado</div>
+                    <div class="encargado-name">
+                        {% if item.camion.encargado %}
+                            {{ item.camion.encargado.nombre }}
+                        {% else %}
+                            Sin asignar
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="times">
+                    Salida: {{ item.camion.hora_salida|default:"-" }} ·
+                    Llegada estimada: {{ item.camion.hora_estimada|default:"-" }}
+                </div>
+
+                <div class="section">
+                    <h3>Madrijim</h3>
+                    <div class="badges">
+                        {% for m in item.madrijim %}
+                            <span class="badge">{{ m.madrij.nombre }}</span>
+                        {% empty %}
+                            <span class="empty">Sin madrijim asignados</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Janijim</h3>
+                    <div class="badges">
+                        {% for j in item.janijim %}
+                            <span class="badge">{{ j.janij.nombre }}</span>
+                        {% empty %}
+                            <span class="empty">Sin janijim asignados</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if item.camion.link_ruta %}
+                    <a class="btn-maps" href="{{ item.camion.link_ruta }}" target="_blank">
+                       📍 Ver ruta en vivo
+                    </a>
+
+                    <div class="section">
+                       <h3>Mapa</h3>
+                       <iframe
+                          src="{{ item.mapa_embed }}"
+                          width="100%"
+                          height="320"
+                          style="border:0; border-radius:16px; margin-top:10px;"
+                          loading="lazy"
+                          referrerpolicy="no-referrer-when-downgrade"
+                      </iframe>
+                   </div>
+               {% endif %}
+
+            </div>
+        {% empty %}
+            <div class="card">
+                <div class="empty">No hay camiones disponibles.</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Madrij</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+        }
+
+        .btn-danger {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #ef4444;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        p {
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/panel-admin/madrijim/{{ madrij.id }}/">← Volver</a>
+
+        <div class="card">
+            <h1>Eliminar Madrij</h1>
+            <p>¿Seguro que quieres eliminar a <strong>{{ madrij.nombre }}</strong>?</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <button class="btn-danger" type="submit">Sí, eliminar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

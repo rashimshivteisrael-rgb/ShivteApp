@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Madrij</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .back {
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+
+        .name {
+            font-size: 30px;
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .label {
+            display: block;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background: #22c55e;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <h1>Detalle de Madrij</h1>
+            <a class="back" href="/panel-admin/madrijim/">← Madrijim</a>
+        </div>
+
+        <div class="card">
+            <h2 class="name">{{ madrij.nombre }}</h2>
+            <div class="subtitle">Perfil individual del madrij</div>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <span class="label">Nombre</span>
+                    <div class="value">{{ madrij.nombre }}</div>
+                </div>
+
+                <div class="info-box">
+                    <span class="label">Usuario</span>
+                    <div class="value">{{ madrij.username }}</div>
+                </div>
+
+                <div class="info-box">
+                    <span class="label">Tipo</span>
+                    <div class="value">{{ madrij.tipo }}</div>
+                </div>
+
+                <div class="info-box">
+                    <span class="label">Kbutza asignada</span>
+                    <div class="value">
+                        {% if asignacion %}
+                            {{ asignacion.kbutza.nombre }}
+                        {% else %}
+                            Sin asignar
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="/panel-admin/madrijim/{{ madrij.id }}/editar/" class="btn btn-edit">Editar</a>
+                <a href="/panel-admin/madrijim/{{ madrij.id }}/eliminar/" class="btn btn-delete">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

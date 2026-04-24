@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shivte App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 30px 20px 50px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .brand p {
+            margin: 8px 0 0;
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+
+        .admin-btn {
+            background: #22c55e;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
+        }
+
+        .hero {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 26px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .hero h2 {
+            margin: 0 0 10px;
+            font-size: 30px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #cbd5e1;
+            max-width: 700px;
+            line-height: 1.5;
+        }
+
+        .camp-day {
+            background: rgba(34, 197, 94, 0.18);
+            color: #bbf7d0;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .highlight-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .highlight-box {
+            background: rgba(255,255,255,0.06);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .highlight-box h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .section-title {
+            margin: 32px 0 18px;
+            font-size: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            text-decoration: none;
+            color: white;
+            display: block;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .icon {
+            font-size: 30px;
+            margin-bottom: 14px;
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 22px;
+        }
+
+        .card p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .footer-note {
+            margin-top: 34px;
+            color: #94a3b8;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .brand h1 {
+                font-size: 28px;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 20px 16px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="brand">
+                <h1>Shivte App 🔥</h1>
+                <p>Todo el campamento en una sola plataforma</p>
+            </div>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                 <a class="admin-btn" href="/login/" style="background:#3b82f6;">Login</a>
+            </div>
+        </div>
+
+        <h2 class="section-title">Secciones principales</h2>
+
+        <div class="grid">
+            <a class="card" href="/kbutzot/">
+                <div class="icon">🏠</div>
+                <h3>Kbutzot</h3>
+                <p>Grupos, cuartos, janijim y madrijim del camp.</p>
+            </a>
+
+            <a class="card" href="/actividades/">
+                <div class="icon">🎯</div>
+                <h3>Actividades</h3>
+                <p>Funny War, Xtreme Day, Got Talent, Color War y más.</p>
+            </a>
+
+            <a class="card" href="/horarios/">
+                <div class="icon">📅</div>
+                <h3>Horarios</h3>
+                <p>Itinerarios del día, actividades y momentos importantes.</p>
+            </a>
+
+            <a class="card" href="/fotos/">
+                <div class="icon">📸</div>
+                <h3>Fotos</h3>
+                <p>Galería del camp por días, eventos y recuerdos especiales.</p>
+            </a>
+
+            <a class="card" href="/inscripciones/">
+                <div class="icon">📝</div>
+                <h3>Inscripciones</h3>
+                <p>Registro de janijim e información general de inscritos.</p>
+            </a>
+
+           <a href="/transporte-publico/" style="text-decoration:none; color:white; display:block;">
+               <div class="card" style="cursor:pointer;">
+                 <h3>🚌 Transporte</h3>
+        
+                 <p>
+                    🟢 {{ en_camino }} en camino <br>
+                    🟡 {{ saliendo }} saliendo <br>
+                    ⚪ {{ pendientes }} pendientes
+                 </p>
+               </div>
+           </a>
+
+        <div class="footer-note">
+            Shivte App · versión inicial
+        </div>
+    </div>
+
+<script>
+    setInterval(function() {
+        window.location.reload();
+    }, 15000);
+</script>
+
+</body>
+</html>

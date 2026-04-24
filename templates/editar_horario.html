@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Horario</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.10);
+            color: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="/panel-admin/horarios/">← Volver</a>
+
+    <div class="card">
+        <h1>Editar horario</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <select name="dia" required>
+                <option value="Lunes 6 de julio" {% if horario.dia == "Lunes 6 de julio" %}selected{% endif %}>Lunes 6 de julio</option>
+                <option value="Martes 7 de julio" {% if horario.dia == "Martes 7 de julio" %}selected{% endif %}>Martes 7 de julio</option>
+                <option value="Miércoles 8 de julio" {% if horario.dia == "Miércoles 8 de julio" %}selected{% endif %}>Miércoles 8 de julio</option>
+                <option value="Jueves 9 de julio" {% if horario.dia == "Jueves 9 de julio" %}selected{% endif %}>Jueves 9 de julio</option>
+                <option value="Viernes 10 de julio" {% if horario.dia == "Viernes 10 de julio" %}selected{% endif %}>Viernes 10 de julio</option>
+                <option value="Sábado 11 de julio" {% if horario.dia == "Sábado 11 de julio" %}selected{% endif %}>Sábado 11 de julio</option>
+                <option value="Domingo 12 de julio" {% if horario.dia == "Domingo 12 de julio" %}selected{% endif %}>Domingo 12 de julio</option>
+                <option value="Lunes 13 de julio" {% if horario.dia == "Lunes 13 de julio" %}selected{% endif %}>Lunes 13 de julio</option>
+                <option value="Martes 14 de julio" {% if horario.dia == "Martes 14 de julio" %}selected{% endif %}>Martes 14 de julio</option>
+                <option value="Miércoles 15 de julio" {% if horario.dia == "Miércoles 15 de julio" %}selected{% endif %}>Miércoles 15 de julio</option>
+                <option value="Jueves 16 de julio" {% if horario.dia == "Jueves 16 de julio" %}selected{% endif %}>Jueves 16 de julio</option>
+            </select>
+            <input type="text" name="hora" value="{{ horario.hora }}" required>
+            <input type="text" name="actividad" value="{{ horario.actividad }}" required>
+            <button class="btn" type="submit">Guardar cambios</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 30px 20px 50px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .brand p {
+            margin: 8px 0 0;
+            color: #cbd5e1;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #334155;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .hero {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .hero h2 {
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .stat {
+            background: rgba(255,255,255,0.06);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .stat h3 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .stat p {
+            margin: 8px 0 0;
+            color: #cbd5e1;
+        }
+
+        .section-title {
+            margin: 30px 0 16px;
+            font-size: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            text-decoration: none;
+            color: white;
+            display: block;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .icon {
+            font-size: 30px;
+            margin-bottom: 14px;
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 22px;
+        }
+
+        .card p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+       <div class="topbar" style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+    
+          <div class="brand">
+             <h1>Panel Admin</h1>
+             <p>Desde aquí controlas toda la operación del camp</p>
+          </div>
+
+          <div style="display:flex; gap:10px;">
+             <a class="back" href="/">← Inicio</a>
+ 
+             <a href="/logout/" style="
+                background:#ef4444;
+                color:white;
+                text-decoration:none;
+                padding:10px 14px;
+                border-radius:10px;
+                font-weight:bold;
+             ">
+               Cerrar sesión
+             </a>
+           </div>
+
+       </div>
+
+        <h2 class="section-title">Módulos de administración</h2>
+
+        <div class="grid">
+            <a class="card" href="/panel-admin/madrijim/">
+                <div class="icon">👨‍🏫</div>
+                <h3>Madrijim</h3>
+                <p>Agregar, editar y asignar madrijim.</p>
+            </a>
+
+            <a class="card" href="/panel-admin/kbutzot/">
+                <div class="icon">🏠</div>
+                <h3>Kbutzot</h3>
+                <p>Crear grupos, cuartos y asignaciones.</p>
+            </a>
+
+            <a class="card" href="/panel-admin/horarios/">
+                <div class="icon">📅</div>
+                <h3>Horarios</h3>
+                <p>Configurar itinerarios y actividades por día.</p>
+            </a>
+
+            <a class="card" href="#">
+                <div class="icon">🎯</div>
+                <h3>Actividades</h3>
+                <p>Crear actividades, reglas, zonas y materiales.</p>
+            </a>
+
+            <a class="card" href="/panel-admin/transporte/">
+                <div class="icon">🚌</div>
+                <h3>Transporte</h3>
+                <p>Asignar camiones, rutas, horarios y pasajeros.</p>
+            </a>
+
+            <a class="card" href="#">
+                <div class="icon">📝</div>
+                <h3>Inscripciones</h3>
+                <p>Registrar inscritos y controlar sus datos.</p>
+            </a>
+
+            <a class="card" href="/fotos/">
+                <h3>📸 Fotos</h3>
+                <p>Galería del camp por días, eventos y recuerdos especiales.</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

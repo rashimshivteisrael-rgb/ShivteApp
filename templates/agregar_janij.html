@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Janij</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 24px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.10);
+            color: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="/panel-admin/kbutzot/{{ kbutza.id }}/">← Volver</a>
+
+    <div class="card">
+        <h1>Agregar Janij a {{ kbutza.nombre }}</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="nombre" placeholder="Nombre del janij" required>
+            <button class="btn" type="submit">Guardar janij</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

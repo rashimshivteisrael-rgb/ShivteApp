@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios Admin</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px 70px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .back {
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        .list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .item {
+            background: rgba(255,255,255,0.08);
+            padding: 16px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .item strong {
+            display: block;
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .item span {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            text-decoration: none;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background: #3b82f6;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+        }
+
+        .add-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 62px;
+            height: 62px;
+            background: #22c55e;
+            border-radius: 50%;
+            font-size: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(34,197,94,0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 18px;
+            width: 90%;
+            max-width: 450px;
+        }
+
+        input {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close {
+            margin-top: 10px;
+            text-align: center;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="topbar">
+        <h1>📅 Horarios</h1>
+        <a class="back" href="/panel-admin/">← Panel</a>
+    </div>
+
+    <div class="list">
+        {% for h in horarios %}
+            <div class="item">
+                <div>
+                    <strong>{{ h.dia }} · {{ h.hora }}</strong>
+                    <span>{{ h.actividad }}{% if h.lugar %} · {{ h.lugar }}{% endif %}</span>
+                </div>
+
+                <div class="buttons">
+                    <a class="btn-small btn-edit" href="/panel-admin/horarios/{{ h.id }}/editar/">Editar</a>
+
+                    <form method="POST" action="/panel-admin/horarios/{{ h.id }}/eliminar/" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn-small btn-delete" type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay horarios todavía.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="add-btn" onclick="abrirModal()">+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h2>Agregar horario</h2>
+
+        <form method="POST" action="/panel-admin/horarios/">
+            {% csrf_token %}
+            <select name="dia" required>
+                 <option value="">Selecciona día</option>
+                 <option value="Lunes 6 de julio">Lunes 6 de julio</option>
+                 <option value="Martes 7 de julio">Martes 7 de julio</option>
+                 <option value="Miércoles 8 de julio">Miércoles 8 de julio</option>
+                 <option value="Jueves 9 de julio">Jueves 9 de julio</option>
+                 <option value="Viernes 10 de julio">Viernes 10 de julio</option>
+                 <option value="Sábado 11 de julio">Sábado 11 de julio</option>
+                 <option value="Domingo 12 de julio">Domingo 12 de julio</option>
+                 <option value="Lunes 13 de julio">Lunes 13 de julio</option>
+                 <option value="Martes 14 de julio">Martes 14 de julio</option>
+                 <option value="Miércoles 15 de julio">Miércoles 15 de julio</option>
+                 <option value="Jueves 16 de julio">Jueves 16 de julio</option>
+            </select>
+            <input type="text" name="hora" placeholder="Ej. 9:00 A.M." required>
+            <input type="text" name="actividad" placeholder="Actividad" required>
+            <button class="save-btn" type="submit">Guardar</button>
+        </form>
+
+        <div class="close" onclick="cerrarModal()">Cancelar</div>
+    </div>
+</div>
+
+<script>
+function abrirModal() {
+    document.getElementById('modal').style.display = 'flex';
+}
+
+function cerrarModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+</script>
+
+</body>
+</html>

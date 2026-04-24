@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madrijim</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px 20px 80px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .back {
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        .list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .item {
+            background: rgba(255,255,255,0.08);
+            padding: 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: white;
+            display: block;
+            transition: 0.18s ease;
+        }
+
+        .item:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateY(-2px);
+        }
+
+        .item strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .item span {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        /* BOTÓN FLOTANTE */
+        .add-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: #22c55e;
+            border-radius: 50%;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(34,197,94,0.4);
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 18px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        input {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close {
+            margin-top: 10px;
+            text-align: center;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="topbar">
+        <h1>👨‍🏫 Madrijim</h1>
+        <a class="back" href="/panel-admin/">← Panel</a>
+    </div>
+
+    <div class="list">
+        {% for m in madrijim %}
+            <a class="item" href="/panel-admin/madrijim/{{ m.id }}/">
+               <strong>{{ m.nombre }}</strong>
+               <span>{{ m.username }}</span>
+            </a>
+        {% empty %}
+            <p>No hay madrijim todavía</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- BOTÓN + -->
+<div class="add-btn" onclick="abrirModal()">+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h2>Agregar Madrij</h2>
+
+        <form method="POST" action="/panel-admin/madrijim/">
+            {% csrf_token %}
+
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="username" placeholder="Usuario" required>
+            <input type="text" name="password" placeholder="Contraseña" required>
+
+            <button class="save-btn" type="submit">Guardar</button>
+        </form>
+
+        <div class="close" onclick="cerrarModal()">Cancelar</div>
+    </div>
+</div>
+
+<script>
+function abrirModal() {
+    document.getElementById('modal').style.display = 'flex';
+}
+
+function cerrarModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+</script>
+
+</body>
+</html>

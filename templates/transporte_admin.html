@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transporte Admin</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px 80px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .back {
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+
+        .list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .item {
+            background: rgba(255,255,255,0.08);
+            padding: 16px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .camion-link {
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .camion-link strong {
+            display: block;
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .info {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            text-decoration: none;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background: #3b82f6;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+        }
+
+        .add-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 62px;
+            height: 62px;
+            background: #22c55e;
+            border-radius: 50%;
+            font-size: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(34,197,94,0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 18px;
+            width: 90%;
+            max-width: 480px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        option {
+            color: black;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close {
+            margin-top: 10px;
+            text-align: center;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="topbar">
+        <h1>🚌 Transporte</h1>
+        <a class="back" href="/panel-admin/">← Panel</a>
+    </div>
+
+    <div class="list">
+        {% for c in camiones %}
+            <div class="item">
+                <div>
+                    <a class="camion-link" href="/panel-admin/transporte/{{ c.id }}/">
+                        <strong>#{{ c.id }} · {{ c.nombre }} · {{ c.tipo }}</strong>
+                        <div class="info">
+                            Estado: {{ c.estado }}<br>
+                            Encargado: {% if c.encargado %}{{ c.encargado.nombre }}{% else %}Sin asignar{% endif %}<br>
+                            Salida: {{ c.hora_salida|default:"-" }} · ETA: {{ c.hora_estimada|default:"-" }}
+                        </div>
+                    </a>
+                </div>
+
+                <div class="buttons">
+                    <a class="btn-small btn-edit" href="/panel-admin/transporte/{{ c.id }}/editar/">Editar</a>
+
+                    <form method="POST" action="/panel-admin/transporte/{{ c.id }}/eliminar/" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn-small btn-delete" type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay camiones todavía.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="add-btn" onclick="abrirModal()">+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h2>Agregar camión</h2>
+
+        <form method="POST" action="/panel-admin/transporte/">
+            {% csrf_token %}
+            <input type="text" name="nombre" placeholder="Nombre del camión" required>
+
+            <select name="tipo" required>
+                <option value="">Tipo</option>
+                <option value="ida">Ida</option>
+                <option value="regreso">Regreso</option>
+            </select>
+
+            <select name="estado" required>
+                <option value="">Estado</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="saliendo">Saliendo</option>
+                <option value="en_camino">En camino</option>
+                <option value="llegando">Llegando</option>
+                <option value="llego">Llegó</option>
+            </select>
+
+            <select name="encargado">
+                <option value="">Encargado</option>
+                {% for m in madrijim %}
+                    <option value="{{ m.id }}">{{ m.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="hora_salida" placeholder="Hora de salida">
+            <input type="text" name="hora_estimada" placeholder="Hora estimada">
+            <textarea name="link_ruta" placeholder="Link de Google Maps o ubicación compartida"></textarea>
+
+            <button class="save-btn" type="submit">Guardar</button>
+        </form>
+
+        <div class="close" onclick="cerrarModal()">Cancelar</div>
+    </div>
+</div>
+
+<script>
+function abrirModal() {
+    document.getElementById('modal').style.display = 'flex';
+}
+
+function cerrarModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+</script>
+
+</body>
+</html>

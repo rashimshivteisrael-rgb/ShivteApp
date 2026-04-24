@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Kbutzot</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1100px; margin:auto; padding:30px 20px; }
+.topbar { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+.btn { background:#334155; color:white; text-decoration:none; padding:10px 14px; border-radius:10px; font-weight:bold; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; }
+.card { background:rgba(255,255,255,0.08); border-radius:20px; padding:20px; }
+.special { border:1px solid rgba(34,197,94,0.45); background:rgba(34,197,94,0.12); margin-bottom:24px; }
+.badge { display:inline-block; background:#334155; padding:6px 10px; border-radius:8px; margin:4px 4px 0 0; font-size:13px; }
+.muted { color:#cbd5e1; font-size:14px; line-height:1.5; }
+.section { margin-top:14px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <div class="topbar">
+        <h1>🏠 Kbutzot</h1>
+
+        {% if request.session.usuario_tipo == 'madrij' %}
+            <a class="btn" href="/menu-madrij/">← Menú</a>
+        {% elif request.session.usuario_tipo == 'admin' %}
+            <a class="btn" href="/panel-admin/">← Panel Admin</a>
+        {% else %}
+            <a class="btn" href="/">← Inicio</a>
+        {% endif %}
+    </div>
+
+   {% if mi_kbutza %}
+    <div class="card special">
+        <h2>🔥 Tu kbutza: {{ mi_kbutza.nombre }}</h2>
+
+        <div class="section">
+            <strong>Madrijim</strong><br>
+            {% for m in mi_madrijim %}
+                <span class="badge">{{ m.usuario.nombre }}</span>
+            {% empty %}
+                <span class="muted">Sin madrijim</span>
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <strong>Janijim</strong><br>
+            {% for j in mi_janijim %}
+                <span class="badge">{{ j.nombre }}</span>
+            {% empty %}
+                <span class="muted">Sin janijim</span>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+    <div class="grid">
+        {% for item in data %}
+            <div class="card">
+                <h2>{{ item.kbutza.nombre }}</h2>
+
+                <div class="section">
+                    <strong>Madrijim</strong><br>
+                    {% for m in item.madrijim %}
+                        <span class="badge">{{ m.usuario.nombre }}</span>
+                    {% empty %}
+                        <span class="muted">Sin madrijim asignados</span>
+                    {% endfor %}
+                </div>
+
+                <div class="section">
+                    <strong>Janijim</strong><br>
+                    {% for j in item.janijim %}
+                        <span class="badge">{{ j.nombre }}</span>
+                    {% empty %}
+                        <span class="muted">Sin janijim</span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="card">No hay kbutzot todavía.</div>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>

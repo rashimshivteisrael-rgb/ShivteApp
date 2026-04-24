@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transporte</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px 50px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .title h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .title p {
+            margin: 8px 0 0;
+            color: #cbd5e1;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #334155;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .hero {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .hero h2 {
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .summary-card {
+            background: rgba(255,255,255,0.06);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .summary-card h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .summary-card p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .section-title {
+            margin: 30px 0 16px;
+            font-size: 24px;
+        }
+
+        .bus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .bus-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+
+        .bus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .bus-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .status {
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .green {
+            background: rgba(34,197,94,0.18);
+            color: #bbf7d0;
+        }
+
+        .yellow {
+            background: rgba(250,204,21,0.18);
+            color: #fde68a;
+        }
+
+        .red {
+            background: rgba(239,68,68,0.18);
+            color: #fecaca;
+        }
+
+        .info-list {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .info-label {
+            display: block;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .passenger-box {
+            margin-top: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .passenger-box h4 {
+            margin: 0 0 10px;
+            font-size: 17px;
+        }
+
+        .passenger-list {
+            margin: 0;
+            padding-left: 18px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .footer-note {
+            margin-top: 34px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .title h1 {
+                font-size: 28px;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 20px 16px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="title">
+                <h1>🚌 Transporte</h1>
+                <p>Seguimiento de camiones de ida y regreso del camp</p>
+            </div>
+
+            <a class="back" href="/">← Inicio</a>
+        </div>
+
+        <div class="hero">
+            <h2>Seguimiento en tiempo real</h2>
+            <p>
+                Aquí podrás revisar el estado de cada camión, la ruta,
+                la hora estimada de llegada y quién va en cada uno.
+            </p>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>🟢 Camiones activos</h3>
+                    <p>Consulta cuáles ya salieron, cuáles van en camino y cuáles ya llegaron.</p>
+                </div>
+
+                <div class="summary-card">
+                    <h3>⏱ ETA</h3>
+                    <p>Muestra el tiempo estimado restante para llegar al destino.</p>
+                </div>
+
+                <div class="summary-card">
+                    <h3>👥 Pasajeros</h3>
+                    <p>Lista visible de janijim, madrijim o grupo asignado por camión.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Camiones de ida</h2>
+
+        <div class="bus-grid">
+            <div class="bus-card">
+                <div class="bus-header">
+                    <h3 class="bus-name">Camión 1</h3>
+                    <span class="status green">En camino</span>
+                </div>
+
+                <div class="info-list">
+                    <div class="info-box">
+                        <span class="info-label">Ruta</span>
+                        <div class="info-value">CDMX → Camp Shivte</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Salida</span>
+                        <div class="info-value">8:00 AM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Hora estimada de llegada</span>
+                        <div class="info-value">10:35 AM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">ETA</span>
+                        <div class="info-value">25 min</div>
+                    </div>
+                </div>
+
+                <div class="passenger-box">
+                    <h4>Pasajeros</h4>
+                    <ol class="passenger-list">
+                        <li>Kbutza 1</li>
+                        <li>Kbutza 2</li>
+                        <li>Madrijim asignados</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="bus-card">
+                <div class="bus-header">
+                    <h3 class="bus-name">Camión 2</h3>
+                    <span class="status yellow">Saliendo</span>
+                </div>
+
+                <div class="info-list">
+                    <div class="info-box">
+                        <span class="info-label">Ruta</span>
+                        <div class="info-value">CDMX → Camp Shivte</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Salida</span>
+                        <div class="info-value">8:20 AM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Hora estimada de llegada</span>
+                        <div class="info-value">10:55 AM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">ETA</span>
+                        <div class="info-value">40 min</div>
+                    </div>
+                </div>
+
+                <div class="passenger-box">
+                    <h4>Pasajeros</h4>
+                    <ol class="passenger-list">
+                        <li>Kbutza 3</li>
+                        <li>Kbutza 4</li>
+                        <li>Staff asignado</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Camiones de regreso</h2>
+
+        <div class="bus-grid">
+            <div class="bus-card">
+                <div class="bus-header">
+                    <h3 class="bus-name">Camión Regreso 1</h3>
+                    <span class="status red">Pendiente</span>
+                </div>
+
+                <div class="info-list">
+                    <div class="info-box">
+                        <span class="info-label">Ruta</span>
+                        <div class="info-value">Camp Shivte → CDMX</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Salida</span>
+                        <div class="info-value">5:00 PM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Hora estimada de llegada</span>
+                        <div class="info-value">7:30 PM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Estado actual</span>
+                        <div class="info-value">Esperando salida</div>
+                    </div>
+                </div>
+
+                <div class="passenger-box">
+                    <h4>Pasajeros</h4>
+                    <ol class="passenger-list">
+                        <li>Kbutza 5</li>
+                        <li>Kbutza 6</li>
+                        <li>Madrijim asignados</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="bus-card">
+                <div class="bus-header">
+                    <h3 class="bus-name">Camión Regreso 2</h3>
+                    <span class="status red">Pendiente</span>
+                </div>
+
+                <div class="info-list">
+                    <div class="info-box">
+                        <span class="info-label">Ruta</span>
+                        <div class="info-value">Camp Shivte → CDMX</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Salida</span>
+                        <div class="info-value">5:20 PM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Hora estimada de llegada</span>
+                        <div class="info-value">7:50 PM</div>
+                    </div>
+
+                    <div class="info-box">
+                        <span class="info-label">Estado actual</span>
+                        <div class="info-value">Esperando salida</div>
+                    </div>
+                </div>
+
+                <div class="passenger-box">
+                    <h4>Pasajeros</h4>
+                    <ol class="passenger-list">
+                        <li>Kbutza 7</li>
+                        <li>Kbutza 8</li>
+                        <li>Staff asignado</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            Aquí después podemos conectar datos reales por camión.
+        </div>
+    </div>
+</body>
+</html>

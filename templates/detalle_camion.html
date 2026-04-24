@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle Camión</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px 20px 60px;
+        }
+        .back {
+            display: inline-block;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: white;
+            background: #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+        }
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+        .row {
+            background: rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        select, button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            margin-top: 10px;
+        }
+        select {
+            background: white;
+            color: black;
+        }
+        .green {
+            background: #22c55e;
+            color: white;
+            font-weight: bold;
+        }
+        .red {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="/panel-admin/transporte/">← Transporte</a>
+
+    <div class="card">
+        <h1>{{ camion.nombre }}</h1>
+        <p>Tipo: {{ camion.tipo }}</p>
+        <p>Estado: {{ camion.estado }}</p>
+        <p>Encargado: {% if camion.encargado %}{{ camion.encargado.nombre }}{% else %}Sin asignar{% endif %}</p>
+        <p>Salida: {{ camion.hora_salida|default:"-" }}</p>
+        <p>ETA: {{ camion.hora_estimada|default:"-" }}</p>
+    </div>
+
+    <div class="card">
+       <h2>Asignar madrij</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo_form" value="madrij">
+            <select name="madrij_id" required>
+                <option value="">Selecciona madrij</option>
+                {% for m in madrijim_disponibles %}
+                    <option value="{{ m.id }}">{{ m.nombre }} - {{ m.username }}</option>
+                {% endfor %}
+            </select>
+            <button class="green" type="submit">Asignar madrij</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Agregar janij</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo_form" value="janij">
+            <select name="janij_id" required>
+                <option value="">Selecciona janij</option>
+                {% for j in janijim_disponibles %}
+                    <option value="{{ j.id }}">{{ j.nombre }}</option>
+                {% endfor %}
+            </select>
+            <button class="green" type="submit">Agregar janij</button>
+       </form>
+</div>
+
+<div class="card">
+    <h2>Janijim del camión</h2>
+    {% for j in janijim %}
+        <div class="row">
+            <div>{{ j.janij.nombre }}</div>
+            <form method="POST" action="/panel-admin/transporte/{{ camion.id }}/quitar-janij/{{ j.id }}/">
+                {% csrf_token %}
+                <button class="red" type="submit">Quitar</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>No hay janijim asignados.</p>
+    {% endfor %}
+</div>
+
+    <div class="card">
+        <h2>Madrijim del camión</h2>
+        {% for m in madrijim %}
+            <div class="row">
+                <div>{{ m.madrij.nombre }}</div>
+                <form method="POST" action="/panel-admin/transporte/{{ camion.id }}/quitar-madrij/{{ m.id }}/">
+                    {% csrf_token %}
+                    <button class="red" type="submit">Quitar</button>
+                </form>
+            </div>
+        {% empty %}
+            <p>No hay madrijim asignados.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Kbutzot del camión</h2>
+        {% for k in kbutzot %}
+            <div class="row">
+                <div>{{ k.kbutza.nombre }}</div>
+                <form method="POST" action="/panel-admin/transporte/{{ camion.id }}/quitar-kbutza/{{ k.id }}/">
+                    {% csrf_token %}
+                    <button class="red" type="submit">Quitar</button>
+                </form>
+            </div>
+        {% empty %}
+            <p>No hay kbutzot asignadas.</p>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
