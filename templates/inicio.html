@@ -10,245 +10,195 @@
         }
 
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
-            color: white;
+             margin: 0;
+             font-family: Arial, sans-serif;
+             background:
+                 linear-gradient(to bottom, #07111f 0%, #12284d 45%, #f8fafc 100%);
+             min-height: 100vh;
+             color: white;
         }
 
-        .container {
-            max-width: 1250px;
-            margin: auto;
-            padding: 30px 20px 50px;
+        .page {
+           max-width: 1180px;
+           margin: auto;
+           padding: 70px 24px;
         }
 
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-
-        .brand h1 {
-            margin: 0;
-            font-size: 34px;
-        }
-
-        .brand p {
-            margin: 8px 0 0;
-            color: #cbd5e1;
-            font-size: 15px;
-        }
-
-        .admin-btn {
-            background: #22c55e;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
-        }
-
-        .hero {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 26px;
-            padding: 28px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-        }
-
-        .hero-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .hero h2 {
-            margin: 0 0 10px;
-            font-size: 30px;
-        }
-
-        .hero p {
-            margin: 0;
-            color: #cbd5e1;
-            max-width: 700px;
-            line-height: 1.5;
-        }
-
-        .camp-day {
-            background: rgba(34, 197, 94, 0.18);
-            color: #bbf7d0;
-            padding: 10px 14px;
-            border-radius: 999px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .highlight-row {
+        .hero-control {
+            background: linear-gradient(135deg, #111827, #1d4ed8, #38bdf8);
+            border-radius: 28px;
+            padding: 34px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
-            margin-top: 22px;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 28px;
+            align-items: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,.28);
         }
 
-        .highlight-box {
-            background: rgba(255,255,255,0.06);
-            border-radius: 18px;
-            padding: 18px;
-        }
-
-        .highlight-box h3 {
-            margin: 0 0 8px;
-            font-size: 18px;
-        }
-
-        .highlight-box p {
-            margin: 0;
-            color: #cbd5e1;
-            font-size: 14px;
-        }
-
-        .section-title {
-            margin: 32px 0 18px;
-            font-size: 24px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            text-decoration: none;
-            color: white;
-            display: block;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 24px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            transition: transform 0.18s ease, background 0.18s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-6px);
-            background: rgba(255,255,255,0.12);
-        }
-
-        .icon {
-            font-size: 30px;
+        .eyebrow {
+            letter-spacing: 4px;
+            font-size: 13px;
             margin-bottom: 14px;
         }
 
-        .card h3 {
-            margin: 0 0 10px;
-            font-size: 22px;
+        .hero-text h1 {
+            font-size: 48px;
+            line-height: 1;
+            margin: 0 0 18px;
         }
 
-        .card p {
-            margin: 0;
-            color: #cbd5e1;
+        .hero-text p {
+            font-size: 17px;
             line-height: 1.5;
-            font-size: 15px;
+            max-width: 560px;
         }
 
-        .footer-note {
-            margin-top: 34px;
-            color: #94a3b8;
-            font-size: 14px;
-            text-align: center;
+        .hero-logo {
+            background: rgba(255,255,255,.16);
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 24px;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        @media (max-width: 700px) {
-            .brand h1 {
-                font-size: 28px;
+        .logo-box {
+            background: white;
+            color: black;
+            width: 220px;
+            height: 220px;
+            border-radius: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            font-weight: 900;
+        }
+
+        .cards-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .menu-card {
+            min-height: 150px;
+            border-radius: 20px;
+            padding: 22px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 16px 35px rgba(0,0,0,.18);
+        }
+
+        .menu-card h2 {
+            font-size: 27px;
+            margin: 0;
+        }
+
+        .menu-card p {
+            color: rgba(255,255,255,.88);
+            line-height: 1.4;
+        }
+
+        .blue { background: linear-gradient(135deg, #2563eb, #38bdf8); }
+        .green { background: linear-gradient(135deg, #16a34a, #6ee7b7); }
+        .dark { background: linear-gradient(135deg, #111827, #374151); }
+        .purple { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+        .orange { background: linear-gradient(135deg, #f97316, #facc15); }
+
+        .login-area {
+            position: fixed;
+            top: 24px;
+            right: 28px;
+        }
+
+        .login-btn {
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+            .hero-control {
+               grid-template-columns: 1fr;
             }
 
-            .hero h2 {
-                font-size: 24px;
+            .cards-row {
+               grid-template-columns: 1fr;
             }
 
-            .container {
-                padding: 20px 16px 40px;
+            .hero-text h1 {
+               font-size: 38px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="topbar">
-            <div class="brand">
-                <h1>Shivte App 🔥</h1>
-                <p>Todo el campamento en una sola plataforma</p>
-            </div>
+<div class="page">
 
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                 <a class="admin-btn" href="/login/" style="background:#3b82f6;">Login</a>
-            </div>
+    <div class="hero-control">
+        <div class="hero-text">
+            <p class="eyebrow">SHIVTE APP 2026</p>
+            <h1>Centro de control del camp</h1>
+            <p>
+                Accede a kbutzot, horarios, fotos, transporte e inscripciones
+                desde un solo lugar.
+            </p>
         </div>
 
-        <h2 class="section-title">Secciones principales</h2>
-
-        <div class="grid">
-            <a class="card" href="/kbutzot/">
-                <div class="icon">🏠</div>
-                <h3>Kbutzot</h3>
-                <p>Grupos, cuartos, janijim y madrijim del camp.</p>
-            </a>
-
-            <a class="card" href="/actividades/">
-                <div class="icon">🎯</div>
-                <h3>Actividades</h3>
-                <p>Funny War, Xtreme Day, Got Talent, Color War y más.</p>
-            </a>
-
-            <a class="card" href="/horarios/">
-                <div class="icon">📅</div>
-                <h3>Horarios</h3>
-                <p>Itinerarios del día, actividades y momentos importantes.</p>
-            </a>
-
-            <a class="card" href="/fotos/">
-                <div class="icon">📸</div>
-                <h3>Fotos</h3>
-                <p>Galería del camp por días, eventos y recuerdos especiales.</p>
-            </a>
-
-            <a class="card" href="/inscripciones/">
-                <div class="icon">📝</div>
-                <h3>Inscripciones</h3>
-                <p>Registro de janijim e información general de inscritos.</p>
-            </a>
-
-           <a href="/transporte-publico/" style="text-decoration:none; color:white; display:block;">
-               <div class="card" style="cursor:pointer;">
-                 <h3>🚌 Transporte</h3>
-        
-                 <p>
-                    🟢 {{ en_camino }} en camino <br>
-                    🟡 {{ saliendo }} saliendo <br>
-                    ⚪ {{ pendientes }} pendientes
-                 </p>
-               </div>
-           </a>
-
-        <div class="footer-note">
-            Shivte App · versión inicial
+        <div class="hero-logo">
+            <div class="logo-box">
+                <span>SHIVTE</span>
+            </div>
         </div>
     </div>
 
-<script>
-    setInterval(function() {
-        window.location.reload();
-    }, 15000);
-</script>
+    <div class="cards-row">
 
+        <a class="menu-card blue" href="/kbutzot/">
+            <h2>Kbutzot</h2>
+            <p>Grupos, madrijim y janijim del camp.</p>
+            <strong>Entrar →</strong>
+        </a>
+
+        <a class="menu-card green" href="/horarios/">
+            <h2>Horarios</h2>
+            <p>Calendario y horarios organizados por día.</p>
+            <strong>Entrar →</strong>
+        </a>
+
+        <a class="menu-card dark" href="/fotos/">
+            <h2>Fotos</h2>
+            <p>Galería del camp y recuerdos especiales.</p>
+            <strong>Entrar →</strong>
+        </a>
+
+        <a class="menu-card purple" href="/transporte-publico/">
+            <h2>Transporte</h2>
+            <p>Camiones, estado y seguimiento en vivo.</p>
+            <strong>Entrar →</strong>
+        </a>
+
+        <a class="menu-card orange" href="/inscripciones/">
+            <h2>Inscripciones</h2>
+            <p>Registro e información general.</p>
+            <strong>Entrar →</strong>
+        </a>
+
+    </div>
+
+    <div class="login-area">
+        <a class="login-btn" href="/login/">Login</a>
+    </div>
+
+</div>
 </body>
 </html>
