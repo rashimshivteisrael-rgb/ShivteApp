@@ -4,7 +4,8 @@ from usuarios.models import UsuarioCamp
 
 class FotoCamp(models.Model):
     titulo = models.CharField(max_length=150, blank=True, null=True)
-    imagen = models.ImageField(upload_to='fotos_camp/')
+    archivo = models.FileField(upload_to='media_camp/', blank=True, null=True)
+    tipo = models.CharField(max_length=20, default='foto')
     subido_por = models.ForeignKey(
         UsuarioCamp,
         on_delete=models.SET_NULL,
@@ -14,4 +15,4 @@ class FotoCamp(models.Model):
     fecha_subida = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.titulo if self.titulo else f"Foto {self.id}"
+        return self.titulo if self.titulo else f"Archivo {self.id}"

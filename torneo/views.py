@@ -582,21 +582,30 @@ def subir_foto(request):
     usuario_tipo = request.session.get('usuario_tipo')
 
     if not usuario_id or usuario_tipo not in ['madrij', 'admin']:
-     return redirect('/login/')
+        return redirect('/login/')
 
     usuario = get_object_or_404(UsuarioCamp, id=usuario_id)
 
     if request.method == 'POST':
         titulo = request.POST.get('titulo')
-        imagen = request.FILES.get('imagen')
+        archivos = request.FILES.getlist('archivos')
 
-        if imagen:
+        for archivo in archivos:
+            content_type = archivo.content_type
+
+            if content_type.startswith('video/'):
+                tipo = 'video'
+            else:
+                tipo = 'foto'
+
             FotoCamp.objects.create(
                 titulo=titulo,
-                imagen=imagen,
+                archivo=archivo,
+                tipo=tipo,
                 subido_por=usuario
             )
-            return redirect('/fotos/')
+
+        return redirect('/fotos/')
 
     return render(request, 'subir_foto.html')
 
