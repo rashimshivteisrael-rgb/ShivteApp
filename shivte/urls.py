@@ -41,7 +41,8 @@ from torneo.views import (
     subir_foto,
     eliminar_foto,
     kbutzot_publicas,
-    janijim_publicos
+    janijim_publicos,
+    detalle_janij_publico,
 )
 
 urlpatterns = [
@@ -87,6 +88,7 @@ urlpatterns = [
     path('fotos/<int:foto_id>/eliminar/', eliminar_foto, name='eliminar_foto'),
     path('kbutzot/', kbutzot_publicas, name='kbutzot_publicas'),
     path('janijim/', janijim_publicos, name='janijim_publicos'),
+    path('janijim/<int:janij_id>/', detalle_janij_publico, name='detalle_janij_publico'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

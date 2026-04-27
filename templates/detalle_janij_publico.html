@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ficha Janij</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:800px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,0.08); padding:22px; border-radius:18px; margin-bottom:16px; }
+.btn { background:#334155; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; display:inline-block; margin-bottom:18px; }
+.badge { display:inline-block; background:#334155; padding:7px 11px; border-radius:999px; margin:4px; }
+.muted { color:#cbd5e1; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn" href="/janijim/">← Volver</a>
+
+    <div class="card">
+        <h1>{{ janij.nombre }}</h1>
+        <p class="muted">Kbutza: {{ janij.kbutza.nombre }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Madrijim de su kbutza</h2>
+        {% for m in madrijim %}
+            <span class="badge">{{ m.usuario.nombre }}</span>
+        {% empty %}
+            <p class="muted">Sin madrijim asignados.</p>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>

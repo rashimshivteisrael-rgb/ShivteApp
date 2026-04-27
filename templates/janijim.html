@@ -29,12 +29,12 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
 
     <div class="grid">
         {% for j in janijim %}
-            <div class="card">
-                <strong>{{ j.nombre }}</strong><br>
-                {% if j.kbutza %}
-                    {{ j.kbutza.nombre }}
-                {% endif %}
-            </div>
+            <a class="card" href="/janijim/{{ j.id }}/" style="text-decoration:none; color:white;">
+               <strong>{{ j.nombre }}</strong><br>
+               {% if j.kbutza %}
+                   {{ j.kbutza.nombre }}
+               {% endif %}
+            </a>
         {% empty %}
             <div class="card">No hay janijim.</div>
         {% endfor %}

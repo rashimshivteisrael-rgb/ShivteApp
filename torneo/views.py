@@ -699,3 +699,26 @@ def janijim_publicos(request):
         'janijim': janijim,
         'titulo': titulo
     })
+
+def detalle_janij_publico(request, janij_id):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo not in ['admin', 'madrij']:
+        return redirect('/login/')
+
+    janij = get_object_or_404(Janij, id=janij_id)
+
+    if usuario_tipo == 'madrij':
+        usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+        asignacion = MadrijKbutza.objects.filter(usuario=usuario).first()
+
+        if not asignacion or janij.kbutza != asignacion.kbutza:
+            return redirect('/janijim/')
+
+    madrijim = MadrijKbutza.objects.filter(kbutza=janij.kbutza)
+
+    return render(request, 'detalle_janij_publico.html', {
+        'janij': janij,
+        'madrijim': madrijim
+    })
