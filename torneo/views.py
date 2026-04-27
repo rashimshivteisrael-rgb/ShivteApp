@@ -672,3 +672,30 @@ def kbutzot_publicas(request):
         'mi_madrijim': mi_madrijim,
         'mi_janijim': mi_janijim
     })
+
+def janijim_publicos(request):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    janijim = []
+    titulo = "Janijim"
+
+    if usuario_tipo == 'admin':
+        janijim = Janij.objects.all().order_by('nombre')
+        titulo = "Todos los janijim"
+
+    elif usuario_tipo == 'madrij':
+        usuario = UsuarioCamp.objects.filter(id=usuario_id, tipo='madrij').first()
+        if usuario:
+            asignacion = MadrijKbutza.objects.filter(usuario=usuario).first()
+            if asignacion:
+                janijim = Janij.objects.filter(kbutza=asignacion.kbutza)
+                titulo = f"Janijim de {asignacion.kbutza.nombre}"
+
+    else:
+        return redirect('/')
+
+    return render(request, 'janijim.html', {
+        'janijim': janijim,
+        'titulo': titulo
+    })

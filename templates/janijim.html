@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Janijim</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1000px; margin:auto; padding:30px 20px; }
+.topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.grid { display:grid; gap:12px; }
+.card { background:rgba(255,255,255,0.08); padding:16px; border-radius:14px; }
+.btn { background:#334155; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="topbar">
+        <h1>{{ titulo }}</h1>
+
+        {% if request.session.usuario_tipo == 'admin' %}
+            <a class="btn" href="/panel-admin/">← Panel</a>
+        {% elif request.session.usuario_tipo == 'madrij' %}
+            <a class="btn" href="/menu-madrij/">← Menú</a>
+        {% endif %}
+    </div>
+
+    <div class="grid">
+        {% for j in janijim %}
+            <div class="card">
+                <strong>{{ j.nombre }}</strong><br>
+                {% if j.kbutza %}
+                    {{ j.kbutza.nombre }}
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="card">No hay janijim.</div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+</html>
