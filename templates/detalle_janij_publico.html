@@ -17,6 +17,15 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
 
     <a class="btn" href="/janijim/">← Volver</a>
 
+    {% if request.session.usuario_tipo == 'admin' %}
+        <a class="btn" href="/janijim/{{ janij.id }}/editar/">Editar</a>
+
+        <form method="POST" action="/janijim/{{ janij.id }}/eliminar/" style="display:inline;">
+            {% csrf_token %}
+            <button class="btn" type="submit" style="background:#ef4444;">Eliminar</button>
+        </form>
+    {% endif %}
+
     <div class="card">
         <h1>{{ janij.nombre }}</h1>
         <p class="muted">Kbutza: {{ janij.kbutza.nombre }}</p>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Editar Janij</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:600px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,0.08); padding:22px; border-radius:18px; }
+input, textarea, select { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+option { color:black; }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="btn back" href="/janijim/{{ janij.id }}/">← Volver</a>
+
+    <div class="card">
+        <h1>Editar janij</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <input type="text" name="nombre" value="{{ janij.nombre }}" required>
+
+            <select name="kbutza">
+                <option value="">Sin kbutza</option>
+                {% for k in kbutzot %}
+                    <option value="{{ k.id }}" {% if janij.kbutza and janij.kbutza.id == k.id %}selected{% endif %}>
+                        {{ k.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="nombre_mama" value="{{ janij.nombre_mama|default:'' }}" placeholder="Nombre mamá">
+            <input type="text" name="tel_mama" value="{{ janij.tel_mama|default:'' }}" placeholder="Tel mamá">
+
+            <input type="text" name="nombre_papa" value="{{ janij.nombre_papa|default:'' }}" placeholder="Nombre papá">
+            <input type="text" name="tel_papa" value="{{ janij.tel_papa|default:'' }}" placeholder="Tel papá">
+
+            <textarea name="info_medica" placeholder="Info médica">{{ janij.info_medica|default:'' }}</textarea>
+
+            <button type="submit">Guardar cambios</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

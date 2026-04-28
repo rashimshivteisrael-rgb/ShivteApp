@@ -44,6 +44,8 @@ from torneo.views import (
     janijim_publicos,
     detalle_janij_publico,
     agregar_janij_general,
+    editar_janij_general,
+    eliminar_janij_general,
 )
 
 urlpatterns = [
@@ -91,6 +93,8 @@ urlpatterns = [
     path('janijim/', janijim_publicos, name='janijim_publicos'),
     path('janijim/<int:janij_id>/', detalle_janij_publico, name='detalle_janij_publico'),
     path('janijim/agregar/', agregar_janij_general, name='agregar_janij_general'),
+    path('janijim/<int:janij_id>/editar/', editar_janij_general, name='editar_janij_general'),
+    path('janijim/<int:janij_id>/eliminar/', eliminar_janij_general, name='eliminar_janij_general'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

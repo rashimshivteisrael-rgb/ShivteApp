@@ -155,27 +155,25 @@ def detalle_kbutza(request, kbutza_id):
 def editar_kbutza(request, kbutza_id):
     kbutza = get_object_or_404(Kbutza, id=kbutza_id)
 
-    # 👇 ESTA ES LA PARTE IMPORTANTE
-    janijim_sin_kbutza = Janij.objects.filter(kbutza__isnull=True)
+    janijim_disponibles = Janij.objects.filter(kbutza__isnull=True).order_by('nombre')
 
     if request.method == 'POST':
         kbutza.nombre = request.POST.get('nombre')
         kbutza.cuarto = request.POST.get('cuarto')
         kbutza.save()
 
-        # 👇 ASIGNAR JANIJIM SELECCIONADOS
         janijim_ids = request.POST.getlist('janijim')
-        for j in Janij.objects.filter(id__in=janijim_ids):
-            j.kbutza = kbutza
-            j.save()
+
+        for janij in Janij.objects.filter(id__in=janijim_ids):
+            janij.kbutza = kbutza
+            janij.save()
 
         return redirect(f'/panel-admin/kbutzot/{kbutza.id}/')
 
     return render(request, 'editar_kbutza.html', {
         'kbutza': kbutza,
-        'janijim_sin_kbutza': janijim_sin_kbutza  # 👈 ESTO VA AL HTML
+        'janijim_disponibles': janijim_disponibles
     })
-
 
 def eliminar_kbutza(request, kbutza_id):
     kbutza = get_object_or_404(Kbutza, id=kbutza_id)
@@ -752,3 +750,45 @@ def agregar_janij_general(request):
         return redirect('/janijim/')
 
     return render(request, 'agregar_janij_general.html')
+
+def editar_janij_general(request, janij_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    janij = get_object_or_404(Janij, id=janij_id)
+    kbutzot = Kbutza.objects.all().order_by('nombre')
+
+    if request.method == 'POST':
+        janij.nombre = request.POST.get('nombre')
+        janij.nombre_mama = request.POST.get('nombre_mama')
+        janij.tel_mama = request.POST.get('tel_mama')
+        janij.nombre_papa = request.POST.get('nombre_papa')
+        janij.tel_papa = request.POST.get('tel_papa')
+        janij.info_medica = request.POST.get('info_medica')
+
+        kbutza_id = request.POST.get('kbutza')
+        if kbutza_id:
+            janij.kbutza = get_object_or_404(Kbutza, id=kbutza_id)
+        else:
+            janij.kbutza = None
+
+        janij.save()
+        return redirect(f'/janijim/{janij.id}/')
+
+    return render(request, 'editar_janij_general.html', {
+        'janij': janij,
+        'kbutzot': kbutzot
+    })
+
+
+def eliminar_janij_general(request, janij_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    janij = get_object_or_404(Janij, id=janij_id)
+
+    if request.method == 'POST':
+        janij.delete()
+        return redirect('/janijim/')
+
+    return redirect('/janijim/')
