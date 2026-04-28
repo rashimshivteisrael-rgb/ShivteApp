@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Picture Day Admin</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1000px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:16px; }
+input, select, textarea { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+option { color:black; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn back" href="/panel-admin/">← Panel</a>
+
+    <h1>📸 Picture Day Admin</h1>
+
+    <div class="card">
+        <h2>Crear foto requerida</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <select name="kbutza" required>
+                <option value="">Selecciona kbutza</option>
+                {% for k in kbutzot %}
+                    <option value="{{ k.id }}">{{ k.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="titulo" placeholder="Ej. Foto grupal, foto con bandera, foto creativa" required>
+
+            <textarea name="descripcion" placeholder="Instrucciones opcionales"></textarea>
+
+            <button type="submit">Guardar pedido</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Pedidos creados</h2>
+
+        {% for p in pedidos %}
+            <p>
+                <strong>{{ p.kbutza.nombre }}</strong> — {{ p.titulo }}
+                <br>
+                {{ p.descripcion|default:"" }}
+            </p>
+        {% empty %}
+            <p>No hay pedidos todavía.</p>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>

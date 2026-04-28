@@ -47,6 +47,10 @@ from torneo.views import (
     editar_janij_general,
     eliminar_janij_general,
     crear_admin_temporal,
+    picture_day_admin,
+    picture_day_madrij,
+    subir_picture_day,
+    picture_day_publico,
 )
 
 urlpatterns = [
@@ -97,6 +101,10 @@ urlpatterns = [
     path('janijim/<int:janij_id>/editar/', editar_janij_general, name='editar_janij_general'),
     path('janijim/<int:janij_id>/eliminar/', eliminar_janij_general, name='eliminar_janij_general'),
     path('crear-admin-temporal/', crear_admin_temporal, name='crear_admin_temporal'),
+    path('panel-admin/picture-day/', picture_day_admin, name='picture_day_admin'),
+    path('picture-day/', picture_day_madrij, name='picture_day_madrij'),
+    path('picture-day/subir/<int:pedido_id>/', subir_picture_day, name='subir_picture_day'),
+    path('picture-day-publico/', picture_day_publico, name='picture_day_publico'),  
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

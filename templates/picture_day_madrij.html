@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Picture Day</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:900px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:16px; }
+.btn { background:#22c55e; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:bold; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+.muted { color:#cbd5e1; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn back" href="/menu-madrij/">← Menú</a>
+
+    <h1>📸 Picture Day</h1>
+
+    {% if sin_kbutza %}
+        <div class="card">No tienes kbutza asignada.</div>
+    {% else %}
+        <h2>{{ kbutza.nombre }}</h2>
+
+        {% for p in pedidos %}
+            <div class="card">
+                <h3>{{ p.titulo }}</h3>
+                <p class="muted">{{ p.descripcion|default:"Sin descripción" }}</p>
+                <a class="btn" href="/picture-day/subir/{{ p.id }}/">Subir foto</a>
+            </div>
+        {% empty %}
+            <div class="card">No hay fotos requeridas para tu kbutza.</div>
+        {% endfor %}
+    {% endif %}
+
+</div>
+</body>
+</html>

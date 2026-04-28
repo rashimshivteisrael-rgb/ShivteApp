@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Subir Picture Day</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:550px; margin:auto; padding:40px 20px; }
+.card { background:rgba(255,255,255,.08); padding:22px; border-radius:18px; }
+input { width:100%; padding:12px; margin-bottom:14px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn back" href="/picture-day/">← Picture Day</a>
+
+    <div class="card">
+        <h1>{{ pedido.titulo }}</h1>
+        <p>{{ pedido.descripcion|default:"" }}</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="archivo" accept="image/*" required>
+            <button type="submit">Subir foto</button>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

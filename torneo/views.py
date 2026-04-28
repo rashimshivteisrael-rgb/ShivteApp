@@ -10,6 +10,7 @@ from django.contrib import messages
 from transporte.models import Camion, CamionMadrij, CamionJanij, AsistenciaCamion, AsistenciaMadrijCamion
 from media_camp.models import FotoCamp
 from collections import defaultdict
+from actividades.models import PictureDayPedido, PictureDayFoto
 
 
 from transporte.models import Camion
@@ -805,3 +806,93 @@ def crear_admin_temporal(request):
         )
 
     return redirect('/login/')
+
+def picture_day_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    kbutzot = Kbutza.objects.all().order_by('nombre')
+
+    if request.method == 'POST':
+        kbutza_id = request.POST.get('kbutza')
+        titulo = request.POST.get('titulo')
+        descripcion = request.POST.get('descripcion')
+
+        if kbutza_id and titulo:
+            kbutza = get_object_or_404(Kbutza, id=kbutza_id)
+            PictureDayPedido.objects.create(
+                kbutza=kbutza,
+                titulo=titulo,
+                descripcion=descripcion
+            )
+            return redirect('/panel-admin/picture-day/')
+
+    pedidos = PictureDayPedido.objects.all().order_by('kbutza__nombre', 'titulo')
+
+    return render(request, 'picture_day_admin.html', {
+        'kbutzot': kbutzot,
+        'pedidos': pedidos
+    })
+
+
+def picture_day_madrij(request):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+    asignacion = MadrijKbutza.objects.filter(usuario=usuario).first()
+
+    if not asignacion:
+        return render(request, 'picture_day_madrij.html', {
+            'sin_kbutza': True
+        })
+
+    kbutza = asignacion.kbutza
+    pedidos = PictureDayPedido.objects.filter(kbutza=kbutza)
+
+    return render(request, 'picture_day_madrij.html', {
+        'kbutza': kbutza,
+        'pedidos': pedidos
+    })
+
+
+def subir_picture_day(request, pedido_id):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+    pedido = get_object_or_404(PictureDayPedido, id=pedido_id)
+
+    asignacion = MadrijKbutza.objects.filter(usuario=usuario, kbutza=pedido.kbutza).first()
+    if not asignacion:
+        return redirect('/picture-day/')
+
+    if request.method == 'POST':
+        archivo = request.FILES.get('archivo')
+
+        if archivo:
+            PictureDayFoto.objects.create(
+                pedido=pedido,
+                archivo=archivo,
+                subido_por=usuario
+            )
+
+        return redirect('/picture-day/')
+
+    return render(request, 'subir_picture_day.html', {
+        'pedido': pedido
+    })
+
+
+def picture_day_publico(request):
+    fotos = PictureDayFoto.objects.all().order_by('-fecha_subida')
+
+    return render(request, 'picture_day_publico.html', {
+        'fotos': fotos
+    })
