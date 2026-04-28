@@ -67,6 +67,18 @@
             {% csrf_token %}
             <input type="text" name="nombre" value="{{ kbutza.nombre }}" required>
             <input type="text" name="cuarto" value="{{ kbutza.cuarto }}" placeholder="Cuarto">
+
+            <h3>Agregar janijim ya creados</h3>
+
+            {% for j in janijim_sin_kbutza %}
+                <label style="display:block; margin-bottom:8px;">
+                  <input type="checkbox" name="janijim" value="{{ j.id }}">
+                  {{ j.nombre }}
+                </label>
+            {% empty %}
+                <p>No hay janijim disponibles.</p>
+            {% endfor %}
+            
             <button class="btn" type="submit">Guardar cambios</button>
         </form>
     </div>

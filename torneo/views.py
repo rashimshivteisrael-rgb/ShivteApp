@@ -155,13 +155,26 @@ def detalle_kbutza(request, kbutza_id):
 def editar_kbutza(request, kbutza_id):
     kbutza = get_object_or_404(Kbutza, id=kbutza_id)
 
+    # 👇 ESTA ES LA PARTE IMPORTANTE
+    janijim_sin_kbutza = Janij.objects.filter(kbutza__isnull=True)
+
     if request.method == 'POST':
         kbutza.nombre = request.POST.get('nombre')
         kbutza.cuarto = request.POST.get('cuarto')
         kbutza.save()
+
+        # 👇 ASIGNAR JANIJIM SELECCIONADOS
+        janijim_ids = request.POST.getlist('janijim')
+        for j in Janij.objects.filter(id__in=janijim_ids):
+            j.kbutza = kbutza
+            j.save()
+
         return redirect(f'/panel-admin/kbutzot/{kbutza.id}/')
 
-    return render(request, 'editar_kbutza.html', {'kbutza': kbutza})
+    return render(request, 'editar_kbutza.html', {
+        'kbutza': kbutza,
+        'janijim_sin_kbutza': janijim_sin_kbutza  # 👈 ESTO VA AL HTML
+    })
 
 
 def eliminar_kbutza(request, kbutza_id):
@@ -722,3 +735,20 @@ def detalle_janij_publico(request, janij_id):
         'janij': janij,
         'madrijim': madrijim
     })
+
+def agregar_janij_general(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    if request.method == 'POST':
+        Janij.objects.create(
+            nombre=request.POST.get('nombre'),
+            nombre_mama=request.POST.get('nombre_mama'),
+            tel_mama=request.POST.get('tel_mama'),
+            nombre_papa=request.POST.get('nombre_papa'),
+            tel_papa=request.POST.get('tel_papa'),
+            info_medica=request.POST.get('info_medica'),
+        )
+        return redirect('/janijim/')
+
+    return render(request, 'agregar_janij_general.html')

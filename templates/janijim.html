@@ -21,6 +21,10 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
         <h1>{{ titulo }}</h1>
 
         {% if request.session.usuario_tipo == 'admin' %}
+           <a class="btn" href="/janijim/agregar/">+ Agregar janij</a>
+        {% endif %}
+
+        {% if request.session.usuario_tipo == 'admin' %}
             <a class="btn" href="/panel-admin/">← Panel</a>
         {% elif request.session.usuario_tipo == 'madrij' %}
             <a class="btn" href="/menu-madrij/">← Menú</a>

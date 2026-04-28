@@ -23,6 +23,18 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
     </div>
 
     <div class="card">
+        <h2>Información familiar</h2>
+
+        <p>Mamá: {{ janij.nombre_mama|default:"-" }}</p>
+        <p>Tel mamá: {{ janij.tel_mama|default:"-" }}</p>
+
+        <p>Papá: {{ janij.nombre_papa|default:"-" }}</p>
+        <p>Tel papá: {{ janij.tel_papa|default:"-" }}</p>
+
+        <p>Info médica: {{ janij.info_medica|default:"-" }}</p>
+    </div>
+
+    <div class="card">
         <h2>Madrijim de su kbutza</h2>
         {% for m in madrijim %}
             <span class="badge">{{ m.usuario.nombre }}</span>

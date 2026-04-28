@@ -13,8 +13,15 @@ class Kbutza(models.Model):
 
 class Janij(models.Model):
     nombre = models.CharField(max_length=100)
-    edad = models.IntegerField(blank=True, null=True)
-    kbutza = models.ForeignKey(Kbutza, on_delete=models.CASCADE, related_name='janijim')
+    kbutza = models.ForeignKey(Kbutza, on_delete=models.SET_NULL, null=True, blank=True)
+
+    nombre_mama = models.CharField(max_length=100, blank=True, null=True)
+    tel_mama = models.CharField(max_length=30, blank=True, null=True)
+
+    nombre_papa = models.CharField(max_length=100, blank=True, null=True)
+    tel_papa = models.CharField(max_length=30, blank=True, null=True)
+
+    info_medica = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.nombre

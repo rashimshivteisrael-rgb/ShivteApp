@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Agregar Janij</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:600px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,0.08); padding:22px; border-radius:18px; }
+input, textarea { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="btn back" href="/janijim/">← Janijim</a>
+
+    <div class="card">
+        <h1>Agregar janij</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="nombre" placeholder="Nombre del janij" required>
+
+            <input type="text" name="nombre_mama" placeholder="Nombre mamá">
+            <input type="text" name="tel_mama" placeholder="Teléfono mamá">
+
+            <input type="text" name="nombre_papa" placeholder="Nombre papá">
+            <input type="text" name="tel_papa" placeholder="Teléfono papá">
+
+            <textarea name="info_medica" placeholder="Información médica"></textarea>
+
+            <button type="submit">Guardar janij</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
