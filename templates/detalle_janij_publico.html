@@ -22,7 +22,14 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
 
         <form method="POST" action="/janijim/{{ janij.id }}/eliminar/" style="display:inline;">
             {% csrf_token %}
-            <button class="btn" type="submit" style="background:#ef4444;">Eliminar</button>
+            <button 
+               class="btn" 
+               type="submit" 
+               style="background:#ef4444;"
+               onclick="return confirm('¿Seguro que quieres eliminar este janij?');"
+            >
+               Eliminar
+            </button>
         </form>
     {% endif %}
 

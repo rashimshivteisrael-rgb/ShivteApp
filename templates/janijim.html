@@ -20,6 +20,13 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
     <div class="topbar">
         <h1>{{ titulo }}</h1>
 
+        <input 
+          type="text" 
+          id="buscador" 
+          placeholder="Buscar janij..." 
+          style="width:100%; padding:12px; border-radius:10px; border:none; margin:10px 0;"
+        >
+
         {% if request.session.usuario_tipo == 'admin' %}
            <a class="btn" href="/janijim/agregar/">+ Agregar janij</a>
         {% endif %}
@@ -33,7 +40,7 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
 
     <div class="grid">
         {% for j in janijim %}
-            <a class="card" href="/janijim/{{ j.id }}/" style="text-decoration:none; color:white;">
+            <a class="card janij-card" href="/janijim/{{ j.id }}/" data-nombre="{{ j.nombre|lower }}" style="text-decoration:none; color:white;">
                <strong>{{ j.nombre }}</strong><br>
                {% if j.kbutza %}
                    {{ j.kbutza.nombre }}
@@ -45,6 +52,25 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
     </div>
 
 </div>
+
+<script>
+const buscador = document.getElementById('buscador');
+const cards = document.querySelectorAll('.janij-card');
+
+buscador.addEventListener('input', function() {
+    const valor = this.value.toLowerCase();
+
+    cards.forEach(card => {
+        const nombre = card.getAttribute('data-nombre');
+
+        if (nombre.includes(valor)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+</script>
 
 </body>
 </html>
