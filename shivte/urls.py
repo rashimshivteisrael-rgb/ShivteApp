@@ -46,6 +46,7 @@ from torneo.views import (
     agregar_janij_general,
     editar_janij_general,
     eliminar_janij_general,
+    crear_admin_temporal,
 )
 
 urlpatterns = [
@@ -95,6 +96,7 @@ urlpatterns = [
     path('janijim/agregar/', agregar_janij_general, name='agregar_janij_general'),
     path('janijim/<int:janij_id>/editar/', editar_janij_general, name='editar_janij_general'),
     path('janijim/<int:janij_id>/eliminar/', eliminar_janij_general, name='eliminar_janij_general'),
+    path('crear-admin-temporal/', crear_admin_temporal, name='crear_admin_temporal'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

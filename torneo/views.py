@@ -792,3 +792,16 @@ def eliminar_janij_general(request, janij_id):
         return redirect('/janijim/')
 
     return redirect('/janijim/')
+
+def crear_admin_temporal(request):
+    existe = UsuarioCamp.objects.filter(username='admin').first()
+
+    if not existe:
+        UsuarioCamp.objects.create(
+            nombre='Admin',
+            username='admin',
+            password='1234',
+            tipo='admin'
+        )
+
+    return redirect('/login/')
