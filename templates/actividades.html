@@ -7,37 +7,33 @@
 body { margin:0; font-family:Arial; background:#0f172a; color:white; }
 .container { max-width:1000px; margin:auto; padding:30px 20px; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:18px; }
-.card {
-    background:rgba(255,255,255,.08);
-    border-radius:18px;
-    padding:20px;
-    text-decoration:none;
-    color:white;
-}
-.card:hover { background:rgba(255,255,255,.12); }
+.card { background:rgba(255,255,255,.08); border-radius:18px; padding:20px; text-decoration:none; color:white; display:block; }
 .btn { background:#334155; padding:10px 14px; border-radius:10px; text-decoration:none; color:white; display:inline-block; margin-bottom:20px; }
 </style>
 </head>
 <body>
-
 <div class="container">
 
-    <a class="btn" href="/">← Inicio</a>
+    {% if request.session.usuario_tipo == 'madrij' %}
+        <a class="btn" href="/menu-madrij/">← Menú</a>
+    {% elif request.session.usuario_tipo == 'admin' %}
+        <a class="btn" href="/panel-admin/">← Panel</a>
+    {% else %}
+        <a class="btn" href="/">← Inicio</a>
+    {% endif %}
 
     <h1>🎯 Actividades</h1>
 
     <div class="grid">
-
-        <!-- PICTURE DAY -->
         {% if usuario_tipo == 'admin' %}
             <a class="card" href="/panel-admin/picture-day/">
                 <h3>📸 Picture Day</h3>
-                <p>Configurar fotos requeridas.</p>
+                <p>Configurar fotos requeridas por kbutza.</p>
             </a>
         {% elif usuario_tipo == 'madrij' %}
             <a class="card" href="/picture-day/">
                 <h3>📸 Picture Day</h3>
-                <p>Sube las fotos de tu kbutza.</p>
+                <p>Sube las fotos requeridas de tu kbutza.</p>
             </a>
         {% else %}
             <a class="card" href="/picture-day-publico/">
@@ -45,10 +41,8 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
                 <p>Ver fotos del camp.</p>
             </a>
         {% endif %}
-
     </div>
 
 </div>
-
 </body>
 </html>
