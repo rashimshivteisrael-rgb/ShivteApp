@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Shevet Bank Admin</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1000px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:16px; }
+input, select { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+option { color:black; }
+.badge { display:inline-block; background:#334155; padding:7px 11px; border-radius:999px; margin:4px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn back" href="/actividades/">← Actividades</a>
+
+    <h1>🏦 Shevet Bank Admin</h1>
+
+    <div class="card">
+        <h2>Crear estación</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo_form" value="estacion">
+
+            <input type="text" name="nombre" placeholder="Nombre de estación" required>
+
+            <select name="encargado">
+                <option value="">Encargado</option>
+                {% for m in madrijim %}
+                    <option value="{{ m.id }}">{{ m.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Guardar estación</button>
+        </form>
+    </div>
+
+    <div class="card">
+         <h2>Crear tarjeta para janij</h2>
+
+         <form method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="tipo_form" value="cuenta">
+
+              <select name="janij" required>
+                 <option value="">Selecciona janij</option>
+                 {% for j in janijim_sin_cuenta %}
+                     <option value="{{ j.id }}">
+                        {{ j.nombre }}
+                        {% if j.kbutza %} · {{ j.kbutza.nombre }}{% endif %}
+                     </option>
+                 {% endfor %}
+              </select>
+
+              <input type="text" name="numero_tarjeta" placeholder="Número de tarjeta física" required>
+
+              <button type="submit">Crear tarjeta</button>
+         </form>
+   </div>
+
+    <div class="card">
+        <h2>Estaciones</h2>
+
+        {% for e in estaciones %}
+            <p>
+                <strong>{{ e.nombre }}</strong><br>
+                Encargado:
+                {% if e.encargado %}
+                    {{ e.encargado.nombre }}
+                {% else %}
+                    Sin asignar
+                {% endif %}
+            </p>
+        {% empty %}
+            <p>No hay estaciones todavía.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Cuentas / tarjetas creadas</h2>
+
+        {% for c in cuentas %}
+            <span class="badge">
+                {{ c.numero_tarjeta }} · {{ c.janij.nombre }} · ${{ c.saldo }}
+            </span>
+        {% empty %}
+            <p>No hay cuentas todavía.</p>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>

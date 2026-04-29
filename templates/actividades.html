@@ -41,6 +41,13 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
                 <p>Ver fotos del camp.</p>
             </a>
         {% endif %}
+
+        {% if usuario_tipo == 'admin' %}
+            <a class="card" href="/panel-admin/shevet-bank/">
+             <h3>🏦 Shevet Bank</h3>
+             <p>Crear estaciones y asignar encargados.</p>
+            </a>
+        {% endif %}
     </div>
 
 </div>

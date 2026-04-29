@@ -11,6 +11,7 @@ from transporte.models import Camion, CamionMadrij, CamionJanij, AsistenciaCamio
 from media_camp.models import FotoCamp
 from collections import defaultdict
 from actividades.models import PictureDayPedido, PictureDayFoto
+from actividades.models import ShevetBankEstacion, ShevetBankCuenta, ShevetBankMovimiento
 
 
 from transporte.models import Camion
@@ -902,4 +903,55 @@ def actividades(request):
 
     return render(request, 'actividades.html', {
         'usuario_tipo': usuario_tipo
+    })
+
+def shevet_bank_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    madrijim = UsuarioCamp.objects.filter(tipo='madrij').order_by('nombre')
+    estaciones = ShevetBankEstacion.objects.all().order_by('nombre')
+    cuentas = ShevetBankCuenta.objects.all().order_by('numero_tarjeta')
+    janijim_sin_cuenta = Janij.objects.filter(shevetbankcuenta__isnull=True).order_by('nombre')
+
+    if request.method == 'POST':
+        tipo_form = request.POST.get('tipo_form')
+
+        if tipo_form == 'estacion':
+            nombre = request.POST.get('nombre')
+            encargado_id = request.POST.get('encargado')
+
+            encargado = None
+            if encargado_id:
+                encargado = UsuarioCamp.objects.filter(id=encargado_id, tipo='madrij').first()
+
+            if nombre:
+                ShevetBankEstacion.objects.create(
+                    nombre=nombre,
+                    encargado=encargado
+                )
+
+        elif tipo_form == 'cuenta':
+            janij_id = request.POST.get('janij')
+            numero_tarjeta = request.POST.get('numero_tarjeta')
+
+            if janij_id and numero_tarjeta:
+                janij = get_object_or_404(Janij, id=janij_id)
+
+                existe = ShevetBankCuenta.objects.filter(numero_tarjeta=numero_tarjeta).first()
+
+                if not existe:
+                    ShevetBankCuenta.objects.create(
+                        janij=janij,
+                        numero_tarjeta=numero_tarjeta,
+                        saldo=0
+                    )
+
+        return redirect('/panel-admin/shevet-bank/')
+
+    return render(request, 'shevet_bank_admin.html', {
+        'madrijim': madrijim,
+        'estaciones': estaciones,
+        'cuentas': cuentas,
+        'janijim_sin_cuenta': janijim_sin_cuenta
     })
