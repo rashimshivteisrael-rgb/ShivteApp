@@ -955,3 +955,56 @@ def shevet_bank_admin(request):
         'cuentas': cuentas,
         'janijim_sin_cuenta': janijim_sin_cuenta
     })
+
+def shevet_bank_madrij(request):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+    estacion = ShevetBankEstacion.objects.filter(encargado=usuario).first()
+
+    cuenta = None
+    mensaje = None
+
+    if not estacion:
+        return render(request, 'shevet_bank_madrij.html', {
+            'sin_estacion': True
+        })
+
+    if request.method == 'POST':
+        numero_tarjeta = request.POST.get('numero_tarjeta')
+        accion = request.POST.get('accion')
+        cantidad = request.POST.get('cantidad')
+        nota = request.POST.get('nota')
+
+        cuenta = ShevetBankCuenta.objects.filter(numero_tarjeta=numero_tarjeta).first()
+
+        if not cuenta:
+            mensaje = 'No existe una cuenta con ese número de tarjeta.'
+        elif accion and cantidad:
+            cantidad = int(cantidad)
+
+            if accion == 'restar':
+                cantidad = cantidad * -1
+
+            cuenta.saldo += cantidad
+            cuenta.save()
+
+            ShevetBankMovimiento.objects.create(
+                cuenta=cuenta,
+                estacion=estacion,
+                madrij=usuario,
+                cantidad=cantidad,
+                nota=nota
+            )
+
+            mensaje = 'Movimiento guardado correctamente.'
+
+    return render(request, 'shevet_bank_madrij.html', {
+        'estacion': estacion,
+        'cuenta': cuenta,
+        'mensaje': mensaje
+    })

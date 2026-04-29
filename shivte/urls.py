@@ -52,6 +52,7 @@ from torneo.views import (
     subir_picture_day,
     picture_day_publico,
     shevet_bank_admin,
+    shevet_bank_madrij,
 )
 
 urlpatterns = [
@@ -108,6 +109,7 @@ urlpatterns = [
     path('picture-day-publico/', picture_day_publico, name='picture_day_publico'), 
     path('actividades/', actividades, name='actividades'), 
     path('panel-admin/shevet-bank/', shevet_bank_admin, name='shevet_bank_admin'),
+    path('shevet-bank/', shevet_bank_madrij, name='shevet_bank_madrij'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
