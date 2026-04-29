@@ -1008,3 +1008,24 @@ def shevet_bank_madrij(request):
         'cuenta': cuenta,
         'mensaje': mensaje
     })
+
+def shevet_bank_ranking(request):
+    kbutzot = Kbutza.objects.all().order_by('nombre')
+
+    ranking = []
+
+    for k in kbutzot:
+        cuentas = ShevetBankCuenta.objects.filter(janij__kbutza=k)
+        total = sum(c.saldo for c in cuentas)
+
+        ranking.append({
+            'kbutza': k,
+            'total': total,
+            'cuentas': cuentas
+        })
+
+    ranking = sorted(ranking, key=lambda x: x['total'], reverse=True)
+
+    return render(request, 'shevet_bank_ranking.html', {
+        'ranking': ranking
+    })

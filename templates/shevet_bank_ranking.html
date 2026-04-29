@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ranking Shevet Bank</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:900px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:14px; }
+.top { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.total { font-size:28px; font-weight:bold; color:#86efac; }
+.btn { background:#334155; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; display:inline-block; margin-bottom:20px; }
+.badge { display:inline-block; background:#334155; padding:7px 11px; border-radius:999px; margin:4px; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn" href="/actividades/">← Actividades</a>
+
+    <h1>🏦 Ranking Shevet Bank</h1>
+
+    {% for item in ranking %}
+        <div class="card">
+            <div class="top">
+                <h2>#{{ forloop.counter }} {{ item.kbutza.nombre }}</h2>
+                <div class="total">${{ item.total }}</div>
+            </div>
+
+            {% for c in item.cuentas %}
+                <span class="badge">{{ c.janij.nombre }} · ${{ c.saldo }}</span>
+            {% empty %}
+                <p>Sin cuentas.</p>
+            {% endfor %}
+        </div>
+    {% empty %}
+        <div class="card">No hay kbutzot.</div>
+    {% endfor %}
+
+</div>
+</body>
+</html>
