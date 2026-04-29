@@ -896,3 +896,10 @@ def picture_day_publico(request):
     return render(request, 'picture_day_publico.html', {
         'fotos': fotos
     })
+
+def actividades(request):
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    return render(request, 'actividades.html', {
+        'usuario_tipo': usuario_tipo
+    })

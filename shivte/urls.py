@@ -104,7 +104,8 @@ urlpatterns = [
     path('panel-admin/picture-day/', picture_day_admin, name='picture_day_admin'),
     path('picture-day/', picture_day_madrij, name='picture_day_madrij'),
     path('picture-day/subir/<int:pedido_id>/', subir_picture_day, name='subir_picture_day'),
-    path('picture-day-publico/', picture_day_publico, name='picture_day_publico'),  
+    path('picture-day-publico/', picture_day_publico, name='picture_day_publico'), 
+    path('actividades/', actividades, name='actividades'), 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

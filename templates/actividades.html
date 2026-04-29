@@ -1,52 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actividades</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-        }
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 30px;
-        }
-        .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .back {
-            color: white;
-            text-decoration: none;
-            background: #334155;
-            padding: 10px 14px;
-            border-radius: 10px;
-        }
-        .box {
-            margin-top: 25px;
-            background: rgba(255,255,255,0.08);
-            padding: 25px;
-            border-radius: 18px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Actividades</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1000px; margin:auto; padding:30px 20px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:18px; }
+.card {
+    background:rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:20px;
+    text-decoration:none;
+    color:white;
+}
+.card:hover { background:rgba(255,255,255,.12); }
+.btn { background:#334155; padding:10px 14px; border-radius:10px; text-decoration:none; color:white; display:inline-block; margin-bottom:20px; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="top">
-            <h1>🏆 Torneo</h1>
-            <a class="back" href="/">← Inicio</a>
-        </div>
 
-        <div class="box">
-            <h2>Módulo de actividades</h2>
-            <p>Aquí irán Funny War, Xtreme Day, Got Talent y más.</p>
-        </div>
+<div class="container">
+
+    <a class="btn" href="/">← Inicio</a>
+
+    <h1>🎯 Actividades</h1>
+
+    <div class="grid">
+
+        <!-- PICTURE DAY -->
+        {% if usuario_tipo == 'admin' %}
+            <a class="card" href="/panel-admin/picture-day/">
+                <h3>📸 Picture Day</h3>
+                <p>Configurar fotos requeridas.</p>
+            </a>
+        {% elif usuario_tipo == 'madrij' %}
+            <a class="card" href="/picture-day/">
+                <h3>📸 Picture Day</h3>
+                <p>Sube las fotos de tu kbutza.</p>
+            </a>
+        {% else %}
+            <a class="card" href="/picture-day-publico/">
+                <h3>📸 Picture Day</h3>
+                <p>Ver fotos del camp.</p>
+            </a>
+        {% endif %}
+
     </div>
+
+</div>
+
 </body>
 </html>
