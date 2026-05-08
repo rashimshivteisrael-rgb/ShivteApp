@@ -812,29 +812,27 @@ def picture_day_admin(request):
     if request.session.get('usuario_tipo') != 'admin':
         return redirect('/login/')
 
-    kbutzot = Kbutza.objects.all().order_by('nombre')
-
     if request.method == 'POST':
-        kbutza_id = request.POST.get('kbutza')
         titulo = request.POST.get('titulo')
         descripcion = request.POST.get('descripcion')
 
-        if kbutza_id and titulo:
-            kbutza = get_object_or_404(Kbutza, id=kbutza_id)
-            PictureDayPedido.objects.create(
-                kbutza=kbutza,
-                titulo=titulo,
-                descripcion=descripcion
-            )
-            return redirect('/panel-admin/picture-day/')
+        if titulo:
+            kbutzot = Kbutza.objects.all()
+
+            for kbutza in kbutzot:
+                PictureDayPedido.objects.create(
+                    kbutza=kbutza,
+                    titulo=titulo,
+                    descripcion=descripcion
+                )
+
+        return redirect('/panel-admin/picture-day/')
 
     pedidos = PictureDayPedido.objects.all().order_by('kbutza__nombre', 'titulo')
 
     return render(request, 'picture_day_admin.html', {
-        'kbutzot': kbutzot,
         'pedidos': pedidos
     })
-
 
 def picture_day_madrij(request):
     usuario_id = request.session.get('usuario_id')
