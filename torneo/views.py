@@ -860,11 +860,20 @@ def picture_day_madrij(request):
         })
 
     kbutza = asignacion.kbutza
-    pedidos = PictureDayPedido.objects.filter(kbutza=kbutza)
+    pedidos = PictureDayPedido.objects.filter(kbutza=kbutza).order_by('titulo')
+
+    data = []
+    for p in pedidos:
+        foto = PictureDayFoto.objects.filter(pedido=p).first()
+        data.append({
+            'pedido': p,
+            'foto': foto,
+            'subida': foto is not None
+        })
 
     return render(request, 'picture_day_madrij.html', {
         'kbutza': kbutza,
-        'pedidos': pedidos
+        'data': data
     })
 
 

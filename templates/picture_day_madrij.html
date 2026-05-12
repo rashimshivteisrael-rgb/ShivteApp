@@ -24,11 +24,18 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
     {% else %}
         <h2>{{ kbutza.nombre }}</h2>
 
-        {% for p in pedidos %}
-            <div class="card">
-                <h3>{{ p.titulo }}</h3>
-                <p class="muted">{{ p.descripcion|default:"Sin descripción" }}</p>
-                <a class="btn" href="/picture-day/subir/{{ p.id }}/">Subir foto</a>
+       {% for item in data %}
+          <div class="card">
+             <h3>{{ item.pedido.titulo }}</h3>
+             <p class="muted">{{ item.pedido.descripcion|default:"Sin descripción" }}</p>
+
+            {% if item.subida %}
+               <p style="color:#22c55e; font-weight:bold;">✅ Ya subiste esta foto</p>
+               <a class="btn" href="{{ item.foto.archivo.url }}" target="_blank">Ver foto</a>
+            {% else %}
+                <p style="color:#ef4444; font-weight:bold;">❌ Falta subir</p>
+                <a class="btn" href="/picture-day/subir/{{ item.pedido.id }}/">Subir foto</a>
+            {% endif %}
             </div>
         {% empty %}
             <div class="card">No hay fotos requeridas para tu kbutza.</div>
