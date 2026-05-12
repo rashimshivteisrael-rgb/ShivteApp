@@ -54,6 +54,7 @@ from torneo.views import (
     shevet_bank_admin,
     shevet_bank_madrij,
     shevet_bank_ranking,
+    eliminar_picture_day_foto,
 )
 
 urlpatterns = [
@@ -112,6 +113,7 @@ urlpatterns = [
     path('panel-admin/shevet-bank/', shevet_bank_admin, name='shevet_bank_admin'),
     path('shevet-bank/', shevet_bank_madrij, name='shevet_bank_madrij'),
     path('shevet-bank-ranking/', shevet_bank_ranking, name='shevet_bank_ranking'),
+    path('panel-admin/picture-day/foto/<int:foto_id>/eliminar/', eliminar_picture_day_foto, name='eliminar_picture_day_foto'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

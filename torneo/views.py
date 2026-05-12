@@ -844,6 +844,17 @@ def picture_day_admin(request):
         'data': data
     })
 
+def eliminar_picture_day_foto(request, foto_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    foto = get_object_or_404(PictureDayFoto, id=foto_id)
+
+    if request.method == 'POST':
+        foto.delete()
+
+    return redirect('/panel-admin/picture-day/')
+
 def picture_day_madrij(request):
     usuario_id = request.session.get('usuario_id')
     usuario_tipo = request.session.get('usuario_tipo')
