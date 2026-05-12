@@ -37,15 +37,30 @@ option { color:black; }
     <div class="card">
         <h2>Pedidos creados</h2>
 
-        {% for p in pedidos %}
-            <p>
-                <strong>{{ p.kbutza.nombre }}</strong> — {{ p.titulo }}
-                <br>
-                {{ p.descripcion|default:"" }}
-            </p>
-        {% empty %}
-            <p>No hay pedidos todavía.</p>
-        {% endfor %}
+       <h2>Estado de fotos</h2>
+
+      {% for item in data %}
+         <div style="background:rgba(255,255,255,.08); padding:14px; border-radius:14px; margin-bottom:10px;">
+              <strong>{{ item.pedido.kbutza.nombre }}</strong> — {{ item.pedido.titulo }}
+
+             {% if item.subida %}
+                 <span style="color:#22c55e; font-weight:bold;">✅ Subida</span>
+                  <br>
+                 <span style="color:#cbd5e1;">
+                     Por:
+                     {% if item.foto.subido_por %}
+                        {{ item.foto.subido_por.nombre }}
+                     {% else %}
+                         Desconocido
+                     {% endif %}
+                 </span>
+             {% else %}
+                 <span style="color:#ef4444; font-weight:bold;">❌ Falta</span>
+             {% endif %}
+          </div>
+      {% empty %}
+          <p>No hay pedidos todavía.</p>
+      {% endfor %}
     </div>
 
 </div>

@@ -830,8 +830,18 @@ def picture_day_admin(request):
 
     pedidos = PictureDayPedido.objects.all().order_by('kbutza__nombre', 'titulo')
 
+    data = []
+    for p in pedidos:
+        foto = PictureDayFoto.objects.filter(pedido=p).first()
+
+        data.append({
+            'pedido': p,
+            'foto': foto,
+            'subida': foto is not None
+        })
+
     return render(request, 'picture_day_admin.html', {
-        'pedidos': pedidos
+        'data': data
     })
 
 def picture_day_madrij(request):
