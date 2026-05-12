@@ -12,6 +12,9 @@ from media_camp.models import FotoCamp
 from collections import defaultdict
 from actividades.models import PictureDayPedido, PictureDayFoto
 from actividades.models import ShevetBankEstacion, ShevetBankCuenta, ShevetBankMovimiento
+import zipfile
+from io import BytesIO
+from django.http import HttpResponse
 
 
 from transporte.models import Camion
@@ -854,6 +857,36 @@ def eliminar_picture_day_foto(request, foto_id):
         foto.delete()
 
     return redirect('/panel-admin/picture-day/')
+
+def descargar_picture_day_zip(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    fotos = PictureDayFoto.objects.all().order_by(
+        'pedido__kbutza__nombre',
+        'pedido__titulo'
+    )
+
+    zip_buffer = BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+        for foto in fotos:
+            if foto.archivo:
+                extension = foto.archivo.name.split('.')[-1]
+
+                nombre_kbutza = foto.pedido.kbutza.nombre.replace('/', '-')
+                nombre_foto = foto.pedido.titulo.replace('/', '-')
+
+                nombre_archivo = f"{nombre_kbutza} - {nombre_foto}.{extension}"
+
+                zip_file.writestr(nombre_archivo, foto.archivo.read())
+
+    zip_buffer.seek(0)
+
+    response = HttpResponse(zip_buffer, content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="picture_day_fotos.zip"'
+
+    return response
 
 def picture_day_madrij(request):
     usuario_id = request.session.get('usuario_id')
