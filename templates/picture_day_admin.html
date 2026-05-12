@@ -54,6 +54,32 @@ option { color:black; }
                          Desconocido
                      {% endif %}
                  </span>
+                 <br><br>
+
+                <a href="{{ item.foto.archivo.url }}" target="_blank"
+                   style="color:#60a5fa; font-weight:bold; text-decoration:none;">
+                     Ver foto
+                </a>
+
+                <form method="POST"
+                     action="/panel-admin/picture-day/foto/{{ item.foto.id }}/eliminar/"
+                     style="display:inline;">
+                  {% csrf_token %}
+
+                  <button type="submit"
+                      style="
+                         background:#ef4444;
+                         color:white;
+                         border:none;
+                         padding:8px 10px;
+                         border-radius:8px;
+                         font-weight:bold;
+                         cursor:pointer;
+                         margin-left:10px;
+                       ">
+                       Eliminar
+                  </button>
+                </form>
              {% else %}
                  <span style="color:#ef4444; font-weight:bold;">❌ Falta</span>
              {% endif %}
