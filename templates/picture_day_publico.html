@@ -24,7 +24,13 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
     <div class="grid">
         {% for f in fotos %}
             <div class="card">
-                <img src="{{ f.archivo.url }}">
+                {% if ".mp4" in f.archivo.url or ".mov" in f.archivo.url %}
+                   <video controls style="width:100%; height:240px; object-fit:cover;">
+                     <source src="{{ f.archivo.url }}">
+                   </video>
+                {% else %}
+                     <img src="{{ f.archivo.url }}">
+                {% endif %}
                 <div class="info">
                     <strong>{{ f.pedido.kbutza.nombre }}</strong><br>
                     {{ f.pedido.titulo }}

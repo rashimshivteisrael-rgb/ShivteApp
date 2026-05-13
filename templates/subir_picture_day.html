@@ -23,7 +23,7 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
 
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" name="archivo" accept="image/*" required>
+            <input type="file" name="archivo" accept="image/*,video/*" required>
             <button type="submit">Subir foto</button>
         </form>
     </div>
