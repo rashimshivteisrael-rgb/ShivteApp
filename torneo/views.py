@@ -877,7 +877,9 @@ def descargar_picture_day_zip(request):
                 nombre_kbutza = foto.pedido.kbutza.nombre.replace('/', '-')
                 nombre_foto = foto.pedido.titulo.replace('/', '-')
 
-                nombre_archivo = f"{nombre_kbutza} - {nombre_foto}.{extension}"
+                nombre_carpeta = nombre_foto
+
+                nombre_archivo = f"{nombre_carpeta}/{nombre_kbutza}.{extension}"
 
                 zip_file.writestr(nombre_archivo, foto.archivo.read())
 
