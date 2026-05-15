@@ -71,11 +71,35 @@ option { color:black; }
             <p>
                 <strong>{{ e.nombre }}</strong><br>
                 Encargado:
-                {% if e.encargado %}
-                    {{ e.encargado.nombre }}
-                {% else %}
-                    Sin asignar
-                {% endif %}
+               {% if e.encargado %}
+                     {{ e.encargado.nombre }}
+               {% else %}
+                     Sin asignar
+               {% endif %}
+
+               <br><br>
+
+               <form method="POST"
+                     action="/panel-admin/shevet-bank/estacion/{{ e.id }}/eliminar/"
+                     style="display:inline;">
+
+                   {% csrf_token %}
+
+                   <button type="submit"
+                         onclick="return confirm('¿Eliminar esta estación?');"
+
+                         style="
+                              background:#ef4444;
+                              color:white;
+                              border:none;
+                              padding:8px 10px;
+                              border-radius:8px;
+                              font-weight:bold;
+                              cursor:pointer;
+                        ">
+                        Eliminar estación
+                   </button>
+               </form>
             </p>
         {% empty %}
             <p>No hay estaciones todavía.</p>

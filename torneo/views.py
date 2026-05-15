@@ -1059,6 +1059,17 @@ def shevet_bank_admin(request):
         'janijim_sin_cuenta': janijim_sin_cuenta
     })
 
+def eliminar_shevet_bank_estacion(request, estacion_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    estacion = get_object_or_404(ShevetBankEstacion, id=estacion_id)
+
+    if request.method == 'POST':
+        estacion.delete()
+
+    return redirect('/panel-admin/shevet-bank/')
+
 def shevet_bank_madrij(request):
     usuario_id = request.session.get('usuario_id')
     usuario_tipo = request.session.get('usuario_tipo')
