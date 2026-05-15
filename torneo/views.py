@@ -15,7 +15,6 @@ from actividades.models import ShevetBankEstacion, ShevetBankCuenta, ShevetBankM
 import zipfile
 from io import BytesIO
 from django.http import HttpResponse
-from actividades.models import ActividadEstado
 
 
 from transporte.models import Camion
@@ -961,23 +960,6 @@ def picture_day_publico(request):
     return render(request, 'picture_day_publico.html', {
         'fotos': fotos
     })
-
-def picture_day_entrada(request):
-    estado, creado = ActividadEstado.objects.get_or_create(nombre='picture_day')
-
-    if not estado.abierta:
-        return render(request, 'actividad_cerrada.html', {
-            'nombre_actividad': 'Picture Day'
-        })
-
-    usuario_tipo = request.session.get('usuario_tipo')
-
-    if usuario_tipo == 'admin':
-        return redirect('/panel-admin/picture-day/')
-    elif usuario_tipo == 'madrij':
-        return redirect('/picture-day/')
-    else:
-        return redirect('/picture-day-publico/')
 
 def actividades(request):
     usuario_tipo = request.session.get('usuario_tipo')
