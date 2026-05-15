@@ -161,7 +161,10 @@ option { color:black; }
                        Eliminar
                   </button>
                 </form>
-                <form method="POST" action="/panel-admin/picture-day/pedido/{{ item.pedido.id }}/eliminar/" style="display:inline;">
+             {% else %}
+                 <span style="color:#ef4444; font-weight:bold;">❌ Falta</span>
+             {% endif %}
+              <form method="POST" action="/panel-admin/picture-day/pedido/{{ item.pedido.id }}/eliminar/" style="display:inline;">
                      {% csrf_token %}
 
                      <button type="submit"
@@ -180,9 +183,6 @@ option { color:black; }
                          Eliminar pedido
                      </button>
                 </form>
-             {% else %}
-                 <span style="color:#ef4444; font-weight:bold;">❌ Falta</span>
-             {% endif %}
           </div>
       {% empty %}
           <p>No hay pedidos todavía.</p>
