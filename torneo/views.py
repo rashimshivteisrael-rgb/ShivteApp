@@ -865,6 +865,17 @@ def eliminar_picture_day_foto(request, foto_id):
 
     return redirect('/panel-admin/picture-day/')
 
+def eliminar_picture_day_pedido(request, pedido_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    pedido = get_object_or_404(PictureDayPedido, id=pedido_id)
+
+    if request.method == 'POST':
+        pedido.delete()
+
+    return redirect('/panel-admin/picture-day/')
+
 def descargar_picture_day_zip(request):
     if request.session.get('usuario_tipo') != 'admin':
         return redirect('/login/')
