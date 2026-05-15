@@ -65,7 +65,12 @@
 
         <form method="POST">
             {% csrf_token %}
-            <input type="text" name="nombre" placeholder="Nombre del janij" required>
+            <select name="janij" required>
+                <option value="">Selecciona janij</option>
+                {% for j in janijim_disponibles %}
+                    <option value="{{ j.id }}">{{ j.nombre }}</option>
+                {% endfor %}
+            </select>
             <button class="btn" type="submit">Guardar janij</button>
         </form>
     </div>

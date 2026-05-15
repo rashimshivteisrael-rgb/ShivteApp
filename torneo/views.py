@@ -195,17 +195,22 @@ def quitar_madrij_kbutza(request, kbutza_id, asignacion_id):
 def agregar_janij(request, kbutza_id):
     kbutza = get_object_or_404(Kbutza, id=kbutza_id)
 
+    janijim_disponibles = Janij.objects.filter(kbutza__isnull=True).order_by('nombre')
+
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
+        janij_id = request.POST.get('janij')
 
-        if nombre:
-            Janij.objects.create(
-                nombre=nombre,
-                kbutza=kbutza
-            )
-            return redirect(f'/panel-admin/kbutzot/{kbutza.id}/')
+        if janij_id:
+            janij = get_object_or_404(Janij, id=janij_id)
+            janij.kbutza = kbutza
+            janij.save()
 
-    return render(request, 'agregar_janij.html', {'kbutza': kbutza})
+        return redirect(f'/panel-admin/kbutzot/{kbutza.id}/')
+
+    return render(request, 'agregar_janij.html', {
+        'kbutza': kbutza,
+        'janijim_disponibles': janijim_disponibles
+    })
 
 def editar_janij(request, janij_id):
     janij = get_object_or_404(Janij, id=janij_id)
