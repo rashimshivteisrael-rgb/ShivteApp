@@ -59,3 +59,10 @@ class ShevetBankMovimiento(models.Model):
 
     def __str__(self):
         return f"{self.cuenta.janij.nombre} {self.cantidad}"
+    
+class ActividadEstado(models.Model):
+    nombre = models.CharField(max_length=100, unique=True)
+    abierta = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.nombre} - {'Abierta' if self.abierta else 'Cerrada'}"

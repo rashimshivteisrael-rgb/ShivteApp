@@ -15,6 +15,7 @@ from actividades.models import ShevetBankEstacion, ShevetBankCuenta, ShevetBankM
 import zipfile
 from io import BytesIO
 from django.http import HttpResponse
+from actividades.models import ActividadEstado
 
 
 from transporte.models import Camion
@@ -812,10 +813,15 @@ def crear_admin_temporal(request):
     return redirect('/login/')
 
 def picture_day_admin(request):
+    estado, creado = ActividadEstado.objects.get_or_create(nombre='picture_day')
     if request.session.get('usuario_tipo') != 'admin':
         return redirect('/login/')
 
     if request.method == 'POST':
+        if request.POST.get('tipo_form') == 'estado':
+            estado.abierta = request.POST.get('abierta') == 'on'
+            estado.save()
+            return redirect('/panel-admin/picture-day/')
         titulo = request.POST.get('titulo')
         descripcion = request.POST.get('descripcion')
 
@@ -960,6 +966,23 @@ def picture_day_publico(request):
     return render(request, 'picture_day_publico.html', {
         'fotos': fotos
     })
+
+def picture_day_entrada(request):
+    estado, creado = ActividadEstado.objects.get_or_create(nombre='picture_day')
+
+    if not estado.abierta:
+        return render(request, 'actividad_cerrada.html', {
+            'nombre_actividad': 'Picture Day'
+        })
+
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo == 'admin':
+        return redirect('/panel-admin/picture-day/')
+    elif usuario_tipo == 'madrij':
+        return redirect('/picture-day/')
+    else:
+        return redirect('/picture-day-publico/')
 
 def actividades(request):
     usuario_tipo = request.session.get('usuario_tipo')

@@ -20,6 +20,22 @@ option { color:black; }
 
     <h1>📸 Picture Day Admin</h1>
 
+     <div class="card">
+         <h2>Estado de la actividad</h2>
+
+         <form method="POST">
+             {% csrf_token %}
+             <input type="hidden" name="tipo_form" value="estado">
+
+             <label>
+                 <input type="checkbox" name="abierta" {% if estado.abierta %}checked{% endif %}>
+                 Actividad abierta
+             </label>
+
+             <button type="submit">Guardar estado</button>
+         </form>
+     </div>
+
      <a href="/panel-admin/picture-day/descargar/"
          style="background:#3b82f6; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:bold; display:inline-block; margin-bottom:16px;">
            Descargar todas las fotos
