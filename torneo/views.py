@@ -850,7 +850,8 @@ def picture_day_admin(request):
         })
 
     return render(request, 'picture_day_admin.html', {
-        'data': data
+        'data': data,
+        'estado': estado
     })
 
 def eliminar_picture_day_foto(request, foto_id):
