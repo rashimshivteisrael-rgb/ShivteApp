@@ -11,6 +11,53 @@ input, select, textarea { width:100%; padding:12px; margin-bottom:12px; border-r
 button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
 .back { background:#334155; margin-bottom:16px; }
 option { color:black; }
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 58px;
+    height: 32px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background: #334155;
+    border-radius: 999px;
+    transition: .25s;
+    cursor: pointer;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 4px;
+    top: 4px;
+    background: white;
+    border-radius: 50%;
+    transition: .25s;
+}
+
+.switch input:checked + .slider {
+    background: #22c55e;
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(26px);
+}
+
+.estado-texto {
+    margin-left: 12px;
+    font-weight: bold;
+    color: #cbd5e1;
+}
 </style>
 </head>
 <body>
@@ -23,17 +70,30 @@ option { color:black; }
      <div class="card">
          <h2>Estado de la actividad</h2>
 
-         <form method="POST">
-             {% csrf_token %}
+         <form method="POST" id="estadoForm">
+              {% csrf_token %}
              <input type="hidden" name="tipo_form" value="estado">
 
-             <label>
-                 <input type="checkbox" name="abierta" {% if estado.abierta %}checked{% endif %}>
-                 Actividad abierta
+             <label class="switch">
+                 <input
+                     type="checkbox"
+                     name="abierta"
+                     onchange="document.getElementById('estadoForm').submit()"
+                     {% if estado.abierta %}checked{% endif %}
+                 >
+
+                 <span class="slider"></span>
              </label>
 
-             <button type="submit">Guardar estado</button>
+             <span class="estado-texto">
+                 {% if estado.abierta %}
+                      Abierta
+                 {% else %}
+                      Cerrada
+                 {% endif %}
+             </span>
          </form>
+
      </div>
 
      <a href="/panel-admin/picture-day/descargar/"
