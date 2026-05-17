@@ -30,6 +30,11 @@ option { color:black; }
 
             <input type="text" name="nombre" placeholder="Nombre de estación" required>
 
+            <textarea
+                name="descripcion"
+                placeholder="Descripción de la estación">
+            </textarea>
+
             <select name="encargado">
                 <option value="">Encargado</option>
                 {% for m in madrijim %}

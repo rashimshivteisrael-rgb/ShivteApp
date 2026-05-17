@@ -1023,6 +1023,7 @@ def shevet_bank_admin(request):
         if tipo_form == 'estacion':
             nombre = request.POST.get('nombre')
             encargado_id = request.POST.get('encargado')
+            descripcion = request.POST.get('descripcion')
 
             encargado = None
             if encargado_id:
@@ -1030,9 +1031,10 @@ def shevet_bank_admin(request):
 
             if nombre:
                 ShevetBankEstacion.objects.create(
-                    nombre=nombre,
-                    encargado=encargado
-                )
+                      nombre=nombre,
+                      encargado=encargado,
+                      descripcion=descripcion
+                    )
 
         elif tipo_form == 'cuenta':
             janij_id = request.POST.get('janij')

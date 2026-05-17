@@ -35,7 +35,7 @@ class ShevetBankEstacion(models.Model):
         blank=True,
         limit_choices_to={'tipo': 'madrij'}
     )
-
+    descripcion = models.TextField(blank=True, null=True)
     def __str__(self):
         return self.nombre
 

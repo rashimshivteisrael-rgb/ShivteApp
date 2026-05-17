@@ -31,6 +31,11 @@ option { color:black; }
         <div class="card">
             <h2>Tu estación</h2>
             <p>{{ estacion.nombre }}</p>
+            {% if estacion.descripcion %}
+                <p style="color:#cbd5e1;">
+                    {{ estacion.descripcion }}
+                </p>
+            {% endif %}
         </div>
 
         {% if mensaje %}
