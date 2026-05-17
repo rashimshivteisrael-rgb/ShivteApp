@@ -16,6 +16,9 @@ import zipfile
 from io import BytesIO
 from django.http import HttpResponse
 from actividades.models import ActividadEstado
+from actividades.models import ShevetBankSubasta, ShevetBankPuja
+from django.utils import timezone
+from datetime import timedelta
 
 
 from transporte.models import Camion
@@ -1059,6 +1062,33 @@ def shevet_bank_admin(request):
         'estaciones': estaciones,
         'cuentas': cuentas,
         'janijim_sin_cuenta': janijim_sin_cuenta
+    })
+
+def shevet_bank_subasta_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    subastas = ShevetBankSubasta.objects.all().order_by('-id')
+
+    if request.method == 'POST':
+        premio = request.POST.get('premio')
+        descripcion = request.POST.get('descripcion')
+        duracion = request.POST.get('duracion')
+
+        minutos = int(duracion) if duracion else 5
+
+        ShevetBankSubasta.objects.create(
+            premio=premio,
+            descripcion=descripcion,
+            activa=True,
+            precio_actual=0,
+            termina_en=timezone.now() + timedelta(minutes=minutos)
+        )
+
+        return redirect('/panel-admin/shevet-bank/subasta/')
+
+    return render(request, 'shevet_bank_subasta_admin.html', {
+        'subastas': subastas
     })
 
 def eliminar_shevet_bank_estacion(request, estacion_id):

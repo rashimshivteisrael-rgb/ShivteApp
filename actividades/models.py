@@ -60,6 +60,33 @@ class ShevetBankMovimiento(models.Model):
     def __str__(self):
         return f"{self.cuenta.janij.nombre} {self.cantidad}"
     
+class ShevetBankSubasta(models.Model):
+    premio = models.CharField(max_length=150)
+    descripcion = models.TextField(blank=True, null=True)
+    activa = models.BooleanField(default=False)
+    precio_actual = models.IntegerField(default=0)
+    kbutza_ganando = models.ForeignKey(
+        Kbutza,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    termina_en = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.premio
+
+
+class ShevetBankPuja(models.Model):
+    subasta = models.ForeignKey(ShevetBankSubasta, on_delete=models.CASCADE)
+    kbutza = models.ForeignKey(Kbutza, on_delete=models.CASCADE)
+    madrij = models.ForeignKey(UsuarioCamp, on_delete=models.SET_NULL, null=True)
+    cantidad = models.IntegerField()
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.kbutza.nombre} - ${self.cantidad}"
+    
 class ActividadEstado(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     abierta = models.BooleanField(default=False)
