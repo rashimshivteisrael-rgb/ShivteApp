@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Subasta</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:700px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:22px; border-radius:18px; margin-bottom:16px; }
+input { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+.big { font-size:38px; font-weight:bold; color:#86efac; }
+.msg { background:rgba(59,130,246,.18); padding:12px; border-radius:12px; margin-bottom:14px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn back" href="/actividades/">← Actividades</a>
+
+    <h1>🏆 Subasta Shevet Bank</h1>
+
+    {% if sin_kbutza %}
+        <div class="card">No tienes kbutza asignada.</div>
+    {% elif not subasta %}
+        <div class="card">No hay subasta activa todavía.</div>
+    {% else %}
+
+        {% if mensaje %}
+            <div class="msg">{{ mensaje }}</div>
+        {% endif %}
+
+        <div class="card">
+            <h2>{{ subasta.premio }}</h2>
+            <p>{{ subasta.descripcion|default:"" }}</p>
+
+            <p>Precio actual:</p>
+            <div class="big">${{ subasta.precio_actual }}</div>
+
+            <p>
+                Ganando:
+                {% if subasta.kbutza_ganando %}
+                    {{ subasta.kbutza_ganando.nombre }}
+                {% else %}
+                    Nadie todavía
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>Pujar por {{ kbutza.nombre }}</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="number" name="cantidad" placeholder="Nueva puja" required>
+                <button type="submit">Enviar puja</button>
+            </form>
+        </div>
+
+    {% endif %}
+
+</div>
+</body>
+</html>

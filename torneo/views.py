@@ -1155,6 +1155,50 @@ def shevet_bank_madrij(request):
         'mensaje': mensaje
     })
 
+def shevet_bank_subasta_madrij(request):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+    asignacion = MadrijKbutza.objects.filter(usuario=usuario).first()
+
+    if not asignacion:
+        return render(request, 'shevet_bank_subasta_madrij.html', {
+            'sin_kbutza': True
+        })
+
+    kbutza = asignacion.kbutza
+    subasta = ShevetBankSubasta.objects.filter(activa=True).order_by('-id').first()
+    mensaje = None
+
+    if request.method == 'POST' and subasta:
+        cantidad = int(request.POST.get('cantidad'))
+
+        if cantidad > subasta.precio_actual:
+            subasta.precio_actual = cantidad
+            subasta.kbutza_ganando = kbutza
+            subasta.save()
+
+            ShevetBankPuja.objects.create(
+                subasta=subasta,
+                kbutza=kbutza,
+                madrij=usuario,
+                cantidad=cantidad
+            )
+
+            mensaje = "Puja enviada correctamente."
+        else:
+            mensaje = "La puja debe ser mayor al precio actual."
+
+    return render(request, 'shevet_bank_subasta_madrij.html', {
+        'kbutza': kbutza,
+        'subasta': subasta,
+        'mensaje': mensaje
+    })
+
 def shevet_bank_ranking(request):
     kbutzot = Kbutza.objects.all().order_by('nombre')
 

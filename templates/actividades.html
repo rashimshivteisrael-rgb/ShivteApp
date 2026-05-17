@@ -60,6 +60,13 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
          <h3>🏆 Ranking Shevet Bank</h3>
          <p>Ver cuánto dinero lleva cada kbutza.</p>
        </a>
+
+       {% if usuario_tipo == 'madrij' %}
+          <a class="card" href="/shevet-bank/subasta/">
+             <h3>🏆 Subasta Shevet Bank</h3>
+             <p>Puja por tu kbutza.</p>
+          </a>
+       {% endif %}
     </div>
 
 </div>
