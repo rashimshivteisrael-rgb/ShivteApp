@@ -1091,6 +1091,13 @@ def shevet_bank_subasta_admin(request):
         'subastas': subastas
     })
 
+def shevet_bank_subasta_pantalla(request):
+    subasta = ShevetBankSubasta.objects.filter(activa=True).order_by('-id').first()
+
+    return render(request, 'shevet_bank_subasta_pantalla.html', {
+        'subasta': subasta
+    })
+
 def eliminar_shevet_bank_estacion(request, estacion_id):
     if request.session.get('usuario_tipo') != 'admin':
         return redirect('/login/')

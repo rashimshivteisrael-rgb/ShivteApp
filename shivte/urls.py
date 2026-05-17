@@ -61,6 +61,7 @@ from torneo.views import (
     eliminar_shevet_bank_estacion,
     shevet_bank_subasta_admin,  
     shevet_bank_subasta_madrij,
+    shevet_bank_subasta_pantalla,
 
 )
 
@@ -127,6 +128,7 @@ urlpatterns = [
     path('panel-admin/shevet-bank/estacion/<int:estacion_id>/eliminar/', eliminar_shevet_bank_estacion, name='eliminar_shevet_bank_estacion'),
     path('panel-admin/shevet-bank/subasta/', shevet_bank_subasta_admin, name='shevet_bank_subasta_admin'),
     path('shevet-bank/subasta/', shevet_bank_subasta_madrij, name='shevet_bank_subasta_madrij'),
+    path('shevet-bank/subasta/pantalla/', shevet_bank_subasta_pantalla, name='shevet_bank_subasta_pantalla'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

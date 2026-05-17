@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="3">
+<title>Pantalla Subasta</title>
+<style>
+body {
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#020617,#0f172a,#1e3a8a);
+    color:white;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+.screen {
+    width:90%;
+    max-width:1200px;
+}
+.label {
+    letter-spacing:4px;
+    color:#93c5fd;
+    font-weight:bold;
+}
+.premio {
+    font-size:72px;
+    margin:20px 0;
+}
+.precio {
+    font-size:110px;
+    color:#86efac;
+    font-weight:900;
+}
+.kbutza {
+    font-size:54px;
+    margin-top:20px;
+}
+.small {
+    color:#cbd5e1;
+    font-size:24px;
+}
+</style>
+</head>
+<body>
+
+<div class="screen">
+    {% if subasta %}
+        <div class="label">SUBASTA SHEVET BANK</div>
+
+        <div class="premio">{{ subasta.premio }}</div>
+
+        <div class="small">Puja actual</div>
+        <div class="precio">${{ subasta.precio_actual }}</div>
+
+        <div class="small">Ganando</div>
+        <div class="kbutza">
+            {% if subasta.kbutza_ganando %}
+                {{ subasta.kbutza_ganando.nombre }}
+            {% else %}
+                Nadie todavía
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="premio">No hay subasta activa</div>
+    {% endif %}
+</div>
+
+</body>
+</html>
