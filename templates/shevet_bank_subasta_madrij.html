@@ -37,6 +37,9 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
 
             <p>Precio actual:</p>
             <div class="big">${{ subasta.precio_actual }}</div>
+            <div class="big" id="precioActual" data-precio="{{ subasta.precio_actual|default:0 }}">
+                 ${{ subasta.precio_actual }}
+            </div>
 
             <p>
                 Ganando:
@@ -54,11 +57,41 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
             <p>Dinero disponible de tu kbutza:</p>
             <div class="big">${{ saldo_disponible }}</div>
 
-            <form method="POST">
+           <form method="POST" id="pujaForm">
                 {% csrf_token %}
-                <input type="number" name="cantidad" placeholder="Nueva puja" required>
-                <button type="submit">Enviar puja</button>
+
+                <input type="hidden" name="cantidad" id="cantidadInput">
+
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+
+                    <button type="button" class="puja-btn" onclick="pujar(100)">
+                        +100
+                    </button>
+
+                    <button type="button" class="puja-btn" onclick="pujar(500)">
+                        +500
+                    </button>
+
+                    <button type="button" class="puja-btn" onclick="pujar(1000)">
+                       +1000
+                    </button>
+
+                    <button type="button" class="puja-btn" onclick="pujar(5000)">
+                        +5000
+                   </button>
+
+                </div>
+
             </form>
+            <script>
+            function pujar(extra) {
+                const actual = Number(document.getElementById('precioActual').dataset.precio);
+                const nueva = actual + extra;
+
+                document.getElementById('cantidadInput').value = nueva;
+                document.getElementById('pujaForm').submit();
+            }
+</script>
         </div>
 
     {% endif %}
