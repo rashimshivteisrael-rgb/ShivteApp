@@ -56,6 +56,14 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
                         Nadie todavía
                     {% endif %}
                 </p>
+                {% if s.activa %}
+                <form method="POST" action="/panel-admin/shevet-bank/subasta/{{ s.id }}/cerrar/" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('¿Cerrar subasta y cobrar al ganador?');" style="background:#ef4444;">
+                         Cerrar y cobrar
+                    </button>
+                </form>
+                {% endif %}
             </div>
         {% empty %}
             <p>No hay subastas todavía.</p>
