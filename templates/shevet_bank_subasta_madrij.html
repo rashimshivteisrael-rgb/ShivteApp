@@ -36,7 +36,6 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
             <p>{{ subasta.descripcion|default:"" }}</p>
 
             <p>Precio actual:</p>
-            <div class="big">${{ subasta.precio_actual }}</div>
             <div class="big" id="precioActual" data-precio="{{ subasta.precio_actual|default:0 }}">
                  ${{ subasta.precio_actual }}
             </div>
