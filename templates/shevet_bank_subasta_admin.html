@@ -64,6 +64,12 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
                     </button>
                 </form>
                 {% endif %}
+                {% if not s.iniciada %}
+                <form method="POST" action="/panel-admin/shevet-bank/subasta/{{ s.id }}/iniciar/" style="display:inline;">
+                     {% csrf_token %}
+                     <button type="submit">Iniciar</button>
+                </form>
+                {% endif %}
             </div>
         {% empty %}
             <p>No hay subastas todavía.</p>

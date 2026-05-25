@@ -40,6 +40,10 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
                  ${{ subasta.precio_actual }}
             </div>
 
+            <p>Tiempo restante:</p>
+
+            <div class="big" id="timer"></div>
+
             <p>
                 Ganandooo:
                 {% if subasta.kbutza_ganando %}
@@ -96,5 +100,27 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
     {% endif %}
 
 </div>
+<div id="timerData" data-segundos="{{ segundos_restantes|default:0 }}"></div>
+
+<script>
+let segundos = Number(document.getElementById('timerData').dataset.segundos);
+
+function tick() {
+    const min = Math.floor(segundos / 60);
+    const sec = segundos % 60;
+
+    document.getElementById('timer').innerText =
+        `${min}:${sec.toString().padStart(2,'0')}`;
+
+    if (segundos > 0) {
+        segundos--;
+    } else {
+        location.reload();
+    }
+}
+
+tick();
+setInterval(tick, 1000);
+</script>
 </body>
 </html>

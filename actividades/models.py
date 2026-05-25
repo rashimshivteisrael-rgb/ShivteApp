@@ -72,6 +72,9 @@ class ShevetBankSubasta(models.Model):
         blank=True
     )
     termina_en = models.DateTimeField(null=True, blank=True)
+    duracion_minutos = models.IntegerField(default=5)
+    iniciada = models.BooleanField(default=False)
+    cobrada = models.BooleanField(default=False)
 
     def __str__(self):
         return self.premio

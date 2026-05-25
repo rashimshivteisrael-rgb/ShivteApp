@@ -1080,9 +1080,12 @@ def shevet_bank_subasta_admin(request):
         ShevetBankSubasta.objects.create(
             premio=premio,
             descripcion=descripcion,
-            activa=True,
+            activa=False,
+            iniciada=False,
+            cobrada=False,
             precio_actual=0,
-            termina_en=timezone.now() + timedelta(minutes=minutos)
+            duracion_minutos=minutos,
+            termina_en=None
         )
 
         return redirect('/panel-admin/shevet-bank/subasta/')
@@ -1090,6 +1093,20 @@ def shevet_bank_subasta_admin(request):
     return render(request, 'shevet_bank_subasta_admin.html', {
         'subastas': subastas
     })
+
+def iniciar_shevet_bank_subasta(request, subasta_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    subasta = get_object_or_404(ShevetBankSubasta, id=subasta_id)
+
+    if request.method == 'POST' and not subasta.cobrada:
+        subasta.activa = True
+        subasta.iniciada = True
+        subasta.termina_en = timezone.now() + timedelta(minutes=subasta.duracion_minutos)
+        subasta.save()
+
+    return redirect('/panel-admin/shevet-bank/subasta/')
 
 def saldo_kbutza_shevet(kbutza):
     cuentas = ShevetBankCuenta.objects.filter(janij__kbutza=kbutza)
@@ -1183,6 +1200,15 @@ def shevet_bank_subasta_madrij(request):
 
     kbutza = asignacion.kbutza
     subasta = ShevetBankSubasta.objects.filter(activa=True).order_by('-id').first()
+    cobrar_subasta_si_termino(subasta)
+
+    segundos_restantes = 0
+
+    if subasta and subasta.termina_en:
+        segundos_restantes = max(
+            0,
+            int((subasta.termina_en - timezone.now()).total_seconds())
+        )
     mensaje = None
 
     saldo_disponible = saldo_kbutza_shevet(kbutza)
@@ -1212,7 +1238,8 @@ def shevet_bank_subasta_madrij(request):
         'kbutza': kbutza,
         'subasta': subasta,
         'mensaje': mensaje,
-        'saldo_disponible': saldo_disponible
+        'saldo_disponible': saldo_disponible,
+        'segundos_restantes': segundos_restantes
     })
 
 def cerrar_shevet_bank_subasta(request, subasta_id):
@@ -1250,6 +1277,46 @@ def cerrar_shevet_bank_subasta(request, subasta_id):
         subasta.save()
 
     return redirect('/panel-admin/shevet-bank/subasta/')
+
+def cobrar_subasta_si_termino(subasta):
+    if not subasta or not subasta.activa or not subasta.termina_en:
+        return
+
+    if timezone.now() < subasta.termina_en:
+        return
+
+    if subasta.cobrada:
+        subasta.activa = False
+        subasta.save()
+        return
+
+    if subasta.kbutza_ganando and subasta.precio_actual > 0:
+        cuentas = ShevetBankCuenta.objects.filter(
+            janij__kbutza=subasta.kbutza_ganando
+        ).order_by('-saldo')
+
+        restante = subasta.precio_actual
+
+        for cuenta in cuentas:
+            if restante <= 0:
+                break
+
+            descuento = min(cuenta.saldo, restante)
+            cuenta.saldo -= descuento
+            cuenta.save()
+            restante -= descuento
+
+            ShevetBankMovimiento.objects.create(
+                cuenta=cuenta,
+                estacion=None,
+                madrij=None,
+                cantidad=-descuento,
+                nota=f"Pago subasta: {subasta.premio}"
+            )
+
+    subasta.activa = False
+    subasta.cobrada = True
+    subasta.save()
 
 def shevet_bank_ranking(request):
     kbutzot = Kbutza.objects.all().order_by('nombre')
