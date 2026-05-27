@@ -1418,3 +1418,40 @@ def got_talent_inscripciones(request):
         'janijim': janijim,
         'concursantes': concursantes
     })
+
+def got_talent_iniciar_concursante(request, concursante_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    concursante = get_object_or_404(ShivteGotTalentConcursante, id=concursante_id)
+
+    if request.method == 'POST':
+        ShivteGotTalentConcursante.objects.all().update(activo=False)
+
+        concursante.activo = True
+        concursante.terminado = False
+        concursante.save()
+
+    return redirect('/panel-admin/got-talent/')
+
+
+def got_talent_terminar_concursante(request, concursante_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    concursante = get_object_or_404(ShivteGotTalentConcursante, id=concursante_id)
+
+    if request.method == 'POST':
+        concursante.activo = False
+        concursante.terminado = True
+        concursante.save()
+
+    return redirect('/panel-admin/got-talent/')
+
+
+def got_talent_pantalla(request):
+    concursante = ShivteGotTalentConcursante.objects.filter(activo=True).first()
+
+    return render(request, 'got_talent_pantalla.html', {
+        'concursante': concursante
+    })

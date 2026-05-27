@@ -66,6 +66,9 @@ from torneo.views import (
     iniciar_shevet_bank_subasta,
     got_talent_admin,
     got_talent_inscripciones,
+    got_talent_iniciar_concursante,
+    got_talent_terminar_concursante,
+    got_talent_pantalla,
 
 )
 
@@ -137,6 +140,9 @@ urlpatterns = [
     path('panel-admin/shevet-bank/subasta/<int:subasta_id>/iniciar/', iniciar_shevet_bank_subasta, name='iniciar_shevet_bank_subasta'),
     path('panel-admin/got-talent/', got_talent_admin, name='got_talent_admin'),
     path('got-talent/inscripciones/', got_talent_inscripciones, name='got_talent_inscripciones'),
+    path('panel-admin/got-talent/concursante/<int:concursante_id>/iniciar/', got_talent_iniciar_concursante, name='got_talent_iniciar_concursante'),
+    path('panel-admin/got-talent/concursante/<int:concursante_id>/terminar/', got_talent_terminar_concursante, name='got_talent_terminar_concursante'),
+    path('got-talent/pantalla/', got_talent_pantalla, name='got_talent_pantalla'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

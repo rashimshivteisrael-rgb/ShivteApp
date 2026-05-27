@@ -21,6 +21,10 @@ option { color:black; }
 
     <h1>🎤 Shivte Got Talent Admin</h1>
 
+    <a class="btn" href="/got-talent/pantalla/" target="_blank">
+         🖥️ Abrir pantalla grande
+    </a>
+
     <div class="card">
         <h2>Asignar rol</h2>
 
@@ -58,9 +62,28 @@ option { color:black; }
         <h2>Concursantes inscritos</h2>
 
         {% for c in concursantes %}
-            <p>
-                <strong>{{ c.janij.nombre }}</strong> — {{ c.talento }}
-            </p>
+            <div class="card">
+                <h3>{{ c.janij.nombre }}</h3>
+                <p>{{ c.talento }}</p>
+
+                {% if c.activo %}
+                   <p style="color:#22c55e; font-weight:bold;">EN ESCENA</p>
+
+                   <form method="POST" action="/panel-admin/got-talent/concursante/{{ c.id }}/terminar/">
+                         {% csrf_token %}
+                         <button type="submit" style="background:#ef4444;">
+                              Terminar
+                         </button>
+                   </form>
+                {% else %}
+                   <form method="POST" action="/panel-admin/got-talent/concursante/{{ c.id }}/iniciar/">
+                         {% csrf_token %}
+                         <button type="submit">
+                             Iniciar
+                         </button>
+                   </form>
+                {% endif %}
+            </div>
         {% empty %}
             <p>No hay concursantes inscritos.</p>
         {% endfor %}

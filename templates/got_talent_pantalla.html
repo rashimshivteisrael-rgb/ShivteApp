@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="3">
+<title>Got Talent Pantalla</title>
+<style>
+body {
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#020617,#111827,#7c3aed);
+    color:white;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+.screen {
+    width:90%;
+    max-width:1200px;
+}
+.label {
+    letter-spacing:4px;
+    color:#c4b5fd;
+    font-weight:bold;
+}
+.nombre {
+    font-size:86px;
+    font-weight:900;
+    margin:25px 0;
+}
+.talento {
+    font-size:54px;
+    color:#fde68a;
+}
+.kbutza {
+    font-size:34px;
+    color:#cbd5e1;
+    margin-top:20px;
+}
+</style>
+</head>
+<body>
+<div class="screen">
+    {% if concursante %}
+        <div class="label">SHIVTE GOT TALENT</div>
+        <div class="nombre">{{ concursante.janij.nombre }}</div>
+        <div class="talento">{{ concursante.talento }}</div>
+
+        <div class="kbutza">
+            {% if concursante.janij.kbutza %}
+                {{ concursante.janij.kbutza.nombre }}
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="label">SHIVTE GOT TALENT</div>
+        <div class="nombre">Próximamente</div>
+        <div class="talento">Esperando concursante...</div>
+    {% endif %}
+</div>
+</body>
+</html>
