@@ -1379,3 +1379,42 @@ def got_talent_admin(request):
         'roles': roles,
         'concursantes': concursantes
     })
+
+def got_talent_inscripciones(request):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+
+    tiene_permiso = ShivteGotTalentRol.objects.filter(
+        usuario=usuario,
+        rol='inscripciones'
+    ).exists()
+
+    if not tiene_permiso:
+        return render(request, 'got_talent_sin_permiso.html')
+
+    janijim = Janij.objects.all().order_by('nombre')
+    concursantes = ShivteGotTalentConcursante.objects.all().order_by('janij__nombre')
+
+    if request.method == 'POST':
+        janij_id = request.POST.get('janij')
+        talento = request.POST.get('talento')
+
+        if janij_id and talento:
+            janij = get_object_or_404(Janij, id=janij_id)
+
+            ShivteGotTalentConcursante.objects.get_or_create(
+                janij=janij,
+                defaults={'talento': talento}
+            )
+
+        return redirect('/got-talent/inscripciones/')
+
+    return render(request, 'got_talent_inscripciones.html', {
+        'janijim': janijim,
+        'concursantes': concursantes
+    })

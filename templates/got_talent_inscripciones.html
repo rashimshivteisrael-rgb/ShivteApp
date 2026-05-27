@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Inscripciones Got Talent</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:900px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:16px; }
+select, input, button { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; width:auto; }
+option { color:black; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn back" href="/actividades/">← Actividades</a>
+
+    <h1>🎤 Inscripciones Shivte Got Talent</h1>
+
+    <div class="card">
+        <h2>Inscribir janij</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <select name="janij" required>
+                <option value="">Selecciona janij</option>
+                {% for j in janijim %}
+                    <option value="{{ j.id }}">
+                        {{ j.nombre }}
+                        {% if j.kbutza %} · {{ j.kbutza.nombre }}{% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="talento" placeholder="¿Qué va a hacer? Ej. cantar, bailar..." required>
+
+            <button type="submit">Inscribir</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Concursantes inscritos</h2>
+
+        {% for c in concursantes %}
+            <p>
+                <strong>{{ c.janij.nombre }}</strong> — {{ c.talento }}
+            </p>
+        {% empty %}
+            <p>No hay concursantes todavía.</p>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>

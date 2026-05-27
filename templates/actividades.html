@@ -73,6 +73,12 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
                <p>Configurar jueces, inscripciones y concursantes.</p>
            </a>
        {% endif %}
+       {% if usuario_tipo == 'madrij' %}
+            <a class="card" href="/got-talent/inscripciones/">
+               <h3>🎤 Got Talent Inscripciones</h3>
+               <p>Inscribir concursantes si tienes permiso.</p>
+            </a>
+       {% endif %}
     </div>
 
 </div>
