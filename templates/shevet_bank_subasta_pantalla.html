@@ -54,6 +54,9 @@ body {
 
         <div class="small">Puja actual</div>
         <div class="precio">${{ subasta.precio_actual }}</div>
+        {% if subasta.imagen %}
+            <img src="{{ subasta.imagen.url }}" style="max-height:260px; max-width:420px; object-fit:contain; margin-bottom:20px;">
+        {% endif %}
 
         <div class="small">Ganando</div>
         <div class="kbutza">

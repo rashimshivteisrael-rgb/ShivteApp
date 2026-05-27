@@ -75,6 +75,7 @@ class ShevetBankSubasta(models.Model):
     duracion_minutos = models.IntegerField(default=5)
     iniciada = models.BooleanField(default=False)
     cobrada = models.BooleanField(default=False)
+    imagen = models.ImageField(upload_to='subastas/', blank=True, null=True)
 
     def __str__(self):
         return self.premio

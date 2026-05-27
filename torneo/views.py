@@ -1085,7 +1085,8 @@ def shevet_bank_subasta_admin(request):
             cobrada=False,
             precio_actual=0,
             duracion_minutos=minutos,
-            termina_en=None
+            termina_en=None,
+            imagen=imagen
         )
 
         return redirect('/panel-admin/shevet-bank/subasta/')

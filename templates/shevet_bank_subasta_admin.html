@@ -23,12 +23,13 @@ button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; 
     <div class="card">
         <h2>Crear subasta</h2>
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="text" name="premio" placeholder="Nombre del premio" required>
             <textarea name="descripcion" placeholder="Descripción"></textarea>
             <input type="number" name="duracion" placeholder="Duración en minutos" value="5" required>
             <button type="submit">Crear y abrir subasta</button>
+            <input type="file" name="imagen" accept="image/png,image/webp,image/jpeg">
         </form>
     </div>
 
