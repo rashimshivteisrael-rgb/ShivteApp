@@ -1074,6 +1074,7 @@ def shevet_bank_subasta_admin(request):
         premio = request.POST.get('premio')
         descripcion = request.POST.get('descripcion')
         duracion = request.POST.get('duracion')
+        imagen = request.FILES.get('imagen')
 
         minutos = int(duracion) if duracion else 5
 
