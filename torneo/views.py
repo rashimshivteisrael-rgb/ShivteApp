@@ -1455,3 +1455,49 @@ def got_talent_pantalla(request):
     return render(request, 'got_talent_pantalla.html', {
         'concursante': concursante
     })
+
+def got_talent_juez(request):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    juez = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+
+    es_juez = ShivteGotTalentRol.objects.filter(
+        usuario=juez,
+        rol='juez'
+    ).exists()
+
+    if not es_juez:
+        return render(request, 'got_talent_sin_permiso.html')
+
+    concursante = ShivteGotTalentConcursante.objects.filter(activo=True).first()
+    calificacion_existente = None
+
+    if concursante:
+        calificacion_existente = ShivteGotTalentCalificacion.objects.filter(
+            concursante=concursante,
+            juez=juez
+        ).first()
+
+    if request.method == 'POST' and concursante and not calificacion_existente:
+        originalidad = int(request.POST.get('originalidad'))
+        ejecucion = int(request.POST.get('ejecucion'))
+        general = int(request.POST.get('general'))
+
+        ShivteGotTalentCalificacion.objects.create(
+            concursante=concursante,
+            juez=juez,
+            originalidad=originalidad,
+            ejecucion=ejecucion,
+            general=general
+        )
+
+        return redirect('/got-talent/juez/')
+
+    return render(request, 'got_talent_juez.html', {
+        'concursante': concursante,
+        'calificacion_existente': calificacion_existente
+    })
