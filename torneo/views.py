@@ -19,6 +19,7 @@ from actividades.models import ActividadEstado
 from actividades.models import ShevetBankSubasta, ShevetBankPuja
 from django.utils import timezone
 from datetime import timedelta
+from actividades.models import ShivteGotTalentRol, ShivteGotTalentConcursante, ShivteGotTalentCalificacion
 
 
 from transporte.models import Camion
@@ -1349,4 +1350,32 @@ def shevet_bank_ranking(request):
 
     return render(request, 'shevet_bank_ranking.html', {
         'ranking': ranking
+    })
+
+def got_talent_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    madrijim = UsuarioCamp.objects.filter(tipo='madrij').order_by('nombre')
+    roles = ShivteGotTalentRol.objects.all().order_by('rol', 'usuario__nombre')
+    concursantes = ShivteGotTalentConcursante.objects.all().order_by('janij__nombre')
+
+    if request.method == 'POST':
+        usuario_id = request.POST.get('usuario')
+        rol = request.POST.get('rol')
+
+        if usuario_id and rol:
+            usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+
+            ShivteGotTalentRol.objects.get_or_create(
+                usuario=usuario,
+                rol=rol
+            )
+
+        return redirect('/panel-admin/got-talent/')
+
+    return render(request, 'got_talent_admin.html', {
+        'madrijim': madrijim,
+        'roles': roles,
+        'concursantes': concursantes
     })

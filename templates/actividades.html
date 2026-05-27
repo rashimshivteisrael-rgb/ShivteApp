@@ -67,6 +67,12 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
              <p>Puja por tu kbutza.</p>
           </a>
        {% endif %}
+       {% if usuario_tipo == 'admin' %}
+           <a class="card" href="/panel-admin/got-talent/">
+               <h3>🎤 Shivte Got Talent</h3>
+               <p>Configurar jueces, inscripciones y concursantes.</p>
+           </a>
+       {% endif %}
     </div>
 
 </div>

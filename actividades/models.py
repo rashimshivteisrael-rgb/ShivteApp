@@ -97,3 +97,40 @@ class ActividadEstado(models.Model):
 
     def __str__(self):
         return f"{self.nombre} - {'Abierta' if self.abierta else 'Cerrada'}"
+    
+class ShivteGotTalentRol(models.Model):
+    usuario = models.ForeignKey(UsuarioCamp, on_delete=models.CASCADE)
+    rol = models.CharField(max_length=30)  # inscripciones / juez
+
+    def __str__(self):
+        return f"{self.usuario.nombre} - {self.rol}"
+
+
+class ShivteGotTalentConcursante(models.Model):
+    janij = models.ForeignKey(Janij, on_delete=models.CASCADE)
+    talento = models.CharField(max_length=150)
+    activo = models.BooleanField(default=False)
+    terminado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.janij.nombre} - {self.talento}"
+
+
+class ShivteGotTalentCalificacion(models.Model):
+    concursante = models.ForeignKey(ShivteGotTalentConcursante, on_delete=models.CASCADE)
+    juez = models.ForeignKey(UsuarioCamp, on_delete=models.CASCADE)
+
+    originalidad = models.IntegerField()
+    ejecucion = models.IntegerField()
+    general = models.IntegerField()
+
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('concursante', 'juez')
+
+    def total(self):
+        return self.originalidad + self.ejecucion + self.general
+
+    def __str__(self):
+        return f"{self.concursante} - {self.juez.nombre}"

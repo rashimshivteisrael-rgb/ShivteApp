@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Shivte Got Talent Admin</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1000px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:16px; }
+select, button { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; width:auto; }
+option { color:black; }
+.badge { display:inline-block; background:#334155; padding:7px 11px; border-radius:999px; margin:4px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn back" href="/actividades/">← Actividades</a>
+
+    <h1>🎤 Shivte Got Talent Admin</h1>
+
+    <div class="card">
+        <h2>Asignar rol</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <select name="usuario" required>
+                <option value="">Selecciona madrij</option>
+                {% for m in madrijim %}
+                    <option value="{{ m.id }}">{{ m.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="rol" required>
+                <option value="">Selecciona rol</option>
+                <option value="inscripciones">Encargado de inscripciones</option>
+                <option value="juez">Juez</option>
+            </select>
+
+            <button type="submit">Guardar rol</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Roles asignados</h2>
+
+        {% for r in roles %}
+            <span class="badge">{{ r.usuario.nombre }} · {{ r.rol }}</span>
+        {% empty %}
+            <p>No hay roles asignados.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Concursantes inscritos</h2>
+
+        {% for c in concursantes %}
+            <p>
+                <strong>{{ c.janij.nombre }}</strong> — {{ c.talento }}
+            </p>
+        {% empty %}
+            <p>No hay concursantes inscritos.</p>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>
