@@ -1115,8 +1115,18 @@ def saldo_kbutza_shevet(kbutza):
 def shevet_bank_subasta_pantalla(request):
     subasta = ShevetBankSubasta.objects.filter(activa=True).order_by('-id').first()
 
+    cobrar_subasta_si_termino(subasta)
+
+    segundos_restantes = 0
+    if subasta and subasta.termina_en:
+        segundos_restantes = max(
+            0,
+            int((subasta.termina_en - timezone.now()).total_seconds())
+        )
+
     return render(request, 'shevet_bank_subasta_pantalla.html', {
-        'subasta': subasta
+        'subasta': subasta,
+        'segundos_restantes': segundos_restantes
     })
 
 def eliminar_shevet_bank_estacion(request, estacion_id):

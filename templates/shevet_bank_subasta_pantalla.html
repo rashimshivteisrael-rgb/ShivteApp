@@ -62,11 +62,33 @@ body {
             {% else %}
                 Nadie todavía
             {% endif %}
+        <div class="small">Tiempo restante</div>
+        <div class="precio" id="timer"></div>
         </div>
     {% else %}
         <div class="premio">No hay subasta activa</div>
     {% endif %}
 </div>
+<script>
+let segundos = Number("{{ segundos_restantes|default:0 }}");
+
+function tick() {
+    const min = Math.floor(segundos / 60);
+    const sec = segundos % 60;
+
+    document.getElementById('timer').innerText =
+        `${min}:${sec.toString().padStart(2,'0')}`;
+
+    if (segundos > 0) {
+        segundos--;
+    } else {
+        location.reload();
+    }
+}
+
+tick();
+setInterval(tick, 1000);
+</script>
 
 </body>
 </html>
