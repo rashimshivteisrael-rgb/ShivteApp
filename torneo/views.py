@@ -1501,3 +1501,37 @@ def got_talent_juez(request):
         'concursante': concursante,
         'calificacion_existente': calificacion_existente
     })
+
+def got_talent_resultados_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    concursantes = ShivteGotTalentConcursante.objects.all()
+
+    resultados = []
+
+    for c in concursantes:
+        calificaciones = ShivteGotTalentCalificacion.objects.filter(concursante=c)
+
+        total = 0
+        cantidad_jueces = calificaciones.count()
+
+        for cal in calificaciones:
+            total += cal.originalidad + cal.ejecucion + cal.general
+
+        promedio = 0
+        if cantidad_jueces > 0:
+            promedio = total / cantidad_jueces
+
+        resultados.append({
+            'concursante': c,
+            'total': total,
+            'promedio': promedio,
+            'cantidad_jueces': cantidad_jueces
+        })
+
+    resultados = sorted(resultados, key=lambda x: x['total'], reverse=True)
+
+    return render(request, 'got_talent_resultados_admin.html', {
+        'resultados': resultados
+    })

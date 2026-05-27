@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Resultados Got Talent</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:900px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:22px; border-radius:18px; margin-bottom:16px; }
+.top3 { border:2px solid #facc15; background:rgba(250,204,21,.12); }
+.btn { background:#334155; color:white; padding:12px 14px; border-radius:10px; text-decoration:none; display:inline-block; margin-bottom:16px; }
+.score { font-size:32px; font-weight:bold; color:#86efac; }
+.muted { color:#cbd5e1; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <a class="btn" href="/panel-admin/got-talent/">← Got Talent Admin</a>
+
+    <h1>🏆 Resultados Got Talent</h1>
+
+    {% for r in resultados %}
+        <div class="card {% if forloop.counter <= 3 %}top3{% endif %}">
+            <h2>
+                #{{ forloop.counter }}
+                {{ r.concursante.janij.nombre }}
+            </h2>
+
+            <p>{{ r.concursante.talento }}</p>
+
+            <div class="score">{{ r.total }} pts</div>
+
+            <p class="muted">
+                Promedio: {{ r.promedio|floatformat:2 }} ·
+                Jueces: {{ r.cantidad_jueces }}
+            </p>
+
+            {% if forloop.counter == 1 %}
+                <h3>🥇 Primer lugar</h3>
+            {% elif forloop.counter == 2 %}
+                <h3>🥈 Segundo lugar</h3>
+            {% elif forloop.counter == 3 %}
+                <h3>🥉 Tercer lugar</h3>
+            {% endif %}
+        </div>
+    {% empty %}
+        <div class="card">No hay concursantes todavía.</div>
+    {% endfor %}
+
+</div>
+</body>
+</html>
