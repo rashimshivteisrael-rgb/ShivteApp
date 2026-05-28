@@ -71,6 +71,8 @@ from torneo.views import (
     got_talent_pantalla,
     got_talent_juez,
     got_talent_resultados_admin,
+    eliminar_got_talent_concursante,
+    editar_got_talent_concursante
 
 )
 
@@ -147,6 +149,8 @@ urlpatterns = [
     path('got-talent/pantalla/', got_talent_pantalla, name='got_talent_pantalla'),
     path('got-talent/juez/', got_talent_juez, name='got_talent_juez'),
     path('panel-admin/got-talent/resultados/', got_talent_resultados_admin, name='got_talent_resultados_admin'),
+    path('panel-admin/got-talent/concursante/<int:concursante_id>/eliminar/', eliminar_got_talent_concursante, name='eliminar_got_talent_concursante'),
+    path('panel-admin/got-talent/concursante/<int:concursante_id>/editar/',editar_got_talent_concursante,name='editar_got_talent_concursante'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

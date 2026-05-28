@@ -1535,3 +1535,40 @@ def got_talent_resultados_admin(request):
     return render(request, 'got_talent_resultados_admin.html', {
         'resultados': resultados
     })
+
+def eliminar_got_talent_concursante(request, concursante_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    concursante = get_object_or_404(
+        ShivteGotTalentConcursante,
+        id=concursante_id
+    )
+
+    if request.method == 'POST':
+        concursante.delete()
+
+    return redirect('/panel-admin/got-talent/')
+
+def editar_got_talent_concursante(request, concursante_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    concursante = get_object_or_404(
+        ShivteGotTalentConcursante,
+        id=concursante_id
+    )
+
+    if request.method == 'POST':
+        concursante.talento = request.POST.get('talento')
+        concursante.save()
+
+        return redirect('/panel-admin/got-talent/')
+
+    return render(
+        request,
+        'editar_got_talent_concursante.html',
+        {
+            'concursante': concursante
+        }
+    )

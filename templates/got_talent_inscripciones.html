@@ -45,10 +45,46 @@ option { color:black; }
     <div class="card">
         <h2>Concursantes inscritos</h2>
 
-        {% for c in concursantes %}
-            <p>
-                <strong>{{ c.janij.nombre }}</strong> — {{ c.talento }}
-            </p>
+       {% for c in concursantes %}
+            <div class="card">
+                <h3>{{ c.janij.nombre }}</h3>
+
+                <p>
+                    <strong>Kbutza:</strong>
+                    {% if c.janij.kbutza %}
+                        {{ c.janij.kbutza.nombre }}
+                    {% else %}
+                        Sin kbutza
+                    {% endif %}
+                </p>
+
+                <p>
+                    <strong>Talento:</strong>
+                    {{ c.talento }}
+                </p>
+
+                <a
+                    href="/panel-admin/got-talent/concursante/{{ c.id }}/editar/"
+                    class="btn"
+                    style="background:#2563eb;">
+                    Editar
+                </a>
+
+                <form
+                    method="POST"
+                    action="/panel-admin/got-talent/concursante/{{ c.id }}/eliminar/"
+                    style="display:inline;">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        style="background:#ef4444;">
+                        Eliminar
+                    </button>
+
+                </form>
+            </div>
         {% empty %}
             <p>No hay concursantes todavía.</p>
         {% endfor %}

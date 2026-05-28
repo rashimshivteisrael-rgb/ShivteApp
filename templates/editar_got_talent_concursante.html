@@ -1,0 +1,17 @@
+<h1>Editar concursante</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <p>{{ concursante.janij.nombre }}</p>
+
+    <input
+        type="text"
+        name="talento"
+        value="{{ concursante.talento }}"
+        required>
+
+    <button type="submit">
+        Guardar cambios
+    </button>
+</form>
