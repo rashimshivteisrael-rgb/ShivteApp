@@ -72,8 +72,11 @@ from torneo.views import (
     got_talent_juez,
     got_talent_resultados_admin,
     eliminar_got_talent_concursante,
-    editar_got_talent_concursante
-
+    editar_got_talent_concursante,
+    shivte_tv_admin,
+    shivte_tv_madrij,
+    subir_shivte_tv,
+    shivte_tv_publico
 )
 
 urlpatterns = [
@@ -151,6 +154,10 @@ urlpatterns = [
     path('panel-admin/got-talent/resultados/', got_talent_resultados_admin, name='got_talent_resultados_admin'),
     path('panel-admin/got-talent/concursante/<int:concursante_id>/eliminar/', eliminar_got_talent_concursante, name='eliminar_got_talent_concursante'),
     path('panel-admin/got-talent/concursante/<int:concursante_id>/editar/',editar_got_talent_concursante,name='editar_got_talent_concursante'),
+    path('panel-admin/shivte-tv/', shivte_tv_admin, name='shivte_tv_admin'),
+    path('shivte-tv/', shivte_tv_madrij, name='shivte_tv_madrij'),
+    path('shivte-tv/subir/<int:pedido_id>/', subir_shivte_tv, name='subir_shivte_tv'),
+    path('shivte-tv-publico/', shivte_tv_publico, name='shivte_tv_publico'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

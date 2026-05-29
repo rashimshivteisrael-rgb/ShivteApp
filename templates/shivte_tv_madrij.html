@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ShivteTV</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:800px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:16px; }
+.btn { background:#22c55e; color:white; padding:12px 14px; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; }
+.muted { color:#cbd5e1; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="btn back" href="/actividades/">← Actividades</a>
+
+<h1>📺 ShivteTV</h1>
+
+{% if sin_kbutza %}
+    <div class="card">No tienes kbutza asignada.</div>
+{% elif not pedido %}
+    <div class="card">No hay pedido asignado para tu kbutza.</div>
+{% else %}
+    <div class="card">
+        <h2>{{ pedido.titulo }}</h2>
+        <p class="muted">{{ pedido.descripcion|default:"Sin instrucciones" }}</p>
+
+        {% if video %}
+            <p style="color:#22c55e; font-weight:bold;">✅ Ya subiste tu video</p>
+            <a class="btn" href="{{ video.archivo.url }}" target="_blank">Ver video</a>
+        {% else %}
+            <p style="color:#ef4444; font-weight:bold;">❌ Falta subir video</p>
+            <a class="btn" href="/shivte-tv/subir/{{ pedido.id }}/">Subir video</a>
+        {% endif %}
+    </div>
+{% endif %}
+
+</div>
+</body>
+</html>

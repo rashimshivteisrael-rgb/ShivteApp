@@ -85,6 +85,22 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
                 <p>Calificar concursante activo si tienes permiso.</p>
             </a>
         {% endif %}
+        {% if usuario_tipo == 'admin' %}
+            <a class="card" href="/panel-admin/shivte-tv/">
+                <h3>📺 ShivteTV</h3>
+                <p>Asignar pedidos de video por kbutza.</p>
+            </a>    
+        {% endif %}
+        {% if usuario_tipo == 'madrij' %}
+            <a class="card" href="/shivte-tv/">
+                <h3>📺 ShivteTV</h3>
+                <p>Subir video de tu kbutza.</p>
+            </a>
+        {% endif %}
+        <a class="card" href="/shivte-tv-publico/">
+            <h3>📺 ShivteTV</h3>
+            <p>Ver videos subidos.</p>
+        </a>
     </div>
 
 </div>

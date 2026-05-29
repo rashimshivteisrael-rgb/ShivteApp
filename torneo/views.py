@@ -20,6 +20,7 @@ from actividades.models import ShevetBankSubasta, ShevetBankPuja
 from django.utils import timezone
 from datetime import timedelta
 from actividades.models import ShivteGotTalentRol, ShivteGotTalentConcursante, ShivteGotTalentCalificacion
+from actividades.models import ShivteTVPedido, ShivteTVVideo
 
 
 from transporte.models import Camion
@@ -1572,3 +1573,117 @@ def editar_got_talent_concursante(request, concursante_id):
             'concursante': concursante
         }
     )
+
+def shivte_tv_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    kbutzot = Kbutza.objects.all().order_by('nombre')
+
+    if request.method == 'POST':
+        kbutza_id = request.POST.get('kbutza')
+        titulo = request.POST.get('titulo')
+        descripcion = request.POST.get('descripcion')
+
+        if kbutza_id and titulo:
+            kbutza = get_object_or_404(Kbutza, id=kbutza_id)
+
+            pedido, creado = ShivteTVPedido.objects.get_or_create(
+                kbutza=kbutza,
+                defaults={
+                    'titulo': titulo,
+                    'descripcion': descripcion
+                }
+            )
+
+            if not creado:
+                pedido.titulo = titulo
+                pedido.descripcion = descripcion
+                pedido.save()
+
+        return redirect('/panel-admin/shivte-tv/')
+
+    pedidos = ShivteTVPedido.objects.all().order_by('kbutza__nombre')
+
+    data = []
+    for p in pedidos:
+        video = ShivteTVVideo.objects.filter(pedido=p).first()
+        data.append({
+            'pedido': p,
+            'video': video,
+            'subido': video is not None
+        })
+
+    return render(request, 'shivte_tv_admin.html', {
+        'kbutzot': kbutzot,
+        'data': data
+    })
+
+
+def shivte_tv_madrij(request):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+    asignacion = MadrijKbutza.objects.filter(usuario=usuario).first()
+
+    if not asignacion:
+        return render(request, 'shivte_tv_madrij.html', {
+            'sin_kbutza': True
+        })
+
+    pedido = ShivteTVPedido.objects.filter(kbutza=asignacion.kbutza).first()
+    video = None
+
+    if pedido:
+        video = ShivteTVVideo.objects.filter(pedido=pedido).first()
+
+    return render(request, 'shivte_tv_madrij.html', {
+        'kbutza': asignacion.kbutza,
+        'pedido': pedido,
+        'video': video
+    })
+
+
+def subir_shivte_tv(request, pedido_id):
+    usuario_id = request.session.get('usuario_id')
+    usuario_tipo = request.session.get('usuario_tipo')
+
+    if usuario_tipo != 'madrij':
+        return redirect('/login/')
+
+    usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
+    pedido = get_object_or_404(ShivteTVPedido, id=pedido_id)
+
+    asignacion = MadrijKbutza.objects.filter(usuario=usuario, kbutza=pedido.kbutza).first()
+    if not asignacion:
+        return redirect('/shivte-tv/')
+
+    if request.method == 'POST':
+        archivo = request.FILES.get('archivo')
+
+        if archivo:
+            ShivteTVVideo.objects.update_or_create(
+                pedido=pedido,
+                defaults={
+                    'archivo': archivo,
+                    'subido_por': usuario
+                }
+            )
+
+        return redirect('/shivte-tv/')
+
+    return render(request, 'subir_shivte_tv.html', {
+        'pedido': pedido
+    })
+
+
+def shivte_tv_publico(request):
+    videos = ShivteTVVideo.objects.all().order_by('pedido__kbutza__nombre')
+
+    return render(request, 'shivte_tv_publico.html', {
+        'videos': videos
+    })
