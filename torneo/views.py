@@ -21,6 +21,9 @@ from django.utils import timezone
 from datetime import timedelta
 from actividades.models import ShivteGotTalentRol, ShivteGotTalentConcursante, ShivteGotTalentCalificacion
 from actividades.models import ShivteTVPedido, ShivteTVVideo
+import zipfile
+from io import BytesIO
+from django.http import HttpResponse
 
 
 from transporte.models import Camion
@@ -1687,3 +1690,47 @@ def shivte_tv_publico(request):
     return render(request, 'shivte_tv_publico.html', {
         'videos': videos
     })
+
+def descargar_shivte_tv(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    buffer = BytesIO()
+
+    with zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+
+        videos = ShivteTVVideo.objects.select_related(
+            'pedido',
+            'pedido__kbutza'
+        )
+
+        for video in videos:
+
+            ruta = video.archivo.path
+
+            extension = ruta.split('.')[-1]
+
+            nombre_archivo = (
+                f"{video.pedido.kbutza.nombre}"
+                f" - "
+                f"{video.pedido.titulo}"
+                f".{extension}"
+            )
+
+            zip_file.write(
+                ruta,
+                arcname=nombre_archivo
+            )
+
+    buffer.seek(0)
+
+    response = HttpResponse(
+        buffer.getvalue(),
+        content_type='application/zip'
+    )
+
+    response['Content-Disposition'] = (
+        'attachment; filename="ShivteTV.zip"'
+    )
+
+    return response
