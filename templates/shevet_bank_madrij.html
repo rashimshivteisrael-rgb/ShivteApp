@@ -5,87 +5,133 @@
 <title>Shevet Bank</title>
 <style>
 body { margin:0; font-family:Arial; background:#0f172a; color:white; }
-.container { max-width:650px; margin:auto; padding:30px 20px; }
+.container { max-width:800px; margin:auto; padding:30px 20px; }
 .card { background:rgba(255,255,255,.08); padding:22px; border-radius:18px; margin-bottom:16px; }
-input, select { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+input, select, button { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
 button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
-.back { background:#334155; margin-bottom:16px; }
-option { color:black; }
-.saldo { font-size:34px; font-weight:bold; color:#86efac; }
+.back { background:#334155; margin-bottom:16px; width:auto; }
+.danger { background:#ef4444; }
+.big { font-size:34px; font-weight:bold; color:#86efac; }
 .msg { background:rgba(59,130,246,.18); padding:12px; border-radius:12px; margin-bottom:14px; }
+.badge { display:inline-block; background:#334155; padding:8px 10px; border-radius:999px; margin:4px; }
+option { color:black; }
 </style>
 </head>
 <body>
 <div class="container">
 
-    <a class="btn back" href="/actividades/">← Actividades</a>
+<a class="btn back" href="/actividades/">← Actividades</a>
 
-    <h1>🏦 Shevet Bank</h1>
+<h1>🏦 Shevet Bank</h1>
 
-    {% if sin_estacion %}
-        <div class="card">
-            No tienes estación asignada.
-        </div>
-    {% else %}
+{% if sin_estacion %}
+    <div class="card">No tienes estación asignada.</div>
+{% else %}
 
-        <div class="card">
-            <h2>Tu estación</h2>
-            <p>{{ estacion.nombre }}</p>
-            {% if estacion.descripcion %}
-                <p style="color:#cbd5e1;">
-                    {{ estacion.descripcion }}
-                </p>
-            {% endif %}
-        </div>
+    {% if mensaje %}
+        <div class="msg">{{ mensaje }}</div>
+    {% endif %}
 
-        {% if mensaje %}
-            <div class="msg">{{ mensaje }}</div>
+    <div class="card">
+        <h2>{{ estacion.nombre }}</h2>
+        {% if estacion.descripcion %}
+            <p>{{ estacion.descripcion }}</p>
         {% endif %}
 
+        {% if es_banco %}
+            <p>Tipo: BANCO</p>
+        {% else %}
+            <p>Precio por jugar: ${{ estacion.precio }}</p>
+        {% endif %}
+    </div>
+
+    {% if es_banco %}
+
         <div class="card">
-            <h2>Buscar tarjeta</h2>
+            <h2>Banco libre</h2>
 
             <form method="POST">
                 {% csrf_token %}
                 <input type="text" name="numero_tarjeta" placeholder="Número de tarjeta" required>
-                <button type="submit">Buscar</button>
+
+                <select name="accion" required>
+                    <option value="">Acción</option>
+                    <option value="sumar">Sumar dinero</option>
+                    <option value="restar">Restar dinero</option>
+                </select>
+
+                <input type="number" name="cantidad" placeholder="Cantidad" required>
+                <input type="text" name="nota" placeholder="Nota opcional">
+
+                <button type="submit">Guardar movimiento</button>
             </form>
         </div>
 
         {% if cuenta %}
             <div class="card">
                 <h2>{{ cuenta.janij.nombre }}</h2>
-                <p>
-                    Kbutza:
-                    {% if cuenta.janij.kbutza %}
-                        {{ cuenta.janij.kbutza.nombre }}
-                    {% else %}
-                        Sin kbutza
-                    {% endif %}
-                </p>
-
-                <div class="saldo">${{ cuenta.saldo }}</div>
-
-                <form method="POST">
-                    {% csrf_token %}
-
-                    <input type="hidden" name="numero_tarjeta" value="{{ cuenta.numero_tarjeta }}">
-
-                    <select name="accion" required>
-                        <option value="">Acción</option>
-                        <option value="sumar">Sumar dinero</option>
-                        <option value="restar">Restar dinero</option>
-                    </select>
-
-                    <input type="number" name="cantidad" placeholder="Cantidad" required>
-                    <input type="text" name="nota" placeholder="Nota opcional">
-
-                    <button type="submit">Guardar movimiento</button>
-                </form>
+                <div class="big">${{ cuenta.saldo }}</div>
             </div>
         {% endif %}
 
+    {% else %}
+
+        <div class="card">
+            <h2>Ronda actual</h2>
+            <p>Bote acumulado:</p>
+            <div class="big">${{ ronda.bote }}</div>
+        </div>
+
+        <div class="card">
+            <h2>Agregar participante</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="tipo_form" value="agregar_participante">
+
+                <input type="text" name="numero_tarjeta" placeholder="Número de tarjeta" required>
+
+                <button type="submit">Cobrar entrada y agregar</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Participantes</h2>
+
+            {% for p in participantes %}
+                <span class="badge">
+                    {{ p.cuenta.janij.nombre }} · {{ p.cuenta.numero_tarjeta }}
+                </span>
+            {% empty %}
+                <p>No hay participantes todavía.</p>
+            {% endfor %}
+        </div>
+
+        <div class="card">
+            <h2>Finalizar ronda</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="tipo_form" value="finalizar_ronda">
+
+                <select name="ganador" required>
+                    <option value="">Selecciona ganador</option>
+                    {% for p in participantes %}
+                        <option value="{{ p.cuenta.id }}">
+                            {{ p.cuenta.janij.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button class="danger" type="submit">
+                    Finalizar y pagar bote
+                </button>
+            </form>
+        </div>
+
     {% endif %}
+
+{% endif %}
 
 </div>
 </body>

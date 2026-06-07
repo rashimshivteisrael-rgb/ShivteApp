@@ -23,7 +23,7 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
     {% for item in ranking %}
         <div class="card">
             <div class="top">
-                <h2>#{{ forloop.counter }} {{ item.kbutza.nombre }}</h2>
+                <h2>#{{ forloop.counter }} {{ item.grupo.codigo_oculto|default:"Grupo oculto" }}</h2>
                 <div class="total">${{ item.total }}</div>
             </div>
 

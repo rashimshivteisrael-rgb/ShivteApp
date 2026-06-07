@@ -25,6 +25,13 @@ import zipfile
 from io import BytesIO
 from django.http import HttpResponse
 from actividades.models import ShevetBankGrupo, ShevetBankGrupoMadrij, ShevetBankGrupoJanij
+from actividades.models import (
+    ShevetBankEstacion,
+    ShevetBankCuenta,
+    ShevetBankMovimiento,
+    ShevetBankRondaEstacion,
+    ShevetBankRondaParticipante,
+)
 
 from transporte.models import Camion
 
@@ -1175,6 +1182,16 @@ def saldo_kbutza_shevet(kbutza):
     cuentas = ShevetBankCuenta.objects.filter(janij__kbutza=kbutza)
     return sum(c.saldo for c in cuentas)
 
+def saldo_grupo_shevet(grupo):
+    asignaciones = ShevetBankGrupoJanij.objects.filter(grupo=grupo)
+
+    total = 0
+    for a in asignaciones:
+        total += a.cuenta.saldo
+
+    return total
+
+
 def shevet_bank_subasta_pantalla(request):
     subasta = ShevetBankSubasta.objects.filter(activa=True).order_by('-id').first()
 
@@ -1213,47 +1230,147 @@ def shevet_bank_madrij(request):
     usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
     estacion = ShevetBankEstacion.objects.filter(encargado=usuario).first()
 
-    cuenta = None
-    mensaje = None
-
     if not estacion:
         return render(request, 'shevet_bank_madrij.html', {
             'sin_estacion': True
         })
 
+    mensaje = None
+    cuenta = None
+
+    # Si es BANCO, funciona libre como antes
+    if estacion.es_banco:
+        if request.method == 'POST':
+            numero_tarjeta = request.POST.get('numero_tarjeta')
+            accion = request.POST.get('accion')
+            cantidad = request.POST.get('cantidad')
+            nota = request.POST.get('nota')
+
+            cuenta = ShevetBankCuenta.objects.filter(numero_tarjeta=numero_tarjeta).first()
+
+            if not cuenta:
+                mensaje = 'No existe una cuenta con ese número.'
+            elif accion and cantidad:
+                cantidad = int(cantidad)
+
+                if accion == 'restar':
+                    cantidad = cantidad * -1
+
+                cuenta.saldo += cantidad
+                cuenta.save()
+
+                ShevetBankMovimiento.objects.create(
+                    cuenta=cuenta,
+                    estacion=estacion,
+                    madrij=usuario,
+                    cantidad=cantidad,
+                    nota=nota
+                )
+
+                mensaje = 'Movimiento guardado.'
+
+        return render(request, 'shevet_bank_madrij.html', {
+            'estacion': estacion,
+            'cuenta': cuenta,
+            'mensaje': mensaje,
+            'es_banco': True
+        })
+
+    # Estación normal: ronda con bote
+    ronda = ShevetBankRondaEstacion.objects.filter(
+        estacion=estacion,
+        encargado=usuario,
+        activa=True
+    ).first()
+
+    if not ronda:
+        ronda = ShevetBankRondaEstacion.objects.create(
+            estacion=estacion,
+            encargado=usuario,
+            bote=0,
+            activa=True
+        )
+
     if request.method == 'POST':
-        numero_tarjeta = request.POST.get('numero_tarjeta')
-        accion = request.POST.get('accion')
-        cantidad = request.POST.get('cantidad')
-        nota = request.POST.get('nota')
+        tipo_form = request.POST.get('tipo_form')
 
-        cuenta = ShevetBankCuenta.objects.filter(numero_tarjeta=numero_tarjeta).first()
+        if tipo_form == 'agregar_participante':
+            numero_tarjeta = request.POST.get('numero_tarjeta')
+            cuenta = ShevetBankCuenta.objects.filter(numero_tarjeta=numero_tarjeta).first()
 
-        if not cuenta:
-            mensaje = 'No existe una cuenta con ese número de tarjeta.'
-        elif accion and cantidad:
-            cantidad = int(cantidad)
+            if not cuenta:
+                mensaje = 'No existe esa tarjeta.'
+            elif cuenta.saldo < estacion.precio:
+                mensaje = 'No tiene suficiente dinero.'
+            else:
+                ya_esta = ShevetBankRondaParticipante.objects.filter(
+                    ronda=ronda,
+                    cuenta=cuenta
+                ).exists()
 
-            if accion == 'restar':
-                cantidad = cantidad * -1
+                if ya_esta:
+                    mensaje = 'Ese janij ya está en esta ronda.'
+                else:
+                    cuenta.saldo -= estacion.precio
+                    cuenta.save()
 
-            cuenta.saldo += cantidad
-            cuenta.save()
+                    ronda.bote += estacion.precio
+                    ronda.save()
 
-            ShevetBankMovimiento.objects.create(
-                cuenta=cuenta,
-                estacion=estacion,
-                madrij=usuario,
-                cantidad=cantidad,
-                nota=nota
-            )
+                    ShevetBankRondaParticipante.objects.create(
+                        ronda=ronda,
+                        cuenta=cuenta,
+                        cobrado=True
+                    )
 
-            mensaje = 'Movimiento guardado correctamente.'
+                    ShevetBankMovimiento.objects.create(
+                        cuenta=cuenta,
+                        estacion=estacion,
+                        madrij=usuario,
+                        cantidad=-estacion.precio,
+                        nota=f'Entrada a {estacion.nombre}'
+                    )
+
+                    mensaje = 'Participante agregado y cobrado.'
+
+        elif tipo_form == 'finalizar_ronda':
+            ganador_id = request.POST.get('ganador')
+            ganador = ShevetBankCuenta.objects.filter(id=ganador_id).first()
+
+            if ganador:
+                ganador.saldo += ronda.bote
+                ganador.save()
+
+                ShevetBankMovimiento.objects.create(
+                    cuenta=ganador,
+                    estacion=estacion,
+                    madrij=usuario,
+                    cantidad=ronda.bote,
+                    nota=f'Ganó ronda en {estacion.nombre}'
+                )
+
+                ronda.ganador = ganador
+                ronda.activa = False
+                ronda.fecha_fin = timezone.now()
+                ronda.save()
+
+                mensaje = 'Ronda finalizada. Bote entregado al ganador.'
+
+                ronda = ShevetBankRondaEstacion.objects.create(
+                    estacion=estacion,
+                    encargado=usuario,
+                    bote=0,
+                    activa=True
+                )
+
+    participantes = ShevetBankRondaParticipante.objects.filter(ronda=ronda)
 
     return render(request, 'shevet_bank_madrij.html', {
         'estacion': estacion,
-        'cuenta': cuenta,
-        'mensaje': mensaje
+        'ronda': ronda,
+        'participantes': participantes,
+        'mensaje': mensaje,
+        'es_banco': False
     })
 
 def shevet_bank_subasta_madrij(request):
@@ -1264,43 +1381,46 @@ def shevet_bank_subasta_madrij(request):
         return redirect('/login/')
 
     usuario = get_object_or_404(UsuarioCamp, id=usuario_id, tipo='madrij')
-    asignacion = MadrijKbutza.objects.filter(usuario=usuario).first()
 
-    if not asignacion:
+    grupo_asignacion = ShevetBankGrupoMadrij.objects.filter(
+        madrij=usuario
+    ).first()
+
+    if not grupo_asignacion:
         return render(request, 'shevet_bank_subasta_madrij.html', {
             'sin_kbutza': True
         })
 
-    kbutza = asignacion.kbutza
+    grupo = grupo_asignacion.grupo
+
     subasta = ShevetBankSubasta.objects.filter(activa=True).order_by('-id').first()
     cobrar_subasta_si_termino(subasta)
 
     segundos_restantes = 0
-
     if subasta and subasta.termina_en:
         segundos_restantes = max(
             0,
             int((subasta.termina_en - timezone.now()).total_seconds())
         )
-    mensaje = None
 
-    saldo_disponible = saldo_kbutza_shevet(kbutza)
+    mensaje = None
+    saldo_disponible = saldo_grupo_shevet(grupo)
 
     if request.method == 'POST' and subasta:
         cantidad = int(request.POST.get('cantidad'))
 
         if cantidad > saldo_disponible:
-            mensaje = "No tienes suficiente dinero en tu kbutza."
+            mensaje = "No tienes suficiente dinero en tu grupo."
         elif cantidad <= subasta.precio_actual:
             mensaje = "La puja debe ser mayor al precio actual."
         else:
             subasta.precio_actual = cantidad
-            subasta.kbutza_ganando = kbutza
+            subasta.grupo_ganando = grupo
             subasta.save()
 
             ShevetBankPuja.objects.create(
                 subasta=subasta,
-                kbutza=kbutza,
+                grupo=grupo,
                 madrij=usuario,
                 cantidad=cantidad
             )
@@ -1308,7 +1428,7 @@ def shevet_bank_subasta_madrij(request):
             mensaje = "Puja enviada correctamente."
 
     return render(request, 'shevet_bank_subasta_madrij.html', {
-        'kbutza': kbutza,
+        'grupo': grupo,
         'subasta': subasta,
         'mensaje': mensaje,
         'saldo_disponible': saldo_disponible,
@@ -1392,18 +1512,16 @@ def cobrar_subasta_si_termino(subasta):
     subasta.save()
 
 def shevet_bank_ranking(request):
-    kbutzot = Kbutza.objects.all().order_by('nombre')
+    grupos = ShevetBankGrupo.objects.all().order_by('nombre')
 
     ranking = []
 
-    for k in kbutzot:
-        cuentas = ShevetBankCuenta.objects.filter(janij__kbutza=k)
-        total = sum(c.saldo for c in cuentas)
+    for g in grupos:
+        total = saldo_grupo_shevet(g)
 
         ranking.append({
-            'kbutza': k,
-            'total': total,
-            'cuentas': cuentas
+            'grupo': g,
+            'total': total
         })
 
     ranking = sorted(ranking, key=lambda x: x['total'], reverse=True)

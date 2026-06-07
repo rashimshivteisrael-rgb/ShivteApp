@@ -68,37 +68,6 @@ class ShevetBankMovimiento(models.Model):
     def __str__(self):
         return f"{self.cuenta.janij.nombre} {self.cantidad}"
     
-class ShevetBankSubasta(models.Model):
-    premio = models.CharField(max_length=150)
-    descripcion = models.TextField(blank=True, null=True)
-    activa = models.BooleanField(default=False)
-    precio_actual = models.IntegerField(default=0)
-    kbutza_ganando = models.ForeignKey(
-        Kbutza,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-    termina_en = models.DateTimeField(null=True, blank=True)
-    duracion_minutos = models.IntegerField(default=5)
-    iniciada = models.BooleanField(default=False)
-    cobrada = models.BooleanField(default=False)
-    imagen = models.ImageField(upload_to='subastas/', blank=True, null=True)
-
-    def __str__(self):
-        return self.premio
-
-
-class ShevetBankPuja(models.Model):
-    subasta = models.ForeignKey(ShevetBankSubasta, on_delete=models.CASCADE)
-    kbutza = models.ForeignKey(Kbutza, on_delete=models.CASCADE)
-    madrij = models.ForeignKey(UsuarioCamp, on_delete=models.SET_NULL, null=True)
-    cantidad = models.IntegerField()
-    fecha = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.kbutza.nombre} - ${self.cantidad}"
-    
 class ShevetBankGrupo(models.Model):
     nombre = models.CharField(max_length=100)
     codigo_oculto = models.CharField(max_length=50, blank=True, null=True)
@@ -121,8 +90,43 @@ class ShevetBankGrupoJanij(models.Model):
 
     def __str__(self):
         return f"{self.grupo.nombre} - {self.cuenta.janij.nombre}"
+    
+class ShevetBankSubasta(models.Model):
+    premio = models.CharField(max_length=150)
+    descripcion = models.TextField(blank=True, null=True)
+    activa = models.BooleanField(default=False)
+    precio_actual = models.IntegerField(default=0)
+    grupo_ganando = models.ForeignKey(
+    ShevetBankGrupo,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True
+)
+    termina_en = models.DateTimeField(null=True, blank=True)
+    duracion_minutos = models.IntegerField(default=5)
+    iniciada = models.BooleanField(default=False)
+    cobrada = models.BooleanField(default=False)
+    imagen = models.ImageField(upload_to='subastas/', blank=True, null=True)
+
+    def __str__(self):
+        return self.premio
 
 
+class ShevetBankPuja(models.Model):
+    subasta = models.ForeignKey(ShevetBankSubasta, on_delete=models.CASCADE)
+    grupo = models.ForeignKey(
+    ShevetBankGrupo,
+    on_delete=models.CASCADE,
+    null=True,
+    blank=True
+)
+    madrij = models.ForeignKey(UsuarioCamp, on_delete=models.SET_NULL, null=True)
+    cantidad = models.IntegerField()
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+       return f"{self.grupo.nombre} - ${self.cantidad}"
+    
 class ShevetBankRondaEstacion(models.Model):
     estacion = models.ForeignKey(ShevetBankEstacion, on_delete=models.CASCADE)
     encargado = models.ForeignKey(UsuarioCamp, on_delete=models.SET_NULL, null=True)
