@@ -24,7 +24,7 @@ from actividades.models import ShivteTVPedido, ShivteTVVideo
 import zipfile
 from io import BytesIO
 from django.http import HttpResponse
-
+from actividades.models import ShevetBankGrupo, ShevetBankGrupoMadrij, ShevetBankGrupoJanij
 
 from transporte.models import Camion
 
@@ -1068,6 +1068,62 @@ def shevet_bank_admin(request):
         'cuentas': cuentas,
         'janijim_sin_cuenta': janijim_sin_cuenta
     })
+
+def shevet_bank_grupos_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    grupos = ShevetBankGrupo.objects.all().order_by('nombre')
+    madrijim = UsuarioCamp.objects.filter(tipo='madrij').order_by('nombre')
+    cuentas = ShevetBankCuenta.objects.all().order_by('janij__nombre')
+
+    if request.method == 'POST':
+        tipo_form = request.POST.get('tipo_form')
+
+        if tipo_form == 'crear_grupo':
+            nombre = request.POST.get('nombre')
+            codigo = request.POST.get('codigo_oculto')
+
+            if nombre:
+                ShevetBankGrupo.objects.create(
+                    nombre=nombre,
+                    codigo_oculto=codigo
+                )
+
+        elif tipo_form == 'asignar_madrij':
+            grupo_id = request.POST.get('grupo')
+            madrij_id = request.POST.get('madrij')
+
+            if grupo_id and madrij_id:
+                grupo = get_object_or_404(ShevetBankGrupo, id=grupo_id)
+                madrij = get_object_or_404(UsuarioCamp, id=madrij_id, tipo='madrij')
+
+                ShevetBankGrupoMadrij.objects.get_or_create(
+                    grupo=grupo,
+                    madrij=madrij
+                )
+
+        elif tipo_form == 'asignar_janij':
+            grupo_id = request.POST.get('grupo')
+            cuenta_id = request.POST.get('cuenta')
+
+            if grupo_id and cuenta_id:
+                grupo = get_object_or_404(ShevetBankGrupo, id=grupo_id)
+                cuenta = get_object_or_404(ShevetBankCuenta, id=cuenta_id)
+
+                ShevetBankGrupoJanij.objects.get_or_create(
+                    grupo=grupo,
+                    cuenta=cuenta
+                )
+
+        return redirect('/panel-admin/shevet-bank/grupos/')
+
+    return render(request, 'shevet_bank_grupos_admin.html', {
+        'grupos': grupos,
+        'madrijim': madrijim,
+        'cuentas': cuentas
+    })
+
 
 def shevet_bank_subasta_admin(request):
     if request.session.get('usuario_tipo') != 'admin':

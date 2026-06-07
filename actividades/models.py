@@ -28,6 +28,7 @@ class PictureDayFoto(models.Model):
     
 class ShevetBankEstacion(models.Model):
     nombre = models.CharField(max_length=100)
+
     encargado = models.ForeignKey(
         UsuarioCamp,
         on_delete=models.SET_NULL,
@@ -35,7 +36,14 @@ class ShevetBankEstacion(models.Model):
         blank=True,
         limit_choices_to={'tipo': 'madrij'}
     )
+
     descripcion = models.TextField(blank=True, null=True)
+
+    precio = models.IntegerField(default=0)
+
+    es_banco = models.BooleanField(default=False)
+
+
     def __str__(self):
         return self.nombre
 
@@ -90,6 +98,57 @@ class ShevetBankPuja(models.Model):
 
     def __str__(self):
         return f"{self.kbutza.nombre} - ${self.cantidad}"
+    
+class ShevetBankGrupo(models.Model):
+    nombre = models.CharField(max_length=100)
+    codigo_oculto = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return self.nombre
+
+
+class ShevetBankGrupoMadrij(models.Model):
+    grupo = models.ForeignKey(ShevetBankGrupo, on_delete=models.CASCADE)
+    madrij = models.ForeignKey(UsuarioCamp, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.grupo.nombre} - {self.madrij.nombre}"
+
+
+class ShevetBankGrupoJanij(models.Model):
+    grupo = models.ForeignKey(ShevetBankGrupo, on_delete=models.CASCADE)
+    cuenta = models.ForeignKey(ShevetBankCuenta, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.grupo.nombre} - {self.cuenta.janij.nombre}"
+
+
+class ShevetBankRondaEstacion(models.Model):
+    estacion = models.ForeignKey(ShevetBankEstacion, on_delete=models.CASCADE)
+    encargado = models.ForeignKey(UsuarioCamp, on_delete=models.SET_NULL, null=True)
+    activa = models.BooleanField(default=True)
+    bote = models.IntegerField(default=0)
+    ganador = models.ForeignKey(
+        ShevetBankCuenta,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='rondas_ganadas'
+    )
+    fecha_inicio = models.DateTimeField(auto_now_add=True)
+    fecha_fin = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.estacion.nombre} - {self.fecha_inicio}"
+
+
+class ShevetBankRondaParticipante(models.Model):
+    ronda = models.ForeignKey(ShevetBankRondaEstacion, on_delete=models.CASCADE)
+    cuenta = models.ForeignKey(ShevetBankCuenta, on_delete=models.CASCADE)
+    cobrado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.ronda.estacion.nombre} - {self.cuenta.janij.nombre}"
     
 class ActividadEstado(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
