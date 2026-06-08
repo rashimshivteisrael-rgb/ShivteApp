@@ -1549,6 +1549,53 @@ def shevet_bank_madrij(request):
 
                     mensaje = "Préstamo creado"
 
+                elif accion == "pagar_prestamo":
+                        prestamo = ShevetBankPrestamo.objects.filter(
+                            cuenta=cuenta,
+                            abierto=True
+                        ).first()
+
+                        if not prestamo:
+                            mensaje = "No tiene préstamo abierto"
+                        elif cuenta.saldo >= prestamo.cantidad:
+                            cuenta.saldo -= prestamo.cantidad
+                            cuenta.save()
+
+                            prestamo.abierto = False
+                            prestamo.pagado = True
+                            prestamo.fecha_cierre = timezone.now()
+                            prestamo.save()
+
+                            mensaje = "Préstamo pagado"
+                        else:
+                            mensaje = "No tiene saldo suficiente para pagar"
+
+
+                elif accion == "cobrar_doble":
+                        prestamo = ShevetBankPrestamo.objects.filter(
+                            cuenta=cuenta,
+                            abierto=True
+                        ).first()
+
+                        if not prestamo:
+                            mensaje = "No tiene préstamo abierto"
+                        else:
+                            total = prestamo.cantidad * 2
+
+                            if cuenta.saldo >= total:
+                                cuenta.saldo -= total
+                            else:
+                                cuenta.saldo = 0
+
+                            cuenta.save()
+
+                            prestamo.abierto = False
+                            prestamo.cobrado_doble = True
+                            prestamo.fecha_cierre = timezone.now()
+                            prestamo.save()
+
+                            mensaje = "Préstamo cerrado y cobrado doble"
+
 
         return render(request,'shevet_bank_banco.html',{
             'estacion': estacion,
