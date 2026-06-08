@@ -1414,6 +1414,7 @@ def shevet_bank_admin(request):
     madrijim = UsuarioCamp.objects.filter(tipo='madrij')
     janijim = Janij.objects.all()
     estaciones = ShevetBankEstacion.objects.all()
+    cuentas = ShevetBankCuenta.objects.all().order_by('janij__nombre')
 
     config, creado = ShevetBankConfig.objects.get_or_create(id=1)
 
@@ -1482,6 +1483,7 @@ def shevet_bank_admin(request):
         'janijim': janijim,
         'estaciones': estaciones,
         'config': config,
+        'cuentas': cuentas,
     })
 
 def shevet_bank_madrij(request):
@@ -1610,7 +1612,7 @@ def shevet_bank_madrij(request):
         return render(request,'shevet_bank_banco.html',{
             'estacion': estacion,
             'mensaje': mensaje,
-            'cuenta': cuenta
+            'cuenta': cuenta,
         })
 
 
@@ -1712,3 +1714,49 @@ def shevet_bank_historial_admin(request):
         'rondas': rondas,
         'prestamos': prestamos
     })
+
+def eliminar_shevet_grupo(request, grupo_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    grupo = get_object_or_404(ShevetBankGrupo, id=grupo_id)
+
+    if request.method == 'POST':
+        grupo.delete()
+
+    return redirect('/panel-admin/shevet-bank/')
+
+
+def eliminar_shevet_cuenta(request, cuenta_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    cuenta = get_object_or_404(ShevetBankCuenta, id=cuenta_id)
+
+    if request.method == 'POST':
+        cuenta.delete()
+
+    return redirect('/panel-admin/shevet-bank/')
+
+
+def eliminar_shevet_estacion(request, estacion_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    estacion = get_object_or_404(ShevetBankEstacion, id=estacion_id)
+
+    if request.method == 'POST':
+        estacion.delete()
+
+    return redirect('/panel-admin/shevet-bank/')
+
+
+def shevet_bank_saldos_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    cuentas = ShevetBankCuenta.objects.all().order_by('janij__nombre')
+
+    return render(request, 'shevet_bank_saldos_admin.html', {
+        'cuentas': cuentas
+    })  

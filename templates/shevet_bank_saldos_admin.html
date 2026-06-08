@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Saldos Shevet Bank</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:900px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:18px; border-radius:16px; margin-bottom:12px; }
+.btn { background:#334155; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:bold; display:inline-block; margin-bottom:16px; }
+.big { color:#86efac; font-size:26px; font-weight:bold; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="btn" href="/panel-admin/shevet-bank/">← Shevet Bank</a>
+
+<h1>💳 Saldos de tarjetas</h1>
+
+{% for c in cuentas %}
+    <div class="card">
+        <h3>{{ c.janij.nombre }}</h3>
+        <p>Tarjeta: {{ c.numero_tarjeta }}</p>
+        <p>Grupo: {% if c.grupo %}{{ c.grupo.nombre }}{% else %}Sin grupo{% endif %}</p>
+        <div class="big">${{ c.saldo }}</div>
+
+        <form method="POST" action="/panel-admin/shevet-bank/cuenta/{{ c.id }}/eliminar/">
+            {% csrf_token %}
+            <button type="submit" style="background:#ef4444; color:white; border:none; padding:10px; border-radius:10px;">
+                Eliminar tarjeta
+            </button>
+        </form>
+    </div>
+{% empty %}
+    <p>No hay tarjetas.</p>
+{% endfor %}
+
+</div>
+</body>
+</html>

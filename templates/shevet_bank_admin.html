@@ -20,6 +20,7 @@ option { color:black; }
 
 <h1>🏦 Shevet Bank Admin</h1>
 
+<a class="btn" href="/panel-admin/shevet-bank/saldos/">💳 Ver saldos de tarjetas</a>
 <a class="btn" href="/panel-admin/shevet-bank/historial/">📜 Ver historial</a>
 
 <div class="card">
@@ -110,7 +111,21 @@ Finalizar actividad y revelar grupos
 <div class="card">
     <h2>Grupos creados</h2>
     {% for g in grupos %}
-        <p><strong>{{ g.nombre }}</strong></p>
+        <div class="card">
+            <h3>{{ g.nombre }}</h3>
+
+            <p><strong>Janijim:</strong></p>
+            {% for c in cuentas %}
+                {% if c.grupo.id == g.id %}
+                    <p>{{ c.janij.nombre }} · Tarjeta {{ c.numero_tarjeta }} · ${{ c.saldo }}</p>
+                {% endif %}
+            {% endfor %}
+
+            <form method="POST" action="/panel-admin/shevet-bank/grupo/{{ g.id }}/eliminar/">
+                {% csrf_token %}
+                <button type="submit" style="background:#ef4444;">Eliminar grupo</button>
+            </form>
+        </div>
     {% empty %}
         <p>No hay grupos todavía.</p>
     {% endfor %}
@@ -158,6 +173,10 @@ Finalizar actividad y revelar grupos
             {% else %}
                 Normal
             {% endif %}
+            <form method="POST" action="/panel-admin/shevet-bank/estacion/{{ e.id }}/eliminar/">
+                {% csrf_token %}
+                <button type="submit" style="background:#ef4444;">Eliminar estación</button>
+            </form>
         </p>
     {% empty %}
         <p>No hay estaciones todavía.</p>
