@@ -1506,113 +1506,88 @@ def shevet_bank_madrij(request):
     
         # SI ES BANCO
     if estacion.es_banco:
-
         mensaje = None
         cuenta = None
+        prestamo_abierto = None
 
-        if request.method == 'POST':
+        tarjeta = request.POST.get('tarjeta') or request.GET.get('tarjeta')
 
-            tarjeta = request.POST.get('tarjeta')
-            accion = request.POST.get('accion')
-            cantidad = int(request.POST.get('cantidad',0))
-
-            cuenta = ShevetBankCuenta.objects.filter(
-                numero_tarjeta=tarjeta
-            ).first()
-
-
-            if not cuenta:
+        if tarjeta:
+            cuenta = ShevetBankCuenta.objects.filter(numero_tarjeta=tarjeta).first()
+ 
+            if cuenta:
+                prestamo_abierto = ShevetBankPrestamo.objects.filter(
+                    cuenta=cuenta,
+                    abierto=True
+                ).first()
+            else:
                 mensaje = "Tarjeta no encontrada"
 
-            else:
+        if request.method == 'POST':
+            accion = request.POST.get('accion')
+            cantidad = int(request.POST.get('cantidad') or 0)
 
-                # meter dinero
-                if accion == "meter":
-                    cuenta.saldo += cantidad
+            if cuenta and accion == "meter":
+                cuenta.saldo += cantidad
+                cuenta.save()
+                mensaje = "Dinero agregado"
+
+            elif cuenta and accion == "sacar":
+                if cuenta.saldo >= cantidad:
+                    cuenta.saldo -= cantidad
+                    cuenta.save()
+                    mensaje = "Dinero retirado"
+                else:
+                    mensaje = "Saldo insuficiente"
+
+            elif cuenta and accion == "prestamo":
+                cuenta.saldo += cantidad
+                cuenta.save()
+
+                ShevetBankPrestamo.objects.create(
+                    cuenta=cuenta,
+                    banco=estacion,
+                    encargado=usuario,
+                    cantidad=cantidad,
+                    abierto=True
+                )
+
+                mensaje = "Préstamo creado"
+
+            elif cuenta and accion == "pagar_prestamo":
+                if prestamo_abierto and cuenta.saldo >= prestamo_abierto.cantidad:
+                    cuenta.saldo -= prestamo_abierto.cantidad
                     cuenta.save()
 
-                    mensaje = "Dinero agregado"
+                    prestamo_abierto.abierto = False
+                    prestamo_abierto.fecha_cierre = timezone.now()
+                    prestamo_abierto.save()
 
+                    mensaje = "Préstamo pagado"
+                else:
+                    mensaje = "No se pudo pagar el préstamo"
 
-                # sacar dinero
-                elif accion == "sacar":
-
-                    if cuenta.saldo >= cantidad:
-                        cuenta.saldo -= cantidad
-                        cuenta.save()
-
-                        mensaje = "Dinero retirado"
-
-                    else:
-                        mensaje = "No tiene suficiente saldo"
-
-
-                # crear prestamo
-                elif accion == "prestamo":
-
-                    cuenta.saldo += cantidad
+            elif cuenta and accion == "cobrar_doble":
+                if prestamo_abierto:
+                    total = prestamo_abierto.cantidad * 2
+                    cuenta.saldo = max(0, cuenta.saldo - total)
                     cuenta.save()
 
-                    ShevetBankPrestamo.objects.create(
-                        cuenta=cuenta,
-                        cantidad=cantidad,
-                        abierto=True
-                    )
+                    prestamo_abierto.abierto = False
+                    prestamo_abierto.cobrado_doble = True
+                    prestamo_abierto.fecha_cierre = timezone.now()
+                    prestamo_abierto.save()
 
-                    mensaje = "Préstamo creado"
+                    mensaje = "Préstamo cobrado doble"
+                else:
+                    mensaje = "No hay préstamo abierto"
 
-                elif accion == "pagar_prestamo":
-                        prestamo = ShevetBankPrestamo.objects.filter(
-                            cuenta=cuenta,
-                            abierto=True
-                        ).first()
-
-                        if not prestamo:
-                            mensaje = "No tiene préstamo abierto"
-                        elif cuenta.saldo >= prestamo.cantidad:
-                            cuenta.saldo -= prestamo.cantidad
-                            cuenta.save()
-
-                            prestamo.abierto = False
-                            prestamo.pagado = True
-                            prestamo.fecha_cierre = timezone.now()
-                            prestamo.save()
-
-                            mensaje = "Préstamo pagado"
-                        else:
-                            mensaje = "No tiene saldo suficiente para pagar"
-
-
-                elif accion == "cobrar_doble":
-                        prestamo = ShevetBankPrestamo.objects.filter(
-                            cuenta=cuenta,
-                            abierto=True
-                        ).first()
-
-                        if not prestamo:
-                            mensaje = "No tiene préstamo abierto"
-                        else:
-                            total = prestamo.cantidad * 2
-
-                            if cuenta.saldo >= total:
-                                cuenta.saldo -= total
-                            else:
-                                cuenta.saldo = 0
-
-                            cuenta.save()
-
-                            prestamo.abierto = False
-                            prestamo.cobrado_doble = True
-                            prestamo.fecha_cierre = timezone.now()
-                            prestamo.save()
-
-                            mensaje = "Préstamo cerrado y cobrado doble"
-
-
-        return render(request,'shevet_bank_banco.html',{
+        return render(request, 'shevet_bank_banco.html', {
             'estacion': estacion,
             'mensaje': mensaje,
             'cuenta': cuenta,
+            'prestamo_abierto': prestamo_abierto,
+            'tarjeta': tarjeta
         })
 
 
