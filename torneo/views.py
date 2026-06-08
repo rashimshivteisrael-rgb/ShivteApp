@@ -1688,3 +1688,17 @@ def shevet_bank_madrij(request):
         'participantes': participantes,
         'mensaje': mensaje
     })
+
+def shevet_bank_historial_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    movimientos = ShevetBankMovimiento.objects.all().order_by('-fecha')
+    rondas = ShevetBankRonda.objects.all().order_by('-fecha_inicio')
+    prestamos = ShevetBankPrestamo.objects.all().order_by('-fecha_inicio')
+
+    return render(request, 'shevet_bank_historial_admin.html', {
+        'movimientos': movimientos,
+        'rondas': rondas,
+        'prestamos': prestamos
+    })
