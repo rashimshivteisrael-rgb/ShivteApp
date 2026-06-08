@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Banco Shevet</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:750px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:22px; border-radius:18px; margin-bottom:16px; }
+input, select, button { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; padding:12px 14px; border:none; border-radius:10px; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; margin-bottom:16px; width:auto; }
+.big { font-size:36px; font-weight:bold; color:#86efac; }
+.msg { background:rgba(59,130,246,.18); padding:12px; border-radius:12px; margin-bottom:14px; }
+option { color:black; }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<a class="btn back" href="/actividades/">← Actividades</a>
+
+<h1>🏦 Banco Shevet</h1>
+
+<div class="card">
+    <h2>{{ estacion.nombre }}</h2>
+    <p>{{ estacion.descripcion|default:"Banco del juego" }}</p>
+</div>
+
+{% if mensaje %}
+    <div class="msg">{{ mensaje }}</div>
+{% endif %}
+
+<div class="card">
+    <h2>Operación bancaria</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="tarjeta" placeholder="Número de tarjeta" required>
+
+        <select name="accion" required>
+            <option value="">Selecciona acción</option>
+            <option value="meter">Meter dinero</option>
+            <option value="sacar">Sacar dinero</option>
+            <option value="prestamo">Crear préstamo</option>
+        </select>
+
+        <input type="number" name="cantidad" placeholder="Cantidad" required>
+
+        <button type="submit">Ejecutar operación</button>
+    </form>
+</div>
+
+{% if cuenta %}
+    <div class="card">
+        <h2>{{ cuenta.janij.nombre }}</h2>
+        <p>Tarjeta: {{ cuenta.numero_tarjeta }}</p>
+        <div class="big">${{ cuenta.saldo }}</div>
+    </div>
+{% endif %}
+
+</div>
+</body>
+</html>

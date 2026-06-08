@@ -1491,6 +1491,70 @@ def shevet_bank_madrij(request):
         return render(request, 'shevet_bank_madrij.html', {
             'sin_estacion': True
         })
+    
+        # SI ES BANCO
+    if estacion.es_banco:
+
+        mensaje = None
+        cuenta = None
+
+        if request.method == 'POST':
+
+            tarjeta = request.POST.get('tarjeta')
+            accion = request.POST.get('accion')
+            cantidad = int(request.POST.get('cantidad',0))
+
+            cuenta = ShevetBankCuenta.objects.filter(
+                numero_tarjeta=tarjeta
+            ).first()
+
+
+            if not cuenta:
+                mensaje = "Tarjeta no encontrada"
+
+            else:
+
+                # meter dinero
+                if accion == "meter":
+                    cuenta.saldo += cantidad
+                    cuenta.save()
+
+                    mensaje = "Dinero agregado"
+
+
+                # sacar dinero
+                elif accion == "sacar":
+
+                    if cuenta.saldo >= cantidad:
+                        cuenta.saldo -= cantidad
+                        cuenta.save()
+
+                        mensaje = "Dinero retirado"
+
+                    else:
+                        mensaje = "No tiene suficiente saldo"
+
+
+                # crear prestamo
+                elif accion == "prestamo":
+
+                    cuenta.saldo += cantidad
+                    cuenta.save()
+
+                    ShevetBankPrestamo.objects.create(
+                        cuenta=cuenta,
+                        cantidad=cantidad,
+                        abierto=True
+                    )
+
+                    mensaje = "Préstamo creado"
+
+
+        return render(request,'shevet_bank_banco.html',{
+            'estacion': estacion,
+            'mensaje': mensaje,
+            'cuenta': cuenta
+        })
 
 
     ronda = ShevetBankRonda.objects.filter(
