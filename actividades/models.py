@@ -218,3 +218,10 @@ class ShevetBankPuja(models.Model):
 
     def __str__(self):
         return f"{self.grupo.nombre} - ${self.cantidad}"
+    
+class ShevetBankConfig(models.Model):
+    grupos_revelados = models.BooleanField(default=False)
+    actividad_activa = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "Configuración Shevet Bank"

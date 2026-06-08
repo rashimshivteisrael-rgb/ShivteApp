@@ -23,6 +23,31 @@ option { color:black; }
 <a class="btn" href="/panel-admin/shevet-bank/historial/">📜 Ver historial</a>
 
 <div class="card">
+<h2>Estado actividad</h2>
+
+{% if config.actividad_activa %}
+<p>🟢 Actividad corriendo</p>
+
+<form method="POST">
+{% csrf_token %}
+<input type="hidden" name="tipo" value="finalizar">
+
+<button style="background:#ef4444;">
+Finalizar actividad y revelar grupos
+</button>
+
+</form>
+
+{% else %}
+
+<p>🔴 Actividad terminada</p>
+<p>Los grupos ya están revelados</p>
+
+{% endif %}
+
+</div>
+
+<div class="card">
     <h2>Crear grupo secreto</h2>
     <form method="POST">
         {% csrf_token %}

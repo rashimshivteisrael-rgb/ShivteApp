@@ -34,6 +34,7 @@ from actividades.models import (
     ShevetBankPrestamo,
     ShevetBankSubasta,
     ShevetBankPuja,
+    ShevetBankConfig,
 )
 
 def inicio(request):
@@ -1414,6 +1415,8 @@ def shevet_bank_admin(request):
     janijim = Janij.objects.all()
     estaciones = ShevetBankEstacion.objects.all()
 
+    config, creado = ShevetBankConfig.objects.get_or_create(id=1)
+
     if request.method == 'POST':
         tipo = request.POST.get('tipo')
 
@@ -1465,6 +1468,12 @@ def shevet_bank_admin(request):
                 es_banco=es_banco
             )
 
+        elif tipo == "finalizar":
+
+            config.actividad_activa = False
+            config.grupos_revelados = True
+            config.save()
+
         return redirect('/panel-admin/shevet-bank/')
 
     return render(request, 'shevet_bank_admin.html', {
@@ -1472,6 +1481,7 @@ def shevet_bank_admin(request):
         'madrijim': madrijim,
         'janijim': janijim,
         'estaciones': estaciones,
+        'config': config,
     })
 
 def shevet_bank_madrij(request):
