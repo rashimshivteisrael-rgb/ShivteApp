@@ -24,20 +24,62 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
     <h2>Rondas</h2>
 
     {% for r in rondas %}
-        <div class="card">
-            <strong>{{ r.estacion.nombre }}</strong><br>
-            Bote: ${{ r.bote }}<br>
-            Ganador:
+
+    <div class="card">
+
+        <h3>🎮 {{ r.estacion.nombre }}</h3>
+
+        <p>
+            💰 Bote:
+            <strong>${{ r.bote }}</strong>
+        </p>
+
+
+        <p><strong>Participantes:</strong></p>
+
+        {% for p in r.shevetbankparticipanteronda_set.all %}
+
+            <p>
+                👤 {{ p.cuenta.janij.nombre }}
+                |
+                Tarjeta {{ p.cuenta.numero_tarjeta }}
+            </p>
+
+        {% empty %}
+
+            <p>No hubo participantes</p>
+
+        {% endfor %}
+
+
+        <p>
+            🏆 Ganador:
+
             {% if r.ganador %}
+
+                <strong>
                 {{ r.ganador.janij.nombre }}
+                </strong>
+
             {% else %}
+
                 Sin ganador
+
             {% endif %}
-            <br>
-            <span class="muted">{{ r.fecha_inicio }}</span>
-        </div>
+        </p>
+
+
+        <small>
+            {{ r.fecha_inicio }}
+        </small>
+
+
+    </div>
+
     {% empty %}
-        <p>No hay rondas.</p>
+
+    <p>No hay rondas todavía</p>
+
     {% endfor %}
 </div>
 

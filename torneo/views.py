@@ -1530,12 +1530,26 @@ def shevet_bank_madrij(request):
             if cuenta and accion == "meter":
                 cuenta.saldo += cantidad
                 cuenta.save()
+                ShevetBankMovimiento.objects.create(
+                    cuenta=cuenta,
+                    estacion=estacion,
+                    madrij=usuario,
+                    cantidad=cantidad,
+                    nota="Banco: meter dinero"
+                )
                 mensaje = "Dinero agregado"
 
             elif cuenta and accion == "sacar":
                 if cuenta.saldo >= cantidad:
                     cuenta.saldo -= cantidad
                     cuenta.save()
+                    ShevetBankMovimiento.objects.create(
+                        cuenta=cuenta,
+                        estacion=estacion,
+                        madrij=usuario,
+                        cantidad=-cantidad,
+                        nota="Banco: sacar dinero"
+                    )
                     mensaje = "Dinero retirado"
                 else:
                     mensaje = "Saldo insuficiente"
@@ -1551,6 +1565,13 @@ def shevet_bank_madrij(request):
                     cantidad=cantidad,
                     abierto=True
                 )
+                ShevetBankMovimiento.objects.create(
+                    cuenta=cuenta,
+                    estacion=estacion,
+                    madrij=usuario,
+                    cantidad=cantidad,
+                    nota="Préstamo creado"
+                )
 
                 mensaje = "Préstamo creado"
 
@@ -1558,6 +1579,14 @@ def shevet_bank_madrij(request):
                 if prestamo_abierto and cuenta.saldo >= prestamo_abierto.cantidad:
                     cuenta.saldo -= prestamo_abierto.cantidad
                     cuenta.save()
+
+                    ShevetBankMovimiento.objects.create(
+                        cuenta=cuenta,
+                        estacion=estacion,
+                        madrij=usuario,
+                        cantidad=-prestamo_abierto.cantidad,
+                        nota="Préstamo pagado"
+                    )
 
                     prestamo_abierto.abierto = False
                     prestamo_abierto.fecha_cierre = timezone.now()
@@ -1572,6 +1601,14 @@ def shevet_bank_madrij(request):
                     total = prestamo_abierto.cantidad * 2
                     cuenta.saldo = max(0, cuenta.saldo - total)
                     cuenta.save()
+
+                    ShevetBankMovimiento.objects.create(
+                        cuenta=cuenta,
+                        estacion=estacion,
+                        madrij=usuario,
+                        cantidad=-total,
+                        nota="Préstamo cobrado doble"
+                    )
 
                     prestamo_abierto.abierto = False
                     prestamo_abierto.cobrado_doble = True
