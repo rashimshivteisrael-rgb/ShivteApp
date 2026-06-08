@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Shevet Bank Admin</title>
+<style>
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:1000px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:20px; border-radius:18px; margin-bottom:16px; }
+input, select, button { width:100%; padding:12px; margin-bottom:12px; border-radius:10px; border:none; box-sizing:border-box; }
+button, .btn { background:#22c55e; color:white; font-weight:bold; text-decoration:none; display:inline-block; }
+.back { background:#334155; width:auto; }
+option { color:black; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<a class="btn back" href="/panel-admin/">← Panel</a>
+
+<h1>🏦 Shevet Bank Admin</h1>
+
+<div class="card">
+    <h2>Crear grupo secreto</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="tipo" value="grupo">
+        <input type="text" name="nombre" placeholder="Nombre del grupo" required>
+        <button type="submit">Crear grupo</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Asignar madrij a grupo</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="tipo" value="madrij">
+
+        <select name="grupo" required>
+            <option value="">Selecciona grupo</option>
+            {% for g in grupos %}
+                <option value="{{ g.id }}">{{ g.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="madrij" required>
+            <option value="">Selecciona madrij</option>
+            {% for m in madrijim %}
+                <option value="{{ m.id }}">{{ m.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Asignar madrij</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Crear tarjeta para janij</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="tipo" value="tarjeta">
+
+        <select name="grupo" required>
+            <option value="">Selecciona grupo</option>
+            {% for g in grupos %}
+                <option value="{{ g.id }}">{{ g.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="janij" required>
+            <option value="">Selecciona janij</option>
+            {% for j in janijim %}
+                <option value="{{ j.id }}">{{ j.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="tarjeta" placeholder="Número de tarjeta" required>
+
+        <button type="submit">Crear tarjeta</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Grupos creados</h2>
+    {% for g in grupos %}
+        <p><strong>{{ g.nombre }}</strong></p>
+    {% empty %}
+        <p>No hay grupos todavía.</p>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h2>Crear estación</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="tipo" value="estacion">
+
+        <input type="text" name="nombre" placeholder="Nombre de la estación" required>
+
+        <input type="text" name="descripcion" placeholder="Descripción / instrucciones">
+
+        <input type="number" name="precio" placeholder="Precio de entrada" value="0" required>
+
+        <select name="encargado" required>
+            <option value="">Selecciona encargado</option>
+            {% for m in madrijim %}
+                <option value="{{ m.id }}">{{ m.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label>
+            <input type="checkbox" name="es_banco">
+            Esta estación es BANCO
+        </label>
+
+        <button type="submit">Crear estación</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Estaciones creadas</h2>
+
+    {% for e in estaciones %}
+        <p>
+            <strong>{{ e.nombre }}</strong><br>
+            Precio: ${{ e.precio }}<br>
+            Tipo:
+            {% if e.es_banco %}
+                Banco
+            {% else %}
+                Normal
+            {% endif %}
+        </p>
+    {% empty %}
+        <p>No hay estaciones todavía.</p>
+    {% endfor %}
+</div>
+
+</div>
+</body>
+</html>

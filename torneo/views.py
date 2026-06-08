@@ -11,12 +11,10 @@ from transporte.models import Camion, CamionMadrij, CamionJanij, AsistenciaCamio
 from media_camp.models import FotoCamp
 from collections import defaultdict
 from actividades.models import PictureDayPedido, PictureDayFoto
-from actividades.models import ShevetBankEstacion, ShevetBankCuenta, ShevetBankMovimiento
 import zipfile
 from io import BytesIO
 from django.http import HttpResponse
 from actividades.models import ActividadEstado
-from actividades.models import ShevetBankSubasta, ShevetBankPuja
 from django.utils import timezone
 from datetime import timedelta
 from actividades.models import ShivteGotTalentRol, ShivteGotTalentConcursante, ShivteGotTalentCalificacion
@@ -24,16 +22,19 @@ from actividades.models import ShivteTVPedido, ShivteTVVideo
 import zipfile
 from io import BytesIO
 from django.http import HttpResponse
-from actividades.models import ShevetBankGrupo, ShevetBankGrupoMadrij, ShevetBankGrupoJanij
-from actividades.models import (
-    ShevetBankEstacion,
-    ShevetBankCuenta,
-    ShevetBankMovimiento,
-    ShevetBankRondaEstacion,
-    ShevetBankRondaParticipante,
-)
-
 from transporte.models import Camion
+from actividades.models import (
+    ShevetBankGrupo,
+    ShevetBankCuenta,
+    ShevetBankGrupoMadrij,
+    ShevetBankEstacion,
+    ShevetBankMovimiento,
+    ShevetBankRonda,
+    ShevetBankParticipanteRonda,
+    ShevetBankPrestamo,
+    ShevetBankSubasta,
+    ShevetBankPuja,
+)
 
 def inicio(request):
     camiones = Camion.objects.all()
@@ -1403,3 +1404,72 @@ def descargar_shivte_tv(request):
     )
 
     return response
+
+def shevet_bank_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    grupos = ShevetBankGrupo.objects.all()
+    madrijim = UsuarioCamp.objects.filter(tipo='madrij')
+    janijim = Janij.objects.all()
+    estaciones = ShevetBankEstacion.objects.all()
+
+    if request.method == 'POST':
+        tipo = request.POST.get('tipo')
+
+        # crear grupo
+        if tipo == 'grupo':
+            nombre = request.POST.get('nombre')
+
+            if nombre:
+                ShevetBankGrupo.objects.create(
+                    nombre=nombre
+                )
+
+        # asignar madrij
+        elif tipo == 'madrij':
+            grupo_id = request.POST.get('grupo')
+            madrij_id = request.POST.get('madrij')
+
+            ShevetBankGrupoMadrij.objects.create(
+                grupo_id=grupo_id,
+                madrij_id=madrij_id
+            )
+
+        # crear tarjeta janij
+        elif tipo == 'tarjeta':
+            grupo_id = request.POST.get('grupo')
+            janij_id = request.POST.get('janij')
+            tarjeta = request.POST.get('tarjeta')
+
+            ShevetBankCuenta.objects.create(
+                grupo_id=grupo_id,
+                janij_id=janij_id,
+                numero_tarjeta=tarjeta,
+                saldo=0
+            )
+        
+        # crear estacion
+        elif tipo == 'estacion':
+            nombre = request.POST.get('nombre')
+            descripcion = request.POST.get('descripcion')
+            precio = request.POST.get('precio')
+            encargado_id = request.POST.get('encargado')
+            es_banco = request.POST.get('es_banco') == 'on'
+
+            ShevetBankEstacion.objects.create(
+                nombre=nombre,
+                descripcion=descripcion,
+                precio=int(precio or 0),
+                encargado_id=encargado_id,
+                es_banco=es_banco
+            )
+
+        return redirect('/panel-admin/shevet-bank/')
+
+    return render(request, 'shevet_bank_admin.html', {
+        'grupos': grupos,
+        'madrijim': madrijim,
+        'janijim': janijim,
+        'estaciones': estaciones,
+    })

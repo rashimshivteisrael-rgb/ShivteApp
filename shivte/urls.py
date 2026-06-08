@@ -51,19 +51,10 @@ from torneo.views import (
     picture_day_madrij,
     subir_picture_day,
     picture_day_publico,
-    shevet_bank_admin,
-    shevet_bank_madrij,
-    shevet_bank_ranking,
     eliminar_picture_day_foto,
     descargar_picture_day_zip,
     picture_day_entrada,
     eliminar_picture_day_pedido,
-    eliminar_shevet_bank_estacion,
-    shevet_bank_subasta_admin,  
-    shevet_bank_subasta_madrij,
-    shevet_bank_subasta_pantalla,
-    cerrar_shevet_bank_subasta,
-    iniciar_shevet_bank_subasta,
     got_talent_admin,
     got_talent_inscripciones,
     got_talent_iniciar_concursante,
@@ -78,7 +69,7 @@ from torneo.views import (
     subir_shivte_tv,
     shivte_tv_publico,
     descargar_shivte_tv,
-    shevet_bank_grupos_admin
+    shevet_bank_admin,
 )
 
 urlpatterns = [
@@ -134,19 +125,10 @@ urlpatterns = [
     path('picture-day/subir/<int:pedido_id>/', subir_picture_day, name='subir_picture_day'),
     path('picture-day-publico/', picture_day_publico, name='picture_day_publico'), 
     path('actividades/', actividades, name='actividades'), 
-    path('panel-admin/shevet-bank/', shevet_bank_admin, name='shevet_bank_admin'),
-    path('shevet-bank/', shevet_bank_madrij, name='shevet_bank_madrij'),
-    path('shevet-bank-ranking/', shevet_bank_ranking, name='shevet_bank_ranking'),
     path('panel-admin/picture-day/foto/<int:foto_id>/eliminar/', eliminar_picture_day_foto, name='eliminar_picture_day_foto'),
     path('panel-admin/picture-day/descargar/', descargar_picture_day_zip, name='descargar_picture_day_zip'),
     path('actividades/picture-day/', picture_day_entrada, name='picture_day_entrada'),
     path('panel-admin/picture-day/pedido/<int:pedido_id>/eliminar/', eliminar_picture_day_pedido, name='eliminar_picture_day_pedido'),
-    path('panel-admin/shevet-bank/estacion/<int:estacion_id>/eliminar/', eliminar_shevet_bank_estacion, name='eliminar_shevet_bank_estacion'),
-    path('panel-admin/shevet-bank/subasta/', shevet_bank_subasta_admin, name='shevet_bank_subasta_admin'),
-    path('shevet-bank/subasta/', shevet_bank_subasta_madrij, name='shevet_bank_subasta_madrij'),
-    path('shevet-bank/subasta/pantalla/', shevet_bank_subasta_pantalla, name='shevet_bank_subasta_pantalla'),
-    path('panel-admin/shevet-bank/subasta/<int:subasta_id>/cerrar/', cerrar_shevet_bank_subasta, name='cerrar_shevet_bank_subasta'),
-    path('panel-admin/shevet-bank/subasta/<int:subasta_id>/iniciar/', iniciar_shevet_bank_subasta, name='iniciar_shevet_bank_subasta'),
     path('panel-admin/got-talent/', got_talent_admin, name='got_talent_admin'),
     path('got-talent/inscripciones/', got_talent_inscripciones, name='got_talent_inscripciones'),
     path('panel-admin/got-talent/concursante/<int:concursante_id>/iniciar/', got_talent_iniciar_concursante, name='got_talent_iniciar_concursante'),
@@ -161,7 +143,7 @@ urlpatterns = [
     path('shivte-tv/subir/<int:pedido_id>/', subir_shivte_tv, name='subir_shivte_tv'),
     path('shivte-tv-publico/', shivte_tv_publico, name='shivte_tv_publico'),
     path('panel-admin/shivte-tv/descargar/',descargar_shivte_tv,name='descargar_shivte_tv'),
-    path('panel-admin/shevet-bank/grupos/', shevet_bank_grupos_admin, name='shevet_bank_grupos_admin'),
+    path('panel-admin/shevet-bank/', shevet_bank_admin, name='shevet_bank_admin'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
