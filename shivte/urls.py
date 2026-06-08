@@ -70,6 +70,7 @@ from torneo.views import (
     shivte_tv_publico,
     descargar_shivte_tv,
     shevet_bank_admin,
+    shevet_bank_madrij,
 )
 
 urlpatterns = [
@@ -144,6 +145,7 @@ urlpatterns = [
     path('shivte-tv-publico/', shivte_tv_publico, name='shivte_tv_publico'),
     path('panel-admin/shivte-tv/descargar/',descargar_shivte_tv,name='descargar_shivte_tv'),
     path('panel-admin/shevet-bank/', shevet_bank_admin, name='shevet_bank_admin'),
+    path('shevet-bank/', shevet_bank_madrij, name='shevet_bank_madrij'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

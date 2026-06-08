@@ -1473,3 +1473,107 @@ def shevet_bank_admin(request):
         'janijim': janijim,
         'estaciones': estaciones,
     })
+
+def shevet_bank_madrij(request):
+    usuario_id = request.session.get('usuario_id')
+
+    usuario = get_object_or_404(
+        UsuarioCamp,
+        id=usuario_id,
+        tipo='madrij'
+    )
+
+    estacion = ShevetBankEstacion.objects.filter(
+        encargado=usuario
+    ).first()
+
+    if not estacion:
+        return render(request, 'shevet_bank_madrij.html', {
+            'sin_estacion': True
+        })
+
+
+    ronda = ShevetBankRonda.objects.filter(
+        estacion=estacion,
+        activa=True
+    ).first()
+
+
+    mensaje = None
+
+
+    # crear ronda nueva
+    if request.method == 'POST':
+
+        accion = request.POST.get('accion')
+
+
+        if accion == 'crear':
+            ronda = ShevetBankRonda.objects.create(
+                estacion=estacion,
+                bote=0,
+                activa=True
+            )
+
+
+        elif accion == 'agregar':
+
+            tarjeta = request.POST.get('tarjeta')
+
+            cuenta = ShevetBankCuenta.objects.filter(
+                numero_tarjeta=tarjeta
+            ).first()
+
+            if not cuenta:
+                mensaje = "Tarjeta no existe"
+
+            elif cuenta.saldo < estacion.precio:
+                mensaje = "Saldo insuficiente"
+
+            else:
+                cuenta.saldo -= estacion.precio
+                cuenta.save()
+
+                ronda.bote += estacion.precio
+                ronda.save()
+
+                ShevetBankParticipanteRonda.objects.create(
+                    ronda=ronda,
+                    cuenta=cuenta
+                )
+
+                mensaje = "Jugador agregado"
+
+
+        elif accion == 'finalizar':
+
+            ganador_id = request.POST.get('ganador')
+
+            ganador = ShevetBankCuenta.objects.get(
+                id=ganador_id
+            )
+
+            ganador.saldo += ronda.bote
+            ganador.save()
+
+            ronda.activa = False
+            ronda.ganador = ganador
+            ronda.save()
+
+            mensaje = "Ronda terminada"
+
+
+    participantes = []
+
+    if ronda:
+        participantes = ShevetBankParticipanteRonda.objects.filter(
+            ronda=ronda
+        )
+
+
+    return render(request,'shevet_bank_madrij.html',{
+        'estacion': estacion,
+        'ronda': ronda,
+        'participantes': participantes,
+        'mensaje': mensaje
+    })
