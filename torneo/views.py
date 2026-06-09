@@ -1772,3 +1772,18 @@ def shevet_bank_saldos_admin(request):
     return render(request, 'shevet_bank_saldos_admin.html', {
         'cuentas': cuentas
     })  
+
+def editar_shevet_grupo(request, grupo_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    grupo = get_object_or_404(ShevetBankGrupo, id=grupo_id)
+
+    if request.method == 'POST':
+        grupo.nombre = request.POST.get('nombre')
+        grupo.save()
+        return redirect('/panel-admin/shevet-bank/')
+
+    return render(request, 'editar_shevet_grupo.html', {
+        'grupo': grupo
+    })

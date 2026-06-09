@@ -121,6 +121,8 @@ Finalizar actividad y revelar grupos
                 {% endif %}
             {% endfor %}
 
+            <a class="btn" href="/panel-admin/shevet-bank/grupo/{{ g.id }}/editar/">Editar grupo</a>
+
             <form method="POST" action="/panel-admin/shevet-bank/grupo/{{ g.id }}/eliminar/">
                 {% csrf_token %}
                 <button type="submit" style="background:#ef4444;">Eliminar grupo</button>
