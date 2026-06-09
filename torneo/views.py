@@ -1787,3 +1787,26 @@ def editar_shevet_grupo(request, grupo_id):
     return render(request, 'editar_shevet_grupo.html', {
         'grupo': grupo
     })
+
+def editar_shevet_cuenta(request, cuenta_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    cuenta = get_object_or_404(ShevetBankCuenta, id=cuenta_id)
+    grupos = ShevetBankGrupo.objects.all()
+    janijim = Janij.objects.all()
+
+    if request.method == 'POST':
+        cuenta.numero_tarjeta = request.POST.get('tarjeta')
+        cuenta.saldo = int(request.POST.get('saldo') or 0)
+        cuenta.grupo_id = request.POST.get('grupo')
+        cuenta.janij_id = request.POST.get('janij')
+        cuenta.save()
+
+        return redirect('/panel-admin/shevet-bank/saldos/')
+
+    return render(request, 'editar_shevet_cuenta.html', {
+        'cuenta': cuenta,
+        'grupos': grupos,
+        'janijim': janijim
+    })

@@ -77,6 +77,7 @@ from torneo.views import (
     eliminar_shevet_estacion,
     shevet_bank_saldos_admin,
     editar_shevet_grupo,
+    editar_shevet_cuenta,
 )
 
 urlpatterns = [
@@ -158,6 +159,7 @@ urlpatterns = [
     path('panel-admin/shevet-bank/estacion/<int:estacion_id>/eliminar/', eliminar_shevet_estacion, name='eliminar_shevet_estacion'),
     path('panel-admin/shevet-bank/saldos/', shevet_bank_saldos_admin, name='shevet_bank_saldos_admin'),
     path('panel-admin/shevet-bank/grupo/<int:grupo_id>/editar/', editar_shevet_grupo, name='editar_shevet_grupo'),
+    path('panel-admin/shevet-bank/cuenta/<int:cuenta_id>/editar/', editar_shevet_cuenta, name='editar_shevet_cuenta'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

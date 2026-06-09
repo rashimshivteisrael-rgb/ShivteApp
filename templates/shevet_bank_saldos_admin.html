@@ -25,6 +25,10 @@ body { margin:0; font-family:Arial; background:#0f172a; color:white; }
         <p>Grupo: {% if c.grupo %}{{ c.grupo.nombre }}{% else %}Sin grupo{% endif %}</p>
         <div class="big">${{ c.saldo }}</div>
 
+        <a class="btn" href="/panel-admin/shevet-bank/cuenta/{{ c.id }}/editar/">
+            Editar tarjeta
+        </a>
+
         <form method="POST" action="/panel-admin/shevet-bank/cuenta/{{ c.id }}/eliminar/">
             {% csrf_token %}
             <button type="submit" style="background:#ef4444; color:white; border:none; padding:10px; border-radius:10px;">

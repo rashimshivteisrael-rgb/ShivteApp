@@ -1,0 +1,29 @@
+<h1>Editar tarjeta</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Janij</label>
+    <select name="janij">
+        {% for j in janijim %}
+            <option value="{{ j.id }}" {% if cuenta.janij.id == j.id %}selected{% endif %}>
+                {{ j.nombre }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Grupo</label>
+    <select name="grupo">
+        {% for g in grupos %}
+            <option value="{{ g.id }}" {% if cuenta.grupo and cuenta.grupo.id == g.id %}selected{% endif %}>
+                {{ g.nombre }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <input type="text" name="tarjeta" value="{{ cuenta.numero_tarjeta }}" required>
+
+    <input type="number" name="saldo" value="{{ cuenta.saldo }}" required>
+
+    <button type="submit">Guardar cambios</button>
+</form> 
