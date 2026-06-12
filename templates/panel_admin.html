@@ -1,142 +1,208 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin</title>
+<style>
+*{
+    box-sizing:border-box;
+}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
-            color: white;
-        }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+    color:white;
+    overflow-x:hidden;
 
-        .container {
-            max-width: 1250px;
-            margin: auto;
-            padding: 30px 20px 50px;
-        }
+    background:
+    radial-gradient(circle at 15% 10%, rgba(0,180,90,.65), transparent 32%),
+    radial-gradient(circle at 85% 20%, rgba(210,40,70,.55), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(255,255,255,.75), transparent 35%),
+    linear-gradient(160deg,#06251b,#0b2545 55%,#eef7f3);
+}
 
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(35px) saturate(180%);
+    pointer-events:none;
+}
 
-        .brand h1 {
-            margin: 0;
-            font-size: 34px;
-        }
+.container{
+    position:relative;
+    z-index:1;
+    max-width:1250px;
+    margin:auto;
+    padding:40px 22px 60px;
+}
 
-        .brand p {
-            margin: 8px 0 0;
-            color: #cbd5e1;
-        }
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:26px;
+}
 
-        .back {
-            color: white;
-            text-decoration: none;
-            background: #334155;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-weight: bold;
-        }
+.brand h1{
+    margin:0;
+    font-size:46px;
+    letter-spacing:-2px;
+    background:linear-gradient(90deg,#ffffff,#8fffd2,#ffffff);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
 
-        .hero {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-        }
+.brand p{
+    margin:8px 0 0;
+    color:rgba(255,255,255,.78);
+    font-size:16px;
+}
 
-        .hero h2 {
-            margin: 0 0 10px;
-            font-size: 28px;
-        }
+.back,
+.topbar a[href="/logout/"]{
+    display:inline-block;
+    color:white !important;
+    text-decoration:none;
+    padding:12px 18px !important;
+    border-radius:50px !important;
+    font-weight:900;
+    border:1px solid rgba(255,255,255,.35);
+    backdrop-filter:blur(20px);
+    box-shadow:0 15px 35px rgba(0,0,0,.20);
+    transition:.25s ease;
+}
 
-        .hero p {
-            margin: 0;
-            color: #cbd5e1;
-            line-height: 1.5;
-        }
+.back{
+    background:rgba(255,255,255,.20) !important;
+}
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 18px;
-            margin-top: 22px;
-        }
+.topbar a[href="/logout/"]{
+    background:linear-gradient(135deg,rgba(210,40,70,.75),rgba(255,255,255,.18)) !important;
+}
 
-        .stat {
-            background: rgba(255,255,255,0.06);
-            border-radius: 18px;
-            padding: 18px;
-        }
+.back:hover,
+.topbar a[href="/logout/"]:hover{
+    transform:translateY(-3px) scale(1.03);
+}
 
-        .stat h3 {
-            margin: 0;
-            font-size: 28px;
-        }
+.hero{
+    background:linear-gradient(145deg,rgba(255,255,255,.30),rgba(255,255,255,.08));
+    border:1px solid rgba(255,255,255,.45);
+    border-radius:36px;
+    padding:30px;
+    margin-bottom:26px;
+    backdrop-filter:blur(30px) saturate(200%);
+    box-shadow:0 35px 90px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.7);
+}
 
-        .stat p {
-            margin: 8px 0 0;
-            color: #cbd5e1;
-        }
+.hero h2{
+    margin:0 0 10px;
+    font-size:32px;
+}
 
-        .section-title {
-            margin: 30px 0 16px;
-            font-size: 24px;
-        }
+.hero p{
+    margin:0;
+    color:rgba(255,255,255,.78);
+    line-height:1.5;
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
-        }
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+    margin-top:22px;
+}
 
-        .card {
-            text-decoration: none;
-            color: white;
-            display: block;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 24px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-            transition: transform 0.18s ease, background 0.18s ease;
-        }
+.stat{
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:24px;
+    padding:20px;
+    backdrop-filter:blur(20px);
+}
 
-        .card:hover {
-            transform: translateY(-6px);
-            background: rgba(255,255,255,0.12);
-        }
+.stat h3{
+    margin:0;
+    font-size:30px;
+}
 
-        .icon {
-            font-size: 30px;
-            margin-bottom: 14px;
-        }
+.stat p{
+    margin:8px 0 0;
+    color:rgba(255,255,255,.75);
+}
 
-        .card h3 {
-            margin: 0 0 10px;
-            font-size: 22px;
-        }
+.section-title{
+    margin:30px 0 18px;
+    font-size:28px;
+    letter-spacing:-1px;
+}
 
-        .card p {
-            margin: 0;
-            color: #cbd5e1;
-            line-height: 1.5;
-        }
-    </style>
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+}
+
+.card{
+    text-decoration:none;
+    color:white;
+    display:block;
+    min-height:170px;
+    border-radius:32px;
+    padding:26px;
+
+    background:linear-gradient(145deg,rgba(255,255,255,.28),rgba(255,255,255,.08));
+    border:1px solid rgba(255,255,255,.40);
+    backdrop-filter:blur(28px) saturate(200%);
+
+    box-shadow:0 25px 55px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.7);
+    transition:.25s ease;
+}
+
+.card:hover{
+    transform:translateY(-8px) scale(1.03);
+    background:linear-gradient(145deg,rgba(0,200,120,.28),rgba(255,255,255,.18),rgba(220,40,70,.20));
+    box-shadow:0 35px 80px rgba(0,0,0,.35);
+}
+
+.icon{
+    font-size:34px;
+    margin-bottom:14px;
+}
+
+.card h3{
+    margin:0 0 10px;
+    font-size:25px;
+    letter-spacing:-.5px;
+}
+
+.card p{
+    margin:0;
+    color:rgba(255,255,255,.78);
+    line-height:1.5;
+}
+
+@media(max-width:700px){
+    .container{
+        padding:32px 16px 50px;
+    }
+
+    .brand h1{
+        font-size:39px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
 </head>
 <body>
     <div class="container">
