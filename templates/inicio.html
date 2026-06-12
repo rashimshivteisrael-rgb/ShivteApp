@@ -5,188 +5,363 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shivte App</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+    *{
+       box-sizing:border-box;
+    }
 
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, sans-serif;
-            min-height: 100vh;
-            color: white;
-            background:
-                radial-gradient(circle at top left, rgba(59,130,246,.55), transparent 35%),
-                radial-gradient(circle at top right, rgba(168,85,247,.45), transparent 35%),
-                linear-gradient(180deg, #07111f 0%, #12284d 45%, #eaf3ff 100%);
-            overflow-x: hidden;
-        }
+    body{
+        margin:0;
+        min-height:100vh;
+        font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+        color:white;
+        overflow-x:hidden;
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,.08);
-            backdrop-filter: blur(24px);
-            pointer-events: none;
-        }
+        background:
+        radial-gradient(circle at 15% 10%, rgba(0,180,90,.65), transparent 30%),
+        radial-gradient(circle at 85% 15%, rgba(210,40,70,.55), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(255,255,255,.8), transparent 35%),
+        linear-gradient(160deg,#06251b,#0b2545 50%,#eef7f3);
+    }
 
-        .page {
-            position: relative;
-            max-width: 1180px;
-            margin: auto;
-            padding: 90px 24px;
-            z-index: 1;
-        }
-        .hero-control {
-            background: rgba(255,255,255,.18);
-            border: 1px solid rgba(255,255,255,.35);
-            border-radius: 36px;
-            padding: 38px;
-            display: grid;
-            grid-template-columns: 1.1fr .9fr;
-            gap: 28px;
-            align-items: center;
-            box-shadow: 0 30px 80px rgba(0,0,0,.28);
-            backdrop-filter: blur(28px) saturate(180%);
-        }
 
-        .eyebrow {
-            letter-spacing: 4px;
-            font-size: 13px;
-            margin-bottom: 14px;
-            opacity: .85;
-            font-weight: 700;
-        }
+    body::before{
+        content:"";
+        position:fixed;
+        inset:0;
+        backdrop-filter:blur(35px) saturate(180%);
+        background:rgba(255,255,255,.08);
+        pointer-events:none;
+    }
 
-        .hero-text h1 {
-            font-size: 54px;
-            line-height: .95;
-            margin: 0 0 18px;
-            letter-spacing: -2px;
-        }
 
-        .hero-text p {
-            font-size: 18px;
-            line-height: 1.5;
-            max-width: 560px;
-            color: rgba(255,255,255,.86);
-        }
+    .page{
+        position:relative;
+        z-index:1;
+        max-width:1180px;
+        margin:auto;
+        padding:90px 24px;
+    }
 
-        .hero-logo {
-            background: rgba(255,255,255,.18);
-            border: 1px solid rgba(255,255,255,.32);
-            border-radius: 32px;
-            min-height: 260px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(22px);
-        }
 
-        .logo-box {
-            background: rgba(255,255,255,.72);
-            color: #0f172a;
-            width: 220px;
-            height: 220px;
-            border-radius: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            font-weight: 900;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 20px 50px rgba(0,0,0,.22);
-        }
+    /* HERO GLASS */
 
-        .cards-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            margin-top: 26px;
-        }
+    .hero-control{
 
-        .menu-card {
-            min-height: 170px;
-            border-radius: 28px;
-            padding: 24px;
-            color: white;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: rgba(255,255,255,.18);
-            border: 1px solid rgba(255,255,255,.35);
-            box-shadow: 0 20px 45px rgba(0,0,0,.18);
-            backdrop-filter: blur(24px) saturate(180%);
-            transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
-        }
+        background:
+        linear-gradient(
+             135deg,
+            rgba(255,255,255,.28),
+            rgba(255,255,255,.08)
+        );     
 
-        .menu-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            background: rgba(255,255,255,.28);
-            box-shadow: 0 30px 70px rgba(0,0,0,.25);
-        }
+        border:1px solid rgba(255,255,255,.45);
 
-        .menu-card h2 {
-            font-size: 30px;
-            margin: 0;
-            letter-spacing: -1px;
-        }
+        border-radius:40px;
+   
+        padding:42px;
+  
+        display:grid;
+        grid-template-columns:1.1fr .9fr;
+        gap:30px;
+        align-items:center;
 
-        .menu-card p {
-            color: rgba(255,255,255,.86);
-            line-height: 1.4;
-            margin: 12px 0;
-        }
+        backdrop-filter:blur(30px) saturate(200%);
 
-        .menu-card strong {
-            background: rgba(255,255,255,.22);
-            border: 1px solid rgba(255,255,255,.28);
-            width: fit-content;
-            padding: 9px 14px;
-            border-radius: 999px;
-        }
+        box-shadow:
+        0 30px 90px rgba(0,0,0,.32),
+        inset 0 1px rgba(255,255,255,.7);
+    }
 
-        .blue, .green, .dark, .purple, .orange {
-            background: rgba(255,255,255,.18);
-        }
 
-        .login-area {
-            position: fixed;
-            top: 24px;
-            right: 28px;
-            z-index: 10;
-        }
 
-        .login-btn {
-            background: rgba(255,255,255,.22);
-            color: white;
-            text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 999px;
-            font-weight: 800;
-            border: 1px solid rgba(255,255,255,.35);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 12px 30px rgba(0,0,0,.18);
-        }
+    .eyebrow{
+        font-size:13px;
+        letter-spacing:5px;
+        font-weight:900;
+        opacity:.9;
+     }
 
-        @media (max-width: 900px) {
-            .page {
-                padding: 80px 16px;
-            }
 
-            .hero-control {
-                grid-template-columns: 1fr;
-                padding: 28px;
-            }
+    .hero-text h1{
 
-            .cards-row {
-                grid-template-columns: 1fr;
-            }
+        font-size:58px;
+        line-height:.9;
+        margin:0 0 20px;
 
-            .hero-text h1 {
-                font-size: 40px;
-            }
-        }
+        background:linear-gradient(
+            90deg,
+            #ffffff,
+            #8fffd2,
+            #ffffff
+        );
+
+        -webkit-background-clip:text;
+        background-clip:text;
+        color:transparent;
+
+        letter-spacing:-3px;
+    }
+
+
+    .hero-text p{
+        font-size:18px;
+        line-height:1.5;
+        color:rgba(255,255,255,.85);
+    }
+
+
+
+    /* LOGO */
+
+    .hero-logo{
+
+        min-height:270px;
+
+        border-radius:34px;
+
+        display:flex;
+        justify-content:center;
+        align-items:center;
+
+        background:
+        linear-gradient(
+            135deg,
+            rgba(0,170,100,.25),
+            rgba(255,255,255,.15),
+            rgba(210,40,70,.20)
+        );
+
+        border:1px solid rgba(255,255,255,.4);
+
+        backdrop-filter:blur(25px);
+
+    }
+
+
+    .logo-box{
+
+        width:220px;
+        height:220px;
+
+        border-radius:45px;
+
+        background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.95),
+            rgba(230,255,245,.75)
+        );
+
+        color:#083322;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+
+        font-size:36px;
+        font-weight:1000;
+
+        box-shadow:
+        0 25px 60px rgba(0,0,0,.28),
+        inset 0 2px white;
+    }
+
+
+
+    /* TARJETAS */
+
+    .cards-row{
+
+        margin-top:28px;
+
+        display:grid;
+
+        grid-template-columns:repeat(3,1fr);
+
+        gap:20px;
+    }
+
+
+    .menu-card{
+
+        min-height:175px;
+
+        padding:25px;
+
+        border-radius:32px;
+
+        color:white;
+        text-decoration:none;
+
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+
+
+        background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.28),
+            rgba(255,255,255,.08)
+        );
+
+
+        border:1px solid rgba(255,255,255,.4);
+
+        backdrop-filter:blur(28px) saturate(200%);
+
+
+        box-shadow:
+        0 25px 55px rgba(0,0,0,.22),
+        inset 0 1px rgba(255,255,255,.7);
+
+
+        transition:.25s ease;
+
+    }
+
+
+    .menu-card:hover{
+
+        transform:translateY(-8px) scale(1.03);
+
+        background:
+        linear-gradient(
+            145deg,
+            rgba(0,200,120,.28),
+            rgba(255,255,255,.18),
+            rgba(220,40,70,.20)
+        );
+
+
+        box-shadow:
+        0 35px 80px rgba(0,0,0,.35);
+
+    }
+
+
+    .menu-card h2{
+  
+        font-size:31px;
+        margin:0;
+    }
+
+
+    .menu-card p{
+
+        color:rgba(255,255,255,.85);
+    }
+
+
+    .menu-card strong{
+
+        width:max-content;
+
+        padding:10px 16px;
+
+        border-radius:50px;
+
+        background:rgba(255,255,255,.25);
+
+        border:1px solid rgba(255,255,255,.35);
+    }
+
+
+
+    /* COLORES DIFERENTES POR TARJETA */
+
+    .blue{
+        background:linear-gradient(145deg,rgba(0,130,255,.35),rgba(255,255,255,.12));
+    }
+
+    .green{
+        background:linear-gradient(145deg,rgba(0,200,110,.40),rgba(255,255,255,.12));
+    }
+
+    .dark{
+        background:linear-gradient(145deg,rgba(20,40,60,.45),rgba(255,255,255,.1));
+    }
+
+    .purple{
+        background:linear-gradient(145deg,rgba(130,70,255,.35),rgba(255,255,255,.12));
+   }
+
+    .orange{
+        background:linear-gradient(145deg,rgba(220,50,70,.35),rgba(255,210,100,.25));
+    }
+
+
+
+
+    /* LOGIN */
+
+    .login-area{
+
+        position:fixed;
+
+        top:24px;
+
+        right:28px;
+
+        z-index:10;
+
+    }
+
+
+
+    .login-btn{
+
+        padding:13px 24px;
+
+        border-radius:50px;
+
+        text-decoration:none;
+
+        color:white;
+  
+        font-weight:900;
+
+
+        background:
+        linear-gradient(
+            135deg,
+            rgba(0,180,100,.55),
+            rgba(255,255,255,.18),
+            rgba(200,40,60,.45)
+        );
+
+
+        border:1px solid rgba(255,255,255,.45);
+
+        backdrop-filter:blur(20px);
+
+    }
+
+
+
+    /* CEL */
+
+    @media(max-width:900px){
+
+    .hero-control{
+
+    grid-template-columns:1fr;
+
+    }
+
+    .cards-row{
+
+    grid-template-columns:1fr;
+
+    }
+
+    .hero-text h1{
+
+    font-size:42px;
+
+    }
+
+    }
     </style>
 </head>
 <body>
