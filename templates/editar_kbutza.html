@@ -1,60 +1,269 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Kbutza</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
-            color: white;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editar Kbutza</title>
+<style>
 
-        .container {
-            max-width: 700px;
-            margin: auto;
-            padding: 30px 20px 60px;
-        }
+*{
+    box-sizing:border-box;
+}
 
-        .card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 24px;
-        }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+    color:white;
+    overflow-x:hidden;
 
-        .back {
-            display: inline-block;
-            margin-bottom: 18px;
-            text-decoration: none;
-            color: white;
-            background: #334155;
-            padding: 10px 14px;
-            border-radius: 10px;
-        }
+    background:
+    radial-gradient(circle at 15% 10%, rgba(0,180,90,.65), transparent 32%),
+    radial-gradient(circle at 85% 20%, rgba(210,40,70,.55), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(255,255,255,.75), transparent 35%),
+    linear-gradient(160deg,#06251b,#0b2545 55%,#eef7f3);
+}
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 14px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.10);
-            color: white;
-        }
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(35px) saturate(180%);
+    pointer-events:none;
+}
 
-        .btn {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 10px;
-            background: #22c55e;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
+.container{
+    position:relative;
+    z-index:1;
+    max-width:720px;
+    margin:auto;
+    padding:40px 20px 60px;
+}
+
+.back{
+    display:inline-block;
+    margin-bottom:18px;
+
+    text-decoration:none;
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    font-weight:900;
+
+    border:1px solid rgba(255,255,255,.35);
+
+    background:rgba(255,255,255,.18);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.18);
+
+    transition:.25s ease;
+}
+
+.back:hover{
+    transform:translateY(-3px);
+}
+
+.card{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.30),
+        rgba(255,255,255,.08)
+    );
+
+    border:1px solid rgba(255,255,255,.40);
+
+    border-radius:34px;
+
+    padding:30px;
+
+    backdrop-filter:
+    blur(30px)
+    saturate(200%);
+
+    box-shadow:
+    0 35px 90px rgba(0,0,0,.30),
+    inset 0 1px rgba(255,255,255,.65);
+}
+
+h1{
+    margin-top:0;
+    margin-bottom:24px;
+
+    font-size:42px;
+
+    letter-spacing:-2px;
+
+    background:
+    linear-gradient(
+        90deg,
+        white,
+        #8fffd2,
+        white
+    );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+h3{
+    margin-top:24px;
+    margin-bottom:14px;
+
+    font-size:22px;
+    font-weight:700;
+}
+
+input[type="text"]{
+
+    width:100%;
+
+    padding:15px 18px;
+
+    margin-bottom:14px;
+
+    border-radius:20px;
+
+    border:1px solid rgba(255,255,255,.30);
+
+    background:rgba(255,255,255,.18);
+
+    color:white;
+
+    font-size:15px;
+
+    outline:none;
+
+    backdrop-filter:blur(20px);
+
+    transition:.2s ease;
+}
+
+input[type="text"]:focus{
+
+    background:rgba(255,255,255,.26);
+
+    box-shadow:
+    0 0 30px rgba(0,255,170,.20);
+}
+
+input[type="text"]::placeholder{
+    color:rgba(255,255,255,.65);
+}
+
+label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    padding:12px 14px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.10);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(15px);
+
+    transition:.2s ease;
+}
+
+label:hover{
+    background:rgba(255,255,255,.16);
+}
+
+input[type="checkbox"]{
+
+    width:18px;
+    height:18px;
+
+    margin-right:10px;
+
+    accent-color:#22c55e;
+
+    vertical-align:middle;
+}
+
+p{
+    color:rgba(255,255,255,.70);
+}
+
+.btn{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:20px;
+
+    border:none;
+
+    border-radius:999px;
+
+    color:white;
+
+    font-weight:900;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,200,110,.75),
+        rgba(255,255,255,.20),
+        rgba(210,40,70,.50)
+    );
+
+    border:1px solid rgba(255,255,255,.35);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+    0 18px 45px rgba(0,0,0,.22);
+
+    transition:.25s ease;
+}
+
+.btn:hover{
+
+    transform:
+    translateY(-3px)
+    scale(1.02);
+}
+
+@media(max-width:700px){
+
+    .container{
+        padding:30px 16px 50px;
+    }
+
+    .card{
+        padding:22px;
+    }
+
+    h1{
+        font-size:36px;
+    }
+
+    h3{
+        font-size:20px;
+    }
+}
+
+</style>
 </head>
 <body>
 <div class="container">
