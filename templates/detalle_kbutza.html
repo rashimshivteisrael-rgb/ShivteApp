@@ -1,137 +1,347 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle Kbutza</title>
-    <style>
-        * { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalle Kbutza</title>
+<style>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
-            color: white;
-        }
+*{
+    box-sizing:border-box;
+}
 
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            padding: 30px 20px 60px;
-        }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+    color:white;
+    overflow-x:hidden;
 
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
+    background:
+    radial-gradient(circle at 15% 10%, rgba(0,180,90,.65), transparent 32%),
+    radial-gradient(circle at 85% 20%, rgba(210,40,70,.55), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(255,255,255,.75), transparent 35%),
+    linear-gradient(160deg,#06251b,#0b2545 55%,#eef7f3);
+}
 
-        .back {
-            text-decoration: none;
-            color: white;
-            background: #334155;
-            padding: 10px 14px;
-            border-radius: 10px;
-        }
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(35px) saturate(180%);
+    pointer-events:none;
+}
 
-        .card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 24px;
-            margin-bottom: 20px;
-        }
+.container{
+    position:relative;
+    z-index:1;
+    max-width:1000px;
+    margin:auto;
+    padding:40px 20px 60px;
+}
 
-        .info-grid {
-            display: grid;
-            gap: 12px;
-        }
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:24px;
+}
 
-        .info-box {
-            background: rgba(255,255,255,0.06);
-            border-radius: 14px;
-            padding: 16px;
-        }
+.topbar h1{
+    margin:0;
 
-        .section-title {
-            margin-top: 30px;
-        }
+    font-size:48px;
 
-        .list {
-            display: grid;
-            gap: 12px;
-        }
+    letter-spacing:-2px;
 
-        .item {
-            background: rgba(255,255,255,0.06);
-            border-radius: 14px;
-            padding: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+    background:linear-gradient(
+        90deg,
+        white,
+        #8fffd2,
+        white
+    );
 
-        .actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
 
-        .btn {
-            text-decoration: none;
-            display: inline-block;
-            color: white;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-        }
+.back{
+    text-decoration:none;
+    color:white;
 
-        .btn-green {
-            background: #22c55e;
-        }
+    padding:12px 18px;
 
-        .btn-blue {
-            background: #3b82f6;
-        }
+    border-radius:999px;
 
-        .btn-delete {
-            background: #ef4444;
-        }
+    font-weight:900;
 
-        select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            background: rgba(255,255,255,0.10);
-            color: white;
-            margin-bottom: 12px;
-        }
+    border:1px solid rgba(255,255,255,.35);
 
-        option {
-            color: black;
-        }
+    background:rgba(255,255,255,.18);
 
-        .small-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+    backdrop-filter:blur(20px);
 
-        .inline-form {
-            margin: 0;
-        }
-    </style>
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.18);
+
+    transition:.25s ease;
+}
+
+.back:hover{
+    transform:translateY(-3px);
+}
+
+.card{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.30),
+        rgba(255,255,255,.08)
+    );
+
+    border:1px solid rgba(255,255,255,.40);
+
+    border-radius:34px;
+
+    padding:26px;
+
+    margin-bottom:20px;
+
+    backdrop-filter:
+    blur(30px)
+    saturate(200%);
+
+    box-shadow:
+    0 30px 80px rgba(0,0,0,.28),
+    inset 0 1px rgba(255,255,255,.65);
+}
+
+.info-grid{
+    display:grid;
+    gap:12px;
+}
+
+.info-box{
+
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    border-radius:22px;
+
+    padding:18px;
+
+    backdrop-filter:blur(15px);
+}
+
+.actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:18px;
+}
+
+.btn{
+
+    text-decoration:none;
+    display:inline-block;
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    font-weight:900;
+
+    border:none;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+}
+
+.btn:hover{
+    transform:translateY(-3px) scale(1.03);
+}
+
+.btn-green{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,200,110,.75),
+        rgba(255,255,255,.20)
+    );
+
+    border:1px solid rgba(255,255,255,.35);
+}
+
+.btn-blue{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(59,130,246,.85),
+        rgba(255,255,255,.18)
+    );
+
+    border:1px solid rgba(255,255,255,.35);
+}
+
+.btn-delete{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(239,68,68,.85),
+        rgba(255,255,255,.18)
+    );
+
+    border:1px solid rgba(255,255,255,.35);
+}
+
+.section-title{
+    margin-top:34px;
+    margin-bottom:14px;
+
+    font-size:30px;
+
+    letter-spacing:-1px;
+}
+
+.list{
+    display:grid;
+    gap:14px;
+}
+
+.item{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.22),
+        rgba(255,255,255,.08)
+    );
+
+    border:1px solid rgba(255,255,255,.25);
+
+    border-radius:24px;
+
+    padding:16px 18px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+
+    backdrop-filter:blur(18px);
+
+    transition:.2s ease;
+}
+
+.item:hover{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(0,200,120,.16),
+        rgba(255,255,255,.15),
+        rgba(220,40,70,.12)
+    );
+
+    transform:translateY(-2px);
+}
+
+select{
+
+    width:100%;
+
+    padding:15px 18px;
+
+    border-radius:20px;
+
+    border:1px solid rgba(255,255,255,.30);
+
+    background:rgba(255,255,255,.18);
+
+    color:white;
+
+    margin-bottom:14px;
+
+    outline:none;
+
+    backdrop-filter:blur(20px);
+}
+
+option{
+    color:black;
+}
+
+.small-btn{
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(239,68,68,.85),
+        rgba(255,255,255,.15)
+    );
+
+    color:white;
+
+    border:none;
+
+    padding:10px 14px;
+
+    border-radius:999px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:.2s ease;
+}
+
+.small-btn:hover{
+    transform:scale(1.05);
+}
+
+.inline-form{
+    margin:0;
+}
+
+h2{
+    margin-top:0;
+}
+
+@media(max-width:700px){
+
+    .container{
+        padding:30px 16px 50px;
+    }
+
+    .topbar h1{
+        font-size:40px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .actions .btn{
+        width:100%;
+        text-align:center;
+    }
+
+}
+
+</style>
 </head>
 <body>
 <div class="container">
