@@ -4,12 +4,206 @@
 <meta charset="UTF-8">
 <title>Ficha Janij</title>
 <style>
-body { margin:0; font-family:Arial; background:#0f172a; color:white; }
-.container { max-width:800px; margin:auto; padding:30px 20px; }
-.card { background:rgba(255,255,255,0.08); padding:22px; border-radius:18px; margin-bottom:16px; }
-.btn { background:#334155; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; display:inline-block; margin-bottom:18px; }
-.badge { display:inline-block; background:#334155; padding:7px 11px; border-radius:999px; margin:4px; }
-.muted { color:#cbd5e1; }
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+    color:white;
+    overflow-x:hidden;
+
+    background:
+    radial-gradient(circle at 15% 10%, rgba(0,180,90,.65), transparent 32%),
+    radial-gradient(circle at 85% 20%, rgba(210,40,70,.55), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(255,255,255,.75), transparent 35%),
+    linear-gradient(160deg,#06251b,#0b2545 55%,#eef7f3);
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(35px) saturate(180%);
+    pointer-events:none;
+}
+
+.container{
+    position:relative;
+    z-index:1;
+    max-width:850px;
+    margin:auto;
+    padding:40px 20px 60px;
+}
+
+.card{
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.30),
+        rgba(255,255,255,.08)
+    );
+
+    border:1px solid rgba(255,255,255,.40);
+
+    border-radius:34px;
+
+    padding:26px;
+
+    margin-bottom:18px;
+
+    backdrop-filter:
+    blur(30px)
+    saturate(200%);
+
+    box-shadow:
+    0 30px 80px rgba(0,0,0,.28),
+    inset 0 1px rgba(255,255,255,.65);
+}
+
+.btn{
+
+    display:inline-block;
+
+    padding:12px 18px;
+
+    margin-bottom:18px;
+
+    border-radius:999px;
+
+    text-decoration:none;
+
+    font-weight:900;
+
+    color:white;
+
+    border:1px solid rgba(255,255,255,.35);
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,180,100,.45),
+        rgba(255,255,255,.18),
+        rgba(210,40,70,.35)
+    );
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.18);
+
+    transition:.25s ease;
+}
+
+.btn:hover{
+    transform:
+    translateY(-3px)
+    scale(1.03);
+}
+
+h1{
+
+    margin-top:0;
+    margin-bottom:10px;
+
+    font-size:46px;
+
+    letter-spacing:-2px;
+
+    background:
+    linear-gradient(
+        90deg,
+        white,
+        #8fffd2,
+        white
+    );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+h2{
+    margin-top:0;
+    margin-bottom:18px;
+    font-size:28px;
+    letter-spacing:-1px;
+}
+
+p{
+    line-height:1.6;
+}
+
+.muted{
+    color:rgba(255,255,255,.72);
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:10px 16px;
+
+    margin:5px;
+
+    border-radius:999px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(0,180,100,.25),
+        rgba(255,255,255,.18),
+        rgba(210,40,70,.18)
+    );
+
+    border:1px solid rgba(255,255,255,.30);
+
+    backdrop-filter:blur(15px);
+
+    font-weight:700;
+}
+
+form{
+    display:inline;
+}
+
+button.btn{
+
+    cursor:pointer;
+
+    font-size:14px;
+}
+
+button.btn:hover{
+    transform:
+    translateY(-3px)
+    scale(1.03);
+}
+
+@media(max-width:700px){
+
+    .container{
+        padding:30px 16px 50px;
+    }
+
+    h1{
+        font-size:38px;
+    }
+
+    h2{
+        font-size:24px;
+    }
+
+    .card{
+        padding:22px;
+    }
+}
+
 </style>
 </head>
 <body>
