@@ -1832,3 +1832,41 @@ def editar_shevet_estacion(request, estacion_id):
         'estacion': estacion,
         'madrijim': madrijim
     })
+
+def shevet_bank_ranking(request):
+
+    config, creado = ShevetBankConfig.objects.get_or_create(id=1)
+
+    grupos = ShevetBankGrupo.objects.all()
+
+    ranking = []
+
+    for grupo in grupos:
+
+        cuentas = ShevetBankCuenta.objects.filter(
+            grupo=grupo
+        )
+
+        total = 0
+
+        for c in cuentas:
+            total += c.saldo
+
+
+        ranking.append({
+            'grupo': grupo,
+            'total': total
+        })
+
+
+    ranking = sorted(
+        ranking,
+        key=lambda x: x['total'],
+        reverse=True
+    )
+
+
+    return render(request,'shevet_bank_ranking.html',{
+        'ranking': ranking,
+        'config': config
+    })
