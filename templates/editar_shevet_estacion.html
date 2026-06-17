@@ -1,0 +1,26 @@
+<h1>Editar estación</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input type="text" name="nombre" value="{{ estacion.nombre }}" required>
+
+    <input type="text" name="descripcion" value="{{ estacion.descripcion|default:'' }}">
+
+    <input type="number" name="precio" value="{{ estacion.precio }}" required>
+
+    <select name="encargado">
+        {% for m in madrijim %}
+            <option value="{{ m.id }}" {% if estacion.encargado and estacion.encargado.id == m.id %}selected{% endif %}>
+                {{ m.nombre }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>
+        <input type="checkbox" name="es_banco" {% if estacion.es_banco %}checked{% endif %}>
+        Es banco
+    </label>
+
+    <button type="submit">Guardar cambios</button>
+</form>

@@ -1810,3 +1810,25 @@ def editar_shevet_cuenta(request, cuenta_id):
         'grupos': grupos,
         'janijim': janijim
     })
+
+def editar_shevet_estacion(request, estacion_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    estacion = get_object_or_404(ShevetBankEstacion, id=estacion_id)
+    madrijim = UsuarioCamp.objects.filter(tipo='madrij')
+
+    if request.method == 'POST':
+        estacion.nombre = request.POST.get('nombre')
+        estacion.descripcion = request.POST.get('descripcion')
+        estacion.precio = int(request.POST.get('precio') or 0)
+        estacion.encargado_id = request.POST.get('encargado')
+        estacion.es_banco = request.POST.get('es_banco') == 'on'
+        estacion.save()
+
+        return redirect('/panel-admin/shevet-bank/')
+
+    return render(request, 'editar_shevet_estacion.html', {
+        'estacion': estacion,
+        'madrijim': madrijim
+    })

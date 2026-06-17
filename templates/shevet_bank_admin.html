@@ -175,6 +175,9 @@ Finalizar actividad y revelar grupos
             {% else %}
                 Normal
             {% endif %}
+            <a class="btn" href="/panel-admin/shevet-bank/estacion/{{ e.id }}/editar/">
+                Editar estación
+            </a>
             <form method="POST" action="/panel-admin/shevet-bank/estacion/{{ e.id }}/eliminar/">
                 {% csrf_token %}
                 <button type="submit" style="background:#ef4444;">Eliminar estación</button>
