@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Subastas</title>
+
+<style>
+body {margin:0;background:#0f172a;color:white;font-family:Arial;}
+.container {max-width:900px;margin:auto;padding:30px;}
+.card {background:rgba(255,255,255,.08);padding:20px;border-radius:18px;margin-bottom:15px;}
+input,textarea,button {width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:none;}
+button,.btn {background:#22c55e;color:white;font-weight:bold;text-decoration:none;}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<a class="btn" href="/panel-admin/shevet-bank/">← Shevet Bank</a>
+
+<h1>🔨 Subastas</h1>
+
+
+<div class="card">
+
+<h2>Crear premio</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input 
+type="text" 
+name="premio" 
+placeholder="Nombre del premio"
+required>
+
+<textarea 
+name="descripcion"
+placeholder="Descripción">
+</textarea>
+
+<button>
+Crear subasta
+</button>
+
+</form>
+
+</div>
+
+
+<h2>Premios creados</h2>
+
+
+{% for s in subastas %}
+
+<div class="card">
+    
+{% if not s.activa and not s.cerrada %}
+<form method="POST" action="/panel-admin/shevet-bank/subasta/{{ s.id }}/iniciar/">
+    {% csrf_token %}
+    <button type="submit">Iniciar subasta</button>
+</form>
+{% endif %}
+
+<h2>{{ s.premio }}</h2>
+
+<p>{{ s.descripcion }}</p>
+
+
+{% if s.activa %}
+
+🟢 En vivo
+
+{% elif s.cerrada %}
+
+🔴 Terminada
+
+{% else %}
+
+⚪ Esperando inicio
+
+{% endif %}
+
+
+</div>
+
+{% empty %}
+
+<p>No hay premios todavía</p>
+
+{% endfor %}
+
+
+</div>
+
+</body>
+</html>

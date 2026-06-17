@@ -22,6 +22,13 @@ option { color:black; }
 
 <a class="btn back" href="/actividades/">← Actividades</a>
 
+{% if grupo_madrij %}
+    <div class="card">
+        <h2>Tu grupo</h2>
+        <p>{{ grupo_madrij.grupo.nombre }}</p>
+    </div>
+{% endif %}
+
 <h1>🏦 Shevet Bank</h1>
 
 {% if sin_estacion %}

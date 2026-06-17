@@ -27,6 +27,26 @@ option { color:black; }
 </a>
 
 <div class="card">
+    <h2>Estado de Shevet Bank</h2>
+
+    {% if config.actividad_activa %}
+        <p>🟢 Actividad activa</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="tipo" value="finalizar">
+            <button type="submit" style="background:#ef4444;">
+                Finalizar actividad y revelar grupos
+            </button>
+        </form>
+    {% else %}
+        <p>🔴 Actividad finalizada</p>
+        <p>Los grupos ya están revelados.</p>
+    {% endif %}
+</div>
+
+
+<div class="card">
 <h2>Estado actividad</h2>
 
 {% if config.actividad_activa %}

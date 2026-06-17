@@ -1705,12 +1705,15 @@ def shevet_bank_madrij(request):
             ronda=ronda
         )
 
+    grupo_madrij = ShevetBankGrupoMadrij.objects.filter(madrij=usuario).first()
+
 
     return render(request,'shevet_bank_madrij.html',{
         'estacion': estacion,
         'ronda': ronda,
         'participantes': participantes,
-        'mensaje': mensaje
+        'mensaje': mensaje,
+        'grupo_madrij': grupo_madrij,
     })
 
 def shevet_bank_historial_admin(request):
@@ -1834,7 +1837,6 @@ def editar_shevet_estacion(request, estacion_id):
     })
 
 def shevet_bank_ranking(request):
-
     config, creado = ShevetBankConfig.objects.get_or_create(id=1)
 
     grupos = ShevetBankGrupo.objects.all()
@@ -1842,31 +1844,61 @@ def shevet_bank_ranking(request):
     ranking = []
 
     for grupo in grupos:
-
-        cuentas = ShevetBankCuenta.objects.filter(
-            grupo=grupo
-        )
-
-        total = 0
-
-        for c in cuentas:
-            total += c.saldo
-
+        cuentas = ShevetBankCuenta.objects.filter(grupo=grupo)
+        total = sum(c.saldo for c in cuentas)
 
         ranking.append({
             'grupo': grupo,
             'total': total
         })
 
+    ranking = sorted(ranking, key=lambda x: x['total'], reverse=True)
 
-    ranking = sorted(
-        ranking,
-        key=lambda x: x['total'],
-        reverse=True
-    )
-
-
-    return render(request,'shevet_bank_ranking.html',{
+    return render(request, 'shevet_bank_ranking.html', {
         'ranking': ranking,
         'config': config
     })
+
+def shevet_bank_subasta_admin(request):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    subastas = ShevetBankSubasta.objects.all().order_by('-id')
+
+    if request.method == 'POST':
+
+        premio = request.POST.get('premio')
+        descripcion = request.POST.get('descripcion')
+
+        ShevetBankSubasta.objects.create(
+            premio=premio,
+            descripcion=descripcion,
+            activa=False,
+            iniciada=False,
+            cerrada=False,
+            precio_actual=0
+        )
+
+        return redirect('/panel-admin/shevet-bank/subastas/')
+
+    return render(request, 'shevet_bank_subasta_admin.html', {
+        'subastas': subastas
+    })
+
+def iniciar_shevet_bank_subasta(request, subasta_id):
+    if request.session.get('usuario_tipo') != 'admin':
+        return redirect('/login/')
+
+    subasta = get_object_or_404(ShevetBankSubasta, id=subasta_id)
+
+    if request.method == 'POST':
+        ShevetBankSubasta.objects.all().update(activa=False)
+
+        subasta.activa = True
+        subasta.iniciada = True
+        subasta.cerrada = False
+        subasta.precio_actual = 0
+        subasta.grupo_ganando = None
+        subasta.save()
+
+    return redirect('/panel-admin/shevet-bank/subastas/')

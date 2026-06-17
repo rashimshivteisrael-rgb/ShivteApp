@@ -1,91 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<title>Ranking</title>
-
+<meta charset="UTF-8">
+<title>Ranking Shevet Bank</title>
 <style>
-
-body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-}
-
-.container{
-max-width:800px;
-margin:auto;
-padding:40px 20px;
-}
-
-.card{
-background:rgba(255,255,255,.08);
-padding:25px;
-border-radius:20px;
-margin-bottom:15px;
-}
-
-.money{
-font-size:40px;
-color:#86efac;
-font-weight:bold;
-}
-
-.place{
-font-size:35px;
-}
-
+body { margin:0; font-family:Arial; background:#0f172a; color:white; }
+.container { max-width:900px; margin:auto; padding:30px 20px; }
+.card { background:rgba(255,255,255,.08); padding:22px; border-radius:18px; margin-bottom:16px; }
+.money { font-size:34px; font-weight:bold; color:#86efac; }
+.btn { background:#334155; color:white; padding:10px 14px; border-radius:10px; text-decoration:none; display:inline-block; margin-bottom:16px; }
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
 
-<h1>🏆 Shevet Bank Ranking</h1>
+<a class="btn" href="/actividades/">← Actividades</a>
 
+<h1>🏆 Ranking Shevet Bank</h1>
 
 {% for item in ranking %}
+    <div class="card">
+        <h2>
+            #{{ forloop.counter }}
+            {% if config.grupos_revelados %}
+                {{ item.grupo.nombre }}
+            {% else %}
+                Grupo oculto {{ forloop.counter }}
+            {% endif %}
+        </h2>
 
-<div class="card">
-
-<div class="place">
-#{{ forloop.counter }}
-</div>
-
-
-<h2>
-
-{% if config.grupos_revelados %}
-
-{{ item.grupo.nombre }}
-
-{% else %}
-
-Grupo oculto {{ forloop.counter }}
-
-{% endif %}
-
-</h2>
-
-
-<div class="money">
-
-${{ item.total }}
-
-</div>
-
-
-</div>
-
+        <div class="money">${{ item.total }}</div>
+    </div>
 {% empty %}
-
-<p>No hay grupos</p>
-
+    <div class="card">No hay grupos todavía.</div>
 {% endfor %}
 
-
 </div>
-
 </body>
 </html>
